@@ -18,6 +18,8 @@ type Deps struct {
 }
 
 func NewRouter(d Deps) http.Handler {
+	api := &API{DB: d.DB, Config: d.Config}
+
 	r := chi.NewRouter()
 	for _, mw := range appmw.Chain() {
 		r.Use(mw)
@@ -25,6 +27,10 @@ func NewRouter(d Deps) http.Handler {
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/health", Health)
+		r.Get("/users", api.ListUsers)
+		r.Post("/invite", api.Invite)
+		r.Post("/register", api.Register)
+		r.Post("/users/leave", api.Leave)
 	})
 
 	r.Handle("/*", http.FileServer(http.FS(d.Web)))
