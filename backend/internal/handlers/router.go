@@ -9,16 +9,18 @@ import (
 
 	"github.com/cordea/hark/internal/config"
 	appmw "github.com/cordea/hark/internal/middleware"
+	"github.com/cordea/hark/internal/services/alerts"
 )
 
 type Deps struct {
 	DB     *gorm.DB
 	Config config.Config
 	Web    fs.FS
+	Alerts *alerts.Service
 }
 
 func NewRouter(d Deps) http.Handler {
-	api := &API{DB: d.DB, Config: d.Config}
+	api := &API{DB: d.DB, Config: d.Config, Alerts: d.Alerts}
 
 	r := chi.NewRouter()
 	for _, mw := range appmw.Chain() {
@@ -31,6 +33,10 @@ func NewRouter(d Deps) http.Handler {
 		r.Post("/invite", api.Invite)
 		r.Post("/register", api.Register)
 		r.Post("/users/leave", api.Leave)
+
+		r.Post("/alerts/trigger", api.TriggerAlert)
+		r.Post("/alerts/{id}/respond", api.RespondAlert)
+		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)
 	})
 
 	r.Handle("/*", http.FileServer(http.FS(d.Web)))

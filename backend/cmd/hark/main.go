@@ -13,11 +13,16 @@ import (
 	"github.com/cordea/hark/internal/config"
 	"github.com/cordea/hark/internal/db"
 	"github.com/cordea/hark/internal/handlers"
+	alertsvc "github.com/cordea/hark/internal/services/alerts"
+	"github.com/cordea/hark/internal/services/fcm"
 	"github.com/cordea/hark/internal/webui"
 )
 
 func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	cfg := config.Load()
 
@@ -27,13 +32,26 @@ func main() {
 		os.Exit(1)
 	}
 
+	sender, err := fcm.New(ctx, cfg.FCMCredentials)
+	if err != nil {
+		slog.Error("fcm init", "err", err)
+		os.Exit(1)
+	}
+
 	webSub, err := webui.FS()
 	if err != nil {
 		slog.Error("web fs", "err", err)
 		os.Exit(1)
 	}
 
-	handler := handlers.NewRouter(handlers.Deps{DB: gdb, Config: cfg, Web: webSub})
+	alertService := &alertsvc.Service{DB: gdb, Sender: sender}
+
+	handler := handlers.NewRouter(handlers.Deps{
+		DB:     gdb,
+		Config: cfg,
+		Web:    webSub,
+		Alerts: alertService,
+	})
 
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,
@@ -49,10 +67,7 @@ func main() {
 		}
 	}()
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 	<-ctx.Done()
-
 	slog.Info("shutting down")
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
