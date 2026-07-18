@@ -55,6 +55,7 @@ func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs [
 			ID:          uuid.NewString(),
 			Type:        alertType,
 			Status:      models.AlertStatusActive,
+			IsBroadcast: len(targetUserIDs) == 0,
 			TriggeredAt: time.Now().UTC(),
 		}
 		if err := tx.Create(&alert).Error; err != nil {

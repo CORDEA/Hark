@@ -29,11 +29,14 @@ func NewRouter(d Deps) http.Handler {
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/health", Health)
+		r.Get("/stats", api.Stats)
 		r.Get("/users", api.ListUsers)
 		r.Post("/invite", api.Invite)
 		r.Post("/register", api.Register)
 		r.Post("/users/leave", api.Leave)
 
+		r.Get("/alerts", api.ListAlerts)
+		r.Get("/alerts/{id}", api.GetAlert)
 		r.Post("/alerts/trigger", api.TriggerAlert)
 		r.Post("/alerts/{id}/respond", api.RespondAlert)
 		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)

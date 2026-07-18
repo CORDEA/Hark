@@ -45,7 +45,8 @@ type Alert struct {
 	Type         string     `gorm:"size:16;index" json:"type"`
 	Status       string     `gorm:"size:16;index" json:"status"`
 	ResponderID  *string    `gorm:"size:64" json:"responder_id"`
-	TriggeredAt  time.Time  `json:"triggered_at"`
+	IsBroadcast  bool       `gorm:"not null;default:false" json:"is_broadcast"`
+	TriggeredAt  time.Time  `gorm:"index" json:"triggered_at"`
 	ResolvedAt   *time.Time `json:"resolved_at"`
 
 	Recipients []AlertRecipient `gorm:"constraint:OnDelete:CASCADE" json:"recipients,omitempty"`
