@@ -1,0 +1,13 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'list_organization_view_state.freezed.dart';
+
+@freezed
+abstract class OrganizationRowViewState with _$OrganizationRowViewState {
+  const factory OrganizationRowViewState({
+    required String orgId,
+    required String orgName,
+    required String serverUrl,
+    required String initials,
+  }) = _OrganizationRowViewState;
+}
