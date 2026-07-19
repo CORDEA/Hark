@@ -24,6 +24,7 @@ type inviteResponse struct {
 	InvitationCode string `json:"invitation_code"`
 	DeepLink       string `json:"deep_link"`
 	QRPayload      string `json:"qr_payload"`
+	QRImage        string `json:"qr_image"`
 }
 
 func (h *API) Invite(w http.ResponseWriter, r *http.Request) {
@@ -66,16 +67,26 @@ func (h *API) Invite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	deepLink := invites.DeepLink(h.Config.PublicURL, user.InvitationCode)
+	qrImage, err := invites.QRDataURL(deepLink)
+	if err != nil {
+		slog.Error("qr encode", "err", err)
+		fail(w, http.StatusInternalServerError, "qr_encode", err.Error())
+		return
+	}
+
 	created(w, inviteResponse{
 		UserID:         user.ID,
 		DisplayName:    user.DisplayName,
 		InvitationCode: user.InvitationCode,
-		DeepLink:       invites.DeepLink(h.Config.PublicURL, user.InvitationCode),
-		QRPayload:      invites.DeepLink(h.Config.PublicURL, user.InvitationCode),
+		DeepLink:       deepLink,
+		QRPayload:      deepLink,
+		QRImage:        qrImage,
 	})
 }
 
 func defaultName(name string) string {
+	name = strings.TrimSpace(name)
 	if name == "" {
 		return "Subscriber"
 	}

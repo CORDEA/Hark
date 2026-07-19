@@ -3,9 +3,12 @@ package invites
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"net/url"
 	"strings"
+
+	qrcode "github.com/skip2/go-qrcode"
 )
 
 // codeAlphabet excludes visually ambiguous characters (0/O, 1/I/L).
@@ -26,6 +29,18 @@ func DeepLink(publicURL, code string) string {
 	q.Set("server", publicURL)
 	q.Set("code", code)
 	return "hark://join?" + q.Encode()
+}
+
+// QRDataURL renders payload as a QR code PNG and returns it as a data URL.
+// Generating server-side removes the admin UI's dependency on a third-party
+// CDN — which was silently failing behind restrictive networks and surfacing
+// as "QRCode is not defined".
+func QRDataURL(payload string) (string, error) {
+	png, err := qrcode.Encode(payload, qrcode.Medium, 280)
+	if err != nil {
+		return "", fmt.Errorf("qr encode: %w", err)
+	}
+	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(png), nil
 }
 
 func randChars(n int) (string, error) {

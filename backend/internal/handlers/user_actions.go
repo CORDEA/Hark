@@ -53,6 +53,7 @@ type reinviteResponse struct {
 	InvitationCode string `json:"invitation_code"`
 	DeepLink       string `json:"deep_link"`
 	QRPayload      string `json:"qr_payload"`
+	QRImage        string `json:"qr_image"`
 }
 
 // Reinvite regenerates the user's invitation code and flips them back to
@@ -101,11 +102,20 @@ func (h *API) Reinvite(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	deepLink := invites.DeepLink(h.Config.PublicURL, user.InvitationCode)
+	qrImage, err := invites.QRDataURL(deepLink)
+	if err != nil {
+		slog.Error("qr encode", "err", err)
+		fail(w, http.StatusInternalServerError, "qr_encode", err.Error())
+		return
+	}
+
 	ok(w, reinviteResponse{
 		UserID:         userID,
 		InvitationCode: user.InvitationCode,
-		DeepLink:       invites.DeepLink(h.Config.PublicURL, user.InvitationCode),
-		QRPayload:      invites.DeepLink(h.Config.PublicURL, user.InvitationCode),
+		DeepLink:       deepLink,
+		QRPayload:      deepLink,
+		QRImage:        qrImage,
 	})
 }
 

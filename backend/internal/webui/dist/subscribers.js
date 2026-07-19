@@ -65,34 +65,53 @@ async function refresh() {
   } catch (e) { console.error('refresh failed', e); }
 }
 
-async function openInvite() {
+function showInviteCard(data) {
+  q('#invite-card').classList.remove('hidden');
+  q('#invite-url').textContent = data.deep_link;
+  q('#invite-url').dataset.deepLink = data.deep_link;
+  q('#invite-qr').src = data.qr_image;
+}
+
+function openInviteDialog() {
+  const modal = q('#invite-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  q('#invite-error').classList.add('hidden');
+  const input = q('#invite-name');
+  input.value = '';
+  input.focus();
+}
+
+function closeInviteDialog() {
+  const modal = q('#invite-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+async function submitInvite(displayName) {
+  const errEl = q('#invite-error');
+  const submitBtn = q('#invite-create');
+  submitBtn.disabled = true;
   try {
-    const data = await api('/api/invite', { method: 'POST', body: '{}' });
-    q('#invite-card').classList.remove('hidden');
-    q('#invite-url').textContent = data.deep_link;
-    q('#invite-url').dataset.deepLink = data.deep_link;
-    // Render QR client-side so no server code has to generate images.
-    const canvas = q('#invite-qr');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // eslint-disable-next-line no-undef
-    QRCode.toCanvas(canvas, data.qr_payload, { width: 140, margin: 0 }, (err) => {
-      if (err) console.error('qr', err);
+    const data = await api('/api/invite', {
+      method: 'POST',
+      body: JSON.stringify({ display_name: displayName }),
     });
+    closeInviteDialog();
+    showInviteCard(data);
     await refresh(); // pick up the new "invited" row immediately
-  } catch (e) { alert(`Invite failed: ${e.message}`); }
+  } catch (e) {
+    errEl.textContent = `Invite failed: ${e.message}`;
+    errEl.classList.remove('hidden');
+  } finally {
+    submitBtn.disabled = false;
+  }
 }
 
 async function reinvite(id) {
   try {
     const data = await api(`/api/users/${id}/reinvite`, { method: 'POST' });
-    q('#invite-card').classList.remove('hidden');
-    q('#invite-url').textContent = data.deep_link;
-    q('#invite-url').dataset.deepLink = data.deep_link;
-    const canvas = q('#invite-qr');
-    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-    // eslint-disable-next-line no-undef
-    QRCode.toCanvas(canvas, data.qr_payload, { width: 140, margin: 0 });
+    showInviteCard(data);
     await refresh();
   } catch (e) { alert(`Re-invite failed: ${e.message}`); }
 }
@@ -113,7 +132,15 @@ async function kick(id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  q('#btn-invite').addEventListener('click', openInvite);
+  q('#btn-invite').addEventListener('click', openInviteDialog);
+  q('#invite-cancel').addEventListener('click', closeInviteDialog);
+  q('#invite-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitInvite(q('#invite-name').value);
+  });
+  q('#invite-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'invite-modal') closeInviteDialog();
+  });
   q('#btn-invite-close').addEventListener('click', () => {
     q('#invite-card').classList.add('hidden');
   });

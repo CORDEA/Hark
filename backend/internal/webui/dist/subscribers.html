@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hark Admin · Subscribers</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -28,6 +27,7 @@
              font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; }
     .badge-active  { background:var(--green-bg); color:var(--green-text); border:1px solid var(--green-border); }
     .badge-invited { background:var(--n-5); color:var(--text-4); }
+    .modal-backdrop { background: rgba(0,0,0,0.6); }
     ::-webkit-scrollbar { width:8px; height:8px; }
     ::-webkit-scrollbar-thumb { background:var(--n-6); border-radius:4px; }
     ::-webkit-scrollbar-track { background:transparent; }
@@ -84,8 +84,8 @@
                       style="background:transparent;border:1px solid var(--n-6);color:var(--text-4)">Done</button>
             </div>
           </div>
-          <canvas id="invite-qr" width="140" height="140"
-                  class="rounded-md" style="background:#fff"></canvas>
+          <img id="invite-qr" alt="Invite QR code" width="140" height="140"
+               class="rounded-md" style="background:#fff">
         </div>
       </div>
 
@@ -100,6 +100,33 @@
         <div id="rows"></div>
       </div>
     </section>
+  </div>
+
+  <!-- Invite modal -->
+  <div id="invite-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6 modal-backdrop">
+    <div class="w-full max-w-[420px] rounded-xl p-7"
+         style="background:var(--n-2);border:1px solid var(--n-5)">
+      <div class="text-2xl font-extrabold" style="color:var(--text-1)">Invite new user</div>
+      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)">Give this subscriber a display name so responders can tell devices apart.</div>
+
+      <form id="invite-form" novalidate>
+        <label for="invite-name" class="text-[11px] font-bold uppercase tracking-widest mb-1.5 block" style="color:var(--text-5)">Display name</label>
+        <input id="invite-name" name="displayName" type="text" autocomplete="off" maxlength="80"
+               placeholder="e.g. Jordan Marsh"
+               class="w-full h-11 px-3 rounded-md text-sm outline-none"
+               style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-1)">
+        <div id="invite-error" class="text-xs mt-2 hidden" style="color:var(--red-9)"></div>
+
+        <div class="flex gap-2.5 mt-6">
+          <button id="invite-create" type="submit"
+                  class="flex-1 rounded-lg font-bold text-base"
+                  style="background:var(--red-6);color:#fff;height:48px">Create invite</button>
+          <button id="invite-cancel" type="button"
+                  class="px-5 rounded-lg font-semibold text-sm"
+                  style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:48px">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="common.js"></script>
