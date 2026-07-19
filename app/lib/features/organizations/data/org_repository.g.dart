@@ -48,4 +48,4 @@ final class OrgRepositoryProvider
   }
 }
 
-String _$orgRepositoryHash() => r'33668b971f5cdc9980f3d7932d16a69c3fe3cad5';
+String _$orgRepositoryHash() => r'c1f339b3887c85402f6d720d2fc659dfab287b4d';

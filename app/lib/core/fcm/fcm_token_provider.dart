@@ -1,13 +1,16 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'fcm_service.dart';
+
 part 'fcm_token_provider.g.dart';
 
-/// F2 stub: returns a synthetic token so the register flow can be exercised
-/// end-to-end without Firebase configured. F3 replaces the implementation with
-/// FirebaseMessaging.instance.getToken().
+/// The current FCM registration token, or a synthetic placeholder when
+/// Firebase isn't configured locally. The placeholder lets developers exercise
+/// the register flow against a real backend without stamping a Firebase
+/// project first.
 @Riverpod(keepAlive: true)
 Future<String> fcmToken(Ref ref) async {
-  // Deterministic across launches on the same install so the backend treats
-  // repeat registers as idempotent per token.
-  return 'placeholder-fcm-token';
+  final service = ref.watch(fcmServiceProvider);
+  final real = await service.currentToken();
+  return real ?? 'placeholder-fcm-token';
 }
