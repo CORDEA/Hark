@@ -20,7 +20,7 @@ abstract class HistoryRowViewState with _$HistoryRowViewState {
 @freezed
 sealed class HistoryViewEvent with _$HistoryViewEvent {
   const factory HistoryViewEvent.none() = HistoryViewEventNone;
-  const factory HistoryViewEvent.leaveFailed(String reason) =
+  const factory HistoryViewEvent.leaveFailed(Object error) =
       HistoryViewEventLeaveFailed;
   const factory HistoryViewEvent.navigateToOrgs() =
       HistoryViewEventNavigateToOrgs;

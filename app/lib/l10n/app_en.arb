@@ -24,10 +24,9 @@
   "@connectOrgViewList": {},
   "connectOrgMissingFields": "Enter a server URL and an invitation code",
   "@connectOrgMissingFields": {},
-  "connectOrgRegisterFailed": "{reason}",
-  "@connectOrgRegisterFailed": {
-    "placeholders": { "reason": { "type": "String" } }
-  },
+
+  "commonError": "Something went wrong. Please try again.",
+  "@commonError": {},
 
   "orgListTitle": "Organizations",
   "@orgListTitle": {},
@@ -39,10 +38,6 @@
   "@orgListEmptyHeadline": {},
   "orgListEmptyBody": "Tap Add Organization to join one",
   "@orgListEmptyBody": {},
-  "orgListLoadFailed": "Failed to load: {error}",
-  "@orgListLoadFailed": {
-    "placeholders": { "error": { "type": "String" } }
-  },
 
   "orgCardNotificationsOn": "Notifications on",
   "@orgCardNotificationsOn": {},
@@ -85,10 +80,6 @@
   "@activeAlertResolvedByOtherHeadline": {},
   "activeAlertResolvedByOtherSubtitle": "No action needed",
   "@activeAlertResolvedByOtherSubtitle": {},
-  "activeAlertRespondFailed": "Response failed: {reason}",
-  "@activeAlertRespondFailed": {
-    "placeholders": { "reason": { "type": "String" } }
-  },
   "activeAlertElapsed": "{mm}:{ss} elapsed",
   "@activeAlertElapsed": {
     "placeholders": {
@@ -142,10 +133,6 @@
   "@historyTitle": {},
   "historyEmpty": "No alerts yet",
   "@historyEmpty": {},
-  "historyLoadFailed": "Failed: {error}",
-  "@historyLoadFailed": {
-    "placeholders": { "error": { "type": "String" } }
-  },
   "historyBadgeAck": "ACK {hhmm}",
   "@historyBadgeAck": {
     "placeholders": { "hhmm": { "type": "String" } }
@@ -176,10 +163,6 @@
   "historyDisconnect": "Disconnect from {org}",
   "@historyDisconnect": {
     "placeholders": { "org": { "type": "String" } }
-  },
-  "historyLeaveFailed": "Leave failed: {reason}",
-  "@historyLeaveFailed": {
-    "placeholders": { "reason": { "type": "String" } }
   },
   "historyDisconnectDialogTitle": "Disconnect",
   "@historyDisconnectDialogTitle": {},

@@ -82,7 +82,7 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
     } catch (e) {
       state = state.copyWith(
         isSending: false,
-        event: ActiveAlertViewEvent.respondFailed(e.toString()),
+        event: ActiveAlertViewEvent.respondFailed(e),
       );
     }
   }

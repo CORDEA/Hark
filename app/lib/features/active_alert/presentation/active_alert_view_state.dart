@@ -18,7 +18,7 @@ enum ActiveAlertOutcome {
 @freezed
 sealed class ActiveAlertViewEvent with _$ActiveAlertViewEvent {
   const factory ActiveAlertViewEvent.none() = ActiveAlertViewEventNone;
-  const factory ActiveAlertViewEvent.respondFailed(String reason) =
+  const factory ActiveAlertViewEvent.respondFailed(Object error) =
       ActiveAlertViewEventRespondFailed;
   const factory ActiveAlertViewEvent.dismiss() = ActiveAlertViewEventDismiss;
 }

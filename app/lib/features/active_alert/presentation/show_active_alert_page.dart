@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -39,11 +41,11 @@ class ShowActiveAlertPage extends HookConsumerWidget {
 
     ref.listen(provider.select((s) => s.event), (_, event) {
       switch (event) {
-        case ActiveAlertViewEventRespondFailed(:final reason):
+        case ActiveAlertViewEventRespondFailed(:final error):
           if (context.mounted) {
             final l10n = AppLocalizations.of(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.activeAlertRespondFailed(reason))),
+              SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
             );
             ref.read(provider.notifier).onEventConsumed();
           }
@@ -52,7 +54,7 @@ class ShowActiveAlertPage extends HookConsumerWidget {
             if (context.canPop()) {
               context.pop();
             } else {
-              context.go('/orgs');
+              context.go('/');
             }
           }
         case ActiveAlertViewEventNone():
@@ -426,16 +428,12 @@ String _shortOrg(String orgId) {
   return u.host;
 }
 
-String _fmtTime(DateTime t) {
-  final u = t.toUtc();
-  String p(int n) => n.toString().padLeft(2, '0');
-  return '${p(u.hour)}:${p(u.minute)}:${p(u.second)} UTC';
-}
+String _fmtTime(DateTime t) => DateFormat('HH:mm:ss').format(t.toLocal());
 
 String _elapsed(AppLocalizations l10n, DateTime t) {
   final d = DateTime.now().toUtc().difference(t.toUtc());
   final m = d.inMinutes;
-  final s = d.inSeconds - m * 60;
-  String p(int n) => n.toString().padLeft(2, '0');
-  return l10n.activeAlertElapsed(p(m), p(s.clamp(0, 59)));
+  final s = (d.inSeconds - m * 60).clamp(0, 59);
+  final fmt = NumberFormat('00');
+  return l10n.activeAlertElapsed(fmt.format(m), fmt.format(s));
 }

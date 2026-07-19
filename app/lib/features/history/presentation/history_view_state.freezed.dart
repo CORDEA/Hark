@@ -391,11 +391,11 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String reason)?  leaveFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( Object error)?  leaveFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
 return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return orElse();
 
@@ -414,11 +414,11 @@ return navigateToOrgs();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String reason)  leaveFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( Object error)  leaveFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone():
 return none();case HistoryViewEventLeaveFailed():
-return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs():
+return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs():
 return navigateToOrgs();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -433,11 +433,11 @@ return navigateToOrgs();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String reason)?  leaveFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( Object error)?  leaveFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
 return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return null;
 
@@ -482,10 +482,10 @@ String toString() {
 
 
 class HistoryViewEventLeaveFailed implements HistoryViewEvent {
-  const HistoryViewEventLeaveFailed(this.reason);
+  const HistoryViewEventLeaveFailed(this.error);
   
 
- final  String reason;
+ final  Object error;
 
 /// Create a copy of HistoryViewEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -497,16 +497,16 @@ $HistoryViewEventLeaveFailedCopyWith<HistoryViewEventLeaveFailed> get copyWith =
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventLeaveFailed&&(identical(other.reason, reason) || other.reason == reason));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventLeaveFailed&&const DeepCollectionEquality().equals(other.error, error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,reason);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(error));
 
 @override
 String toString() {
-  return 'HistoryViewEvent.leaveFailed(reason: $reason)';
+  return 'HistoryViewEvent.leaveFailed(error: $error)';
 }
 
 
@@ -517,7 +517,7 @@ abstract mixin class $HistoryViewEventLeaveFailedCopyWith<$Res> implements $Hist
   factory $HistoryViewEventLeaveFailedCopyWith(HistoryViewEventLeaveFailed value, $Res Function(HistoryViewEventLeaveFailed) _then) = _$HistoryViewEventLeaveFailedCopyWithImpl;
 @useResult
 $Res call({
- String reason
+ Object error
 });
 
 
@@ -534,10 +534,9 @@ class _$HistoryViewEventLeaveFailedCopyWithImpl<$Res>
 
 /// Create a copy of HistoryViewEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
   return _then(HistoryViewEventLeaveFailed(
-null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
-as String,
+null == error ? _self.error : error ,
   ));
 }
 

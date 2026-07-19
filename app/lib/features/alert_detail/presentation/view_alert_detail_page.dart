@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -59,7 +61,7 @@ class _ErrorView extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            '$error',
+            ErrorLocalizer.localize(l10n, error),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(
@@ -99,7 +101,7 @@ class _Body extends StatelessWidget {
                   if (context.canPop()) {
                     context.pop();
                   } else {
-                    context.go('/orgs');
+                    context.go('/');
                   }
                 },
                 child: Text(
@@ -385,8 +387,4 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-String _fmtTime(DateTime t) {
-  final u = t.toUtc();
-  String p(int n) => n.toString().padLeft(2, '0');
-  return '${p(u.hour)}:${p(u.minute)}:${p(u.second)} UTC';
-}
+String _fmtTime(DateTime t) => DateFormat('HH:mm:ss').format(t.toLocal());

@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -40,10 +41,10 @@ class ConnectOrgPage extends HookConsumerWidget {
             );
             ref.read(provider.notifier).onEventConsumed();
           }
-        case ConnectOrgViewEventRegisterFailed(:final reason):
+        case ConnectOrgViewEventRegisterFailed(:final error):
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.connectOrgRegisterFailed(reason))),
+              SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
             );
             ref.read(provider.notifier).onEventConsumed();
           }

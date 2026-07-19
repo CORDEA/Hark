@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -24,16 +26,16 @@ class ListAlertHistoryPage extends ConsumerWidget {
     ref.listen(provider.select((s) => s.value?.event), (_, event) {
       if (event == null) return;
       switch (event) {
-        case HistoryViewEventLeaveFailed(:final reason):
+        case HistoryViewEventLeaveFailed(:final error):
           if (context.mounted) {
             final l10n = AppLocalizations.of(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.historyLeaveFailed(reason))),
+              SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
             );
             ref.read(provider.notifier).onEventConsumed();
           }
         case HistoryViewEventNavigateToOrgs():
-          if (context.mounted) context.go('/orgs');
+          if (context.mounted) context.go('/');
         case HistoryViewEventNone():
           break;
       }
@@ -45,7 +47,7 @@ class ListAlertHistoryPage extends ConsumerWidget {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Center(
             child: Text(
-              AppLocalizations.of(context).historyLoadFailed(e.toString()),
+              ErrorLocalizer.localize(AppLocalizations.of(context), e),
             ),
           ),
           data: (state) => _Body(state: state, provider: provider),
@@ -74,7 +76,7 @@ class _Body extends ConsumerWidget {
             children: [
               IconButton(
                 onPressed: () =>
-                    context.canPop() ? context.pop() : context.go('/orgs'),
+                    context.canPop() ? context.pop() : context.go('/'),
                 icon: const Icon(Icons.arrow_back),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -314,11 +316,7 @@ String _timeLabel(AppLocalizations l10n, DateTime iso) {
   if (dayStart == today.subtract(const Duration(days: 1))) {
     return l10n.historyTimeYesterday(hhmm);
   }
-  return l10n.historyTimeAbsolute(
-    '${d.year}-${_p(d.month)}-${_p(d.day)}',
-    hhmm,
-  );
+  return l10n.historyTimeAbsolute(DateFormat('yyyy-MM-dd').format(d), hhmm);
 }
 
-String _hm(DateTime t) => '${_p(t.hour)}:${_p(t.minute)}';
-String _p(int n) => n.toString().padLeft(2, '0');
+String _hm(DateTime t) => DateFormat('HH:mm').format(t);

@@ -160,11 +160,11 @@ abstract class AppLocalizations {
   /// **'Enter a server URL and an invitation code'**
   String get connectOrgMissingFields;
 
-  /// No description provided for @connectOrgRegisterFailed.
+  /// No description provided for @commonError.
   ///
   /// In en, this message translates to:
-  /// **'{reason}'**
-  String connectOrgRegisterFailed(String reason);
+  /// **'Something went wrong. Please try again.'**
+  String get commonError;
 
   /// No description provided for @orgListTitle.
   ///
@@ -195,12 +195,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap Add Organization to join one'**
   String get orgListEmptyBody;
-
-  /// No description provided for @orgListLoadFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load: {error}'**
-  String orgListLoadFailed(String error);
 
   /// No description provided for @orgCardNotificationsOn.
   ///
@@ -316,12 +310,6 @@ abstract class AppLocalizations {
   /// **'No action needed'**
   String get activeAlertResolvedByOtherSubtitle;
 
-  /// No description provided for @activeAlertRespondFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Response failed: {reason}'**
-  String activeAlertRespondFailed(String reason);
-
   /// No description provided for @activeAlertElapsed.
   ///
   /// In en, this message translates to:
@@ -436,12 +424,6 @@ abstract class AppLocalizations {
   /// **'No alerts yet'**
   String get historyEmpty;
 
-  /// No description provided for @historyLoadFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed: {error}'**
-  String historyLoadFailed(String error);
-
   /// No description provided for @historyBadgeAck.
   ///
   /// In en, this message translates to:
@@ -495,12 +477,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnect from {org}'**
   String historyDisconnect(String org);
-
-  /// No description provided for @historyLeaveFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave failed: {reason}'**
-  String historyLeaveFailed(String reason);
 
   /// No description provided for @historyDisconnectDialogTitle.
   ///

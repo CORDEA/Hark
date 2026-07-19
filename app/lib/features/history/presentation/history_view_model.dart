@@ -47,7 +47,7 @@ class HistoryViewModel extends _$HistoryViewModel {
       state = AsyncValue.data(
         current.copyWith(
           isLeaving: false,
-          event: HistoryViewEvent.leaveFailed(e.toString()),
+          event: HistoryViewEvent.leaveFailed(e),
         ),
       );
     }

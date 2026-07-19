@@ -7,7 +7,7 @@ sealed class ConnectOrgViewEvent with _$ConnectOrgViewEvent {
   const factory ConnectOrgViewEvent.none() = ConnectOrgViewEventNone;
   const factory ConnectOrgViewEvent.missingFields() =
       ConnectOrgViewEventMissingFields;
-  const factory ConnectOrgViewEvent.registerFailed(String reason) =
+  const factory ConnectOrgViewEvent.registerFailed(Object error) =
       ConnectOrgViewEventRegisterFailed;
   const factory ConnectOrgViewEvent.navigateToOrgs() =
       ConnectOrgViewEventNavigateToOrgs;

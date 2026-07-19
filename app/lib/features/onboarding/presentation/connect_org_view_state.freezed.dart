@@ -125,12 +125,12 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function()?  missingFields,TResult Function( String reason)?  registerFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function()?  missingFields,TResult Function( Object error)?  registerFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
 return none();case ConnectOrgViewEventMissingFields() when missingFields != null:
 return missingFields();case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
-return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return registerFailed(_that.error);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return orElse();
 
@@ -149,12 +149,12 @@ return navigateToOrgs();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function()  missingFields,required TResult Function( String reason)  registerFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function()  missingFields,required TResult Function( Object error)  registerFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone():
 return none();case ConnectOrgViewEventMissingFields():
 return missingFields();case ConnectOrgViewEventRegisterFailed():
-return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs():
+return registerFailed(_that.error);case ConnectOrgViewEventNavigateToOrgs():
 return navigateToOrgs();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -169,12 +169,12 @@ return navigateToOrgs();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function()?  missingFields,TResult? Function( String reason)?  registerFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function()?  missingFields,TResult? Function( Object error)?  registerFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
 return none();case ConnectOrgViewEventMissingFields() when missingFields != null:
 return missingFields();case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
-return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return registerFailed(_that.error);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return null;
 
@@ -251,10 +251,10 @@ String toString() {
 
 
 class ConnectOrgViewEventRegisterFailed implements ConnectOrgViewEvent {
-  const ConnectOrgViewEventRegisterFailed(this.reason);
+  const ConnectOrgViewEventRegisterFailed(this.error);
   
 
- final  String reason;
+ final  Object error;
 
 /// Create a copy of ConnectOrgViewEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -266,16 +266,16 @@ $ConnectOrgViewEventRegisterFailedCopyWith<ConnectOrgViewEventRegisterFailed> ge
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectOrgViewEventRegisterFailed&&(identical(other.reason, reason) || other.reason == reason));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectOrgViewEventRegisterFailed&&const DeepCollectionEquality().equals(other.error, error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,reason);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(error));
 
 @override
 String toString() {
-  return 'ConnectOrgViewEvent.registerFailed(reason: $reason)';
+  return 'ConnectOrgViewEvent.registerFailed(error: $error)';
 }
 
 
@@ -286,7 +286,7 @@ abstract mixin class $ConnectOrgViewEventRegisterFailedCopyWith<$Res> implements
   factory $ConnectOrgViewEventRegisterFailedCopyWith(ConnectOrgViewEventRegisterFailed value, $Res Function(ConnectOrgViewEventRegisterFailed) _then) = _$ConnectOrgViewEventRegisterFailedCopyWithImpl;
 @useResult
 $Res call({
- String reason
+ Object error
 });
 
 
@@ -303,10 +303,9 @@ class _$ConnectOrgViewEventRegisterFailedCopyWithImpl<$Res>
 
 /// Create a copy of ConnectOrgViewEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
   return _then(ConnectOrgViewEventRegisterFailed(
-null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
-as String,
+null == error ? _self.error : error ,
   ));
 }
 

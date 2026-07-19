@@ -44,9 +44,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a server URL and an invitation code';
 
   @override
-  String connectOrgRegisterFailed(String reason) {
-    return '$reason';
-  }
+  String get commonError => 'Something went wrong. Please try again.';
 
   @override
   String get orgListTitle => 'Organizations';
@@ -63,11 +61,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orgListEmptyBody => 'Tap Add Organization to join one';
-
-  @override
-  String orgListLoadFailed(String error) {
-    return 'Failed to load: $error';
-  }
 
   @override
   String get orgCardNotificationsOn => 'Notifications on';
@@ -127,11 +120,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeAlertResolvedByOtherSubtitle => 'No action needed';
-
-  @override
-  String activeAlertRespondFailed(String reason) {
-    return 'Response failed: $reason';
-  }
 
   @override
   String activeAlertElapsed(String mm, String ss) {
@@ -201,11 +189,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyEmpty => 'No alerts yet';
 
   @override
-  String historyLoadFailed(String error) {
-    return 'Failed: $error';
-  }
-
-  @override
   String historyBadgeAck(String hhmm) {
     return 'ACK $hhmm';
   }
@@ -240,11 +223,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String historyDisconnect(String org) {
     return 'Disconnect from $org';
-  }
-
-  @override
-  String historyLeaveFailed(String reason) {
-    return 'Leave failed: $reason';
   }
 
   @override

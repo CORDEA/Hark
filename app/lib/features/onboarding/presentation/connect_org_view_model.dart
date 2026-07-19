@@ -59,7 +59,7 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
     } catch (e) {
       state = state.copyWith(
         isSubmitting: false,
-        event: ConnectOrgViewEvent.registerFailed(_prettifyError(e)),
+        event: ConnectOrgViewEvent.registerFailed(e),
       );
     }
   }
@@ -70,12 +70,6 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
   String _normalize(String url) {
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
     return 'https://$url';
-  }
-
-  String _prettifyError(Object err) {
-    final s = err.toString();
-    if (s.length > 160) return '${s.substring(0, 160)}…';
-    return s;
   }
 
   String _currentLocaleTag() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -91,7 +92,7 @@ class _OrgList extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(
         child: Text(
-          AppLocalizations.of(context).orgListLoadFailed(e.toString()),
+          ErrorLocalizer.localize(AppLocalizations.of(context), e),
           style: TextStyle(color: colors.declineText),
         ),
       ),
