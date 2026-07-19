@@ -1,45 +1,429 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ShowActiveAlertPage extends StatelessWidget {
+import '../../../core/theme/app_color_scheme_extension.dart';
+import '../../../core/theme/app_spacing.dart';
+import 'active_alert_view_model.dart';
+import 'active_alert_view_state.dart';
+
+/// Full-screen emergency UI (Screens 3 + 4 of the mobile design).
+class ShowActiveAlertPage extends HookConsumerWidget {
   const ShowActiveAlertPage({
     super.key,
     required this.alertId,
     required this.orgId,
     required this.type,
+    this.triggeredAt,
   });
 
   final String alertId;
   final String orgId;
   final String type;
+  final DateTime? triggeredAt;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final resolvedTriggeredAt = useMemoized(
+      () => triggeredAt ?? DateTime.now().toUtc(),
+      const [],
+    );
+    final provider = activeAlertViewModelProvider(
+      alertId: alertId,
+      orgId: orgId,
+      type: type,
+      triggeredAt: resolvedTriggeredAt,
+    );
+
+    ref.listen(provider.select((s) => s.event), (_, event) {
+      switch (event) {
+        case ActiveAlertViewEventShowSnackBar(:final message):
+          if (context.mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+            ref.read(provider.notifier).onEventConsumed();
+          }
+        case ActiveAlertViewEventDismiss():
+          if (context.mounted) {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/orgs');
+            }
+          }
+        case ActiveAlertViewEventNone():
+          break;
+      }
+    });
+
+    final isResolved = ref.watch(provider.select((s) => s.isResolved));
     return Scaffold(
-      body: Center(
+      backgroundColor: isResolved
+          ? Theme.of(context).scaffoldBackgroundColor
+          : _bg(context, ref.watch(provider.select((s) => s.isCritical))),
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.xxl,
+          ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                type.toUpperCase(),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text('alert: $alertId'),
-              Text('org: $orgId'),
-              const SizedBox(height: 24),
-              Text(
-                'F4 fills in the full-screen critical UI and the ack/decline flow.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Expanded(child: _Content(provider: provider)),
+              _ActionButtons(provider: provider),
             ],
           ),
         ),
       ),
     );
   }
+
+  Color _bg(BuildContext context, bool isCritical) {
+    if (!isCritical) return Theme.of(context).scaffoldBackgroundColor;
+    return context.harkColors.criticalBackground;
+  }
+}
+
+class _Content extends ConsumerWidget {
+  const _Content({required this.provider});
+  final ActiveAlertViewModelProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    final state = ref.watch(provider);
+
+    if (state.isResolved) {
+      return _ResolvedContent(state: state);
+    }
+
+    return Column(
+      children: [
+        Text(
+          'Alert · ${_shortOrg(state.orgId)}',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: colors.criticalTextMuted,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.02,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          decoration: BoxDecoration(
+            color: state.isCritical ? colors.critical : colors.warning,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Text(
+            state.type.toUpperCase(),
+            style: TextStyle(
+              color: state.isCritical ? Colors.white : const Color(0xFF241A04),
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+              letterSpacing: 0.08,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Container(
+          decoration: BoxDecoration(
+            color: colors.criticalBackground,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: colors.criticalBorder),
+          ),
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _KeyValue(
+                label: 'Type',
+                value: state.isCritical ? 'Service outage' : 'Warning',
+                colors: colors,
+                valueBold: true,
+              ),
+              const _CriticalDivider(),
+              _KeyValue(
+                label: 'Your action',
+                value: state.isSending ? 'Sending…' : 'Pending',
+                colors: colors,
+                valueColor: colors.warning,
+                valueBold: true,
+              ),
+              const _CriticalDivider(),
+              _KeyValue(
+                label: 'Triggered',
+                value: _fmtTime(state.triggeredAt),
+                colors: colors,
+                monoValue: true,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          _elapsed(state.triggeredAt),
+          style: TextStyle(
+            fontFamily: 'Menlo',
+            color: colors.criticalTextDim,
+            fontSize: 13,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ResolvedContent extends StatelessWidget {
+  const _ResolvedContent({required this.state});
+  final ActiveAlertViewState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          decoration: BoxDecoration(
+            color: colors.borderSubtle,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Text(
+            state.type.toUpperCase(),
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+              letterSpacing: 0.08,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: colors.resolvedBackground,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: colors.resolvedBorder),
+          ),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            children: [
+              Text(
+                _resolutionHeadline(state.outcome!),
+                style: TextStyle(
+                  color: colors.resolvedText,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                _resolutionSubtitle(state.outcome!),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String _resolutionHeadline(ActiveAlertOutcome outcome) {
+  switch (outcome) {
+    case ActiveAlertOutcome.acknowledgedByMe:
+      return 'Acknowledged';
+    case ActiveAlertOutcome.declinedByMe:
+      return 'Declined';
+    case ActiveAlertOutcome.resolvedByOther:
+      return 'Resolved by teammate';
+  }
+}
+
+String _resolutionSubtitle(ActiveAlertOutcome outcome) {
+  switch (outcome) {
+    case ActiveAlertOutcome.acknowledgedByMe:
+      return 'You are on it';
+    case ActiveAlertOutcome.declinedByMe:
+      return 'Marked as unavailable';
+    case ActiveAlertOutcome.resolvedByOther:
+      return 'No action needed';
+  }
+}
+
+class _KeyValue extends StatelessWidget {
+  const _KeyValue({
+    required this.label,
+    required this.value,
+    required this.colors,
+    this.valueColor,
+    this.valueBold = false,
+    this.monoValue = false,
+  });
+  final String label;
+  final String value;
+  final AppColorSchemeExtension colors;
+  final Color? valueColor;
+  final bool valueBold;
+  final bool monoValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        Text(
+          label,
+          style: TextStyle(color: colors.criticalTextDim, fontSize: 13),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: valueColor ?? Colors.white,
+            fontWeight: valueBold ? FontWeight.w700 : FontWeight.w600,
+            fontSize: 15,
+            fontFamily: monoValue ? 'Menlo' : null,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CriticalDivider extends StatelessWidget {
+  const _CriticalDivider();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 1,
+      margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm + 6),
+      color: context.harkColors.criticalBorder,
+    );
+  }
+}
+
+class _ActionButtons extends ConsumerWidget {
+  const _ActionButtons({required this.provider});
+  final ActiveAlertViewModelProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(provider);
+    final colors = context.harkColors;
+
+    if (state.isResolved) {
+      return SizedBox(
+        height: 56,
+        width: double.infinity,
+        child: OutlinedButton(
+          onPressed: () => ref.read(provider.notifier).onDismissTapped(),
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: colors.borderSubtle),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: colors.surfaceInput,
+          ),
+          child: const Text(
+            'Dismiss',
+            style: TextStyle(
+              color: Color(0xFFC8C8CE),
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        SizedBox(
+          height: 64,
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: state.isSending
+                ? null
+                : () => ref.read(provider.notifier).onAckTapped(),
+            style: FilledButton.styleFrom(
+              backgroundColor: colors.critical,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: state.isSending
+                ? const SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Text(
+                    "Acknowledge — I'm on it",
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+                  ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm + 4),
+        SizedBox(
+          height: 56,
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: state.isSending
+                ? null
+                : () => ref.read(provider.notifier).onDeclineTapped(),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: colors.criticalBorder),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: Text(
+              "Decline — Can't respond",
+              style: TextStyle(
+                color: colors.criticalTextMuted,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String _shortOrg(String orgId) {
+  final u = Uri.tryParse(orgId);
+  if (u == null || u.host.isEmpty) return orgId;
+  return u.host;
+}
+
+String _fmtTime(DateTime t) {
+  final u = t.toUtc();
+  String p(int n) => n.toString().padLeft(2, '0');
+  return '${p(u.hour)}:${p(u.minute)}:${p(u.second)} UTC';
+}
+
+String _elapsed(DateTime t) {
+  final d = DateTime.now().toUtc().difference(t.toUtc());
+  final m = d.inMinutes;
+  final s = d.inSeconds - m * 60;
+  String p(int n) => n.toString().padLeft(2, '0');
+  return '${p(m)}:${p(s.clamp(0, 59))} elapsed';
 }

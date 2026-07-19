@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../features/active_alert/presentation/show_active_alert_page.dart';
+import '../features/alert_detail/presentation/view_alert_detail_page.dart';
 import '../features/onboarding/presentation/connect_org_page.dart';
 import '../features/organizations/presentation/list_organization_page.dart';
 
@@ -38,6 +39,14 @@ GoRouter router(Ref ref) {
           final org = state.uri.queryParameters['org'] ?? '';
           final type = state.uri.queryParameters['type'] ?? 'critical';
           return ShowActiveAlertPage(alertId: id, orgId: org, type: type);
+        },
+      ),
+      GoRoute(
+        path: '/alert/:id/detail',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          final org = state.uri.queryParameters['org'] ?? '';
+          return ViewAlertDetailPage(orgId: org, alertId: id);
         },
       ),
     ],
