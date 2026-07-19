@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -42,12 +43,19 @@ class DeepLinkService {
     if (uri.scheme != 'hark' || uri.host != 'join') return;
     final server = uri.queryParameters['server'] ?? '';
     final code = uri.queryParameters['code'] ?? '';
-    navigatorKey.currentContext?.go(
-      Uri(
-        path: '/connect',
-        queryParameters: {'server': server, 'code': code},
-      ).toString(),
-    );
+    final location = Uri(
+      path: '/connect',
+      queryParameters: {'server': server, 'code': code},
+    ).toString();
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      context.go(location);
+    } else {
+      // Cold-start: navigator not mounted yet; defer until the first frame.
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        navigatorKey.currentContext?.go(location);
+      });
+    }
   }
 
   Future<void> dispose() async {

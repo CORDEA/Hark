@@ -19,10 +19,10 @@ final navigatorKey = GlobalKey<NavigatorState>();
 GoRouter router(Ref ref) {
   return GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: '/orgs',
+    initialLocation: '/',
     routes: [
       GoRoute(
-        path: '/orgs',
+        path: '/',
         builder: (context, state) => const ListOrganizationPage(),
       ),
       GoRoute(

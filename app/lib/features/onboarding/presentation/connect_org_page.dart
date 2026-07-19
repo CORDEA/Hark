@@ -49,7 +49,7 @@ class ConnectOrgPage extends HookConsumerWidget {
             ref.read(provider.notifier).onEventConsumed();
           }
         case ConnectOrgViewEventNavigateToOrgs():
-          if (context.mounted) context.go('/orgs');
+          if (context.mounted) context.go('/');
         case ConnectOrgViewEventNone():
           break;
       }
@@ -167,7 +167,7 @@ class ConnectOrgPage extends HookConsumerWidget {
               const SizedBox(height: AppSpacing.md),
               Center(
                 child: GestureDetector(
-                  onTap: () => context.go('/orgs'),
+                  onTap: () => context.go('/'),
                   child: Text.rich(
                     TextSpan(
                       text: l10n.connectOrgAlreadyHaveOrgs,
