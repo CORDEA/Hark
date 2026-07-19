@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HistoryRowViewState {
 
- String get alertId; String get type; String get title; DateTime get triggeredAt; HistoryRowBadge get badge; DateTime? get badgeAt;
+ String get alertId; String get type; DateTime get triggeredAt; HistoryRowBadge get badge; DateTime? get badgeAt;
 /// Create a copy of HistoryRowViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HistoryRowViewStateCopyWith<HistoryRowViewState> get copyWith => _$HistoryRowVi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryRowViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.badge, badge) || other.badge == badge)&&(identical(other.badgeAt, badgeAt) || other.badgeAt == badgeAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryRowViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.badge, badge) || other.badge == badge)&&(identical(other.badgeAt, badgeAt) || other.badgeAt == badgeAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,type,title,triggeredAt,badge,badgeAt);
+int get hashCode => Object.hash(runtimeType,alertId,type,triggeredAt,badge,badgeAt);
 
 @override
 String toString() {
-  return 'HistoryRowViewState(alertId: $alertId, type: $type, title: $title, triggeredAt: $triggeredAt, badge: $badge, badgeAt: $badgeAt)';
+  return 'HistoryRowViewState(alertId: $alertId, type: $type, triggeredAt: $triggeredAt, badge: $badge, badgeAt: $badgeAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HistoryRowViewStateCopyWith<$Res>  {
   factory $HistoryRowViewStateCopyWith(HistoryRowViewState value, $Res Function(HistoryRowViewState) _then) = _$HistoryRowViewStateCopyWithImpl;
 @useResult
 $Res call({
- String alertId, String type, String title, DateTime triggeredAt, HistoryRowBadge badge, DateTime? badgeAt
+ String alertId, String type, DateTime triggeredAt, HistoryRowBadge badge, DateTime? badgeAt
 });
 
 
@@ -62,11 +62,10 @@ class _$HistoryRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? type = null,Object? title = null,Object? triggeredAt = null,Object? badge = null,Object? badgeAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? type = null,Object? triggeredAt = null,Object? badge = null,Object? badgeAt = freezed,}) {
   return _then(_self.copyWith(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,triggeredAt: null == triggeredAt ? _self.triggeredAt : triggeredAt // ignore: cast_nullable_to_non_nullable
 as DateTime,badge: null == badge ? _self.badge : badge // ignore: cast_nullable_to_non_nullable
 as HistoryRowBadge,badgeAt: freezed == badgeAt ? _self.badgeAt : badgeAt // ignore: cast_nullable_to_non_nullable
@@ -155,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String type,  String title,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String type,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HistoryRowViewState() when $default != null:
-return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
+return $default(_that.alertId,_that.type,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
   return orElse();
 
 }
@@ -176,10 +175,10 @@ return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.bad
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String type,  String title,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String type,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)  $default,) {final _that = this;
 switch (_that) {
 case _HistoryRowViewState():
-return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
+return $default(_that.alertId,_that.type,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +195,10 @@ return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.bad
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String type,  String title,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String type,  DateTime triggeredAt,  HistoryRowBadge badge,  DateTime? badgeAt)?  $default,) {final _that = this;
 switch (_that) {
 case _HistoryRowViewState() when $default != null:
-return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
+return $default(_that.alertId,_that.type,_that.triggeredAt,_that.badge,_that.badgeAt);case _:
   return null;
 
 }
@@ -211,12 +210,11 @@ return $default(_that.alertId,_that.type,_that.title,_that.triggeredAt,_that.bad
 
 
 class _HistoryRowViewState implements HistoryRowViewState {
-  const _HistoryRowViewState({required this.alertId, required this.type, required this.title, required this.triggeredAt, required this.badge, this.badgeAt});
+  const _HistoryRowViewState({required this.alertId, required this.type, required this.triggeredAt, required this.badge, this.badgeAt});
   
 
 @override final  String alertId;
 @override final  String type;
-@override final  String title;
 @override final  DateTime triggeredAt;
 @override final  HistoryRowBadge badge;
 @override final  DateTime? badgeAt;
@@ -231,16 +229,16 @@ _$HistoryRowViewStateCopyWith<_HistoryRowViewState> get copyWith => __$HistoryRo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryRowViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.badge, badge) || other.badge == badge)&&(identical(other.badgeAt, badgeAt) || other.badgeAt == badgeAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryRowViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.badge, badge) || other.badge == badge)&&(identical(other.badgeAt, badgeAt) || other.badgeAt == badgeAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,type,title,triggeredAt,badge,badgeAt);
+int get hashCode => Object.hash(runtimeType,alertId,type,triggeredAt,badge,badgeAt);
 
 @override
 String toString() {
-  return 'HistoryRowViewState(alertId: $alertId, type: $type, title: $title, triggeredAt: $triggeredAt, badge: $badge, badgeAt: $badgeAt)';
+  return 'HistoryRowViewState(alertId: $alertId, type: $type, triggeredAt: $triggeredAt, badge: $badge, badgeAt: $badgeAt)';
 }
 
 
@@ -251,7 +249,7 @@ abstract mixin class _$HistoryRowViewStateCopyWith<$Res> implements $HistoryRowV
   factory _$HistoryRowViewStateCopyWith(_HistoryRowViewState value, $Res Function(_HistoryRowViewState) _then) = __$HistoryRowViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String alertId, String type, String title, DateTime triggeredAt, HistoryRowBadge badge, DateTime? badgeAt
+ String alertId, String type, DateTime triggeredAt, HistoryRowBadge badge, DateTime? badgeAt
 });
 
 
@@ -268,11 +266,10 @@ class __$HistoryRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? type = null,Object? title = null,Object? triggeredAt = null,Object? badge = null,Object? badgeAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? type = null,Object? triggeredAt = null,Object? badge = null,Object? badgeAt = freezed,}) {
   return _then(_HistoryRowViewState(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,triggeredAt: null == triggeredAt ? _self.triggeredAt : triggeredAt // ignore: cast_nullable_to_non_nullable
 as DateTime,badge: null == badge ? _self.badge : badge // ignore: cast_nullable_to_non_nullable
 as HistoryRowBadge,badgeAt: freezed == badgeAt ? _self.badgeAt : badgeAt // ignore: cast_nullable_to_non_nullable
@@ -327,12 +324,12 @@ extension HistoryViewEventPatterns on HistoryViewEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HistoryViewEventNone value)?  none,TResult Function( HistoryViewEventShowSnackBar value)?  showSnackBar,TResult Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HistoryViewEventNone value)?  none,TResult Function( HistoryViewEventLeaveFailed value)?  leaveFailed,TResult Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
-return none(_that);case HistoryViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none(_that);case HistoryViewEventLeaveFailed() when leaveFailed != null:
+return leaveFailed(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs(_that);case _:
   return orElse();
 
@@ -351,12 +348,12 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HistoryViewEventNone value)  none,required TResult Function( HistoryViewEventShowSnackBar value)  showSnackBar,required TResult Function( HistoryViewEventNavigateToOrgs value)  navigateToOrgs,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HistoryViewEventNone value)  none,required TResult Function( HistoryViewEventLeaveFailed value)  leaveFailed,required TResult Function( HistoryViewEventNavigateToOrgs value)  navigateToOrgs,}){
 final _that = this;
 switch (_that) {
 case HistoryViewEventNone():
-return none(_that);case HistoryViewEventShowSnackBar():
-return showSnackBar(_that);case HistoryViewEventNavigateToOrgs():
+return none(_that);case HistoryViewEventLeaveFailed():
+return leaveFailed(_that);case HistoryViewEventNavigateToOrgs():
 return navigateToOrgs(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -371,12 +368,12 @@ return navigateToOrgs(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HistoryViewEventNone value)?  none,TResult? Function( HistoryViewEventShowSnackBar value)?  showSnackBar,TResult? Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HistoryViewEventNone value)?  none,TResult? Function( HistoryViewEventLeaveFailed value)?  leaveFailed,TResult? Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,}){
 final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
-return none(_that);case HistoryViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none(_that);case HistoryViewEventLeaveFailed() when leaveFailed != null:
+return leaveFailed(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs(_that);case _:
   return null;
 
@@ -394,11 +391,11 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String message)?  showSnackBar,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String reason)?  leaveFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
-return none();case HistoryViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
+return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return orElse();
 
@@ -417,11 +414,11 @@ return navigateToOrgs();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String message)  showSnackBar,required TResult Function()  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String reason)  leaveFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone():
-return none();case HistoryViewEventShowSnackBar():
-return showSnackBar(_that.message);case HistoryViewEventNavigateToOrgs():
+return none();case HistoryViewEventLeaveFailed():
+return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs():
 return navigateToOrgs();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -436,11 +433,11 @@ return navigateToOrgs();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String message)?  showSnackBar,TResult? Function()?  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String reason)?  leaveFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case HistoryViewEventNone() when none != null:
-return none();case HistoryViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
+return leaveFailed(_that.reason);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return null;
 
@@ -484,43 +481,43 @@ String toString() {
 /// @nodoc
 
 
-class HistoryViewEventShowSnackBar implements HistoryViewEvent {
-  const HistoryViewEventShowSnackBar(this.message);
+class HistoryViewEventLeaveFailed implements HistoryViewEvent {
+  const HistoryViewEventLeaveFailed(this.reason);
   
 
- final  String message;
+ final  String reason;
 
 /// Create a copy of HistoryViewEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$HistoryViewEventShowSnackBarCopyWith<HistoryViewEventShowSnackBar> get copyWith => _$HistoryViewEventShowSnackBarCopyWithImpl<HistoryViewEventShowSnackBar>(this, _$identity);
+$HistoryViewEventLeaveFailedCopyWith<HistoryViewEventLeaveFailed> get copyWith => _$HistoryViewEventLeaveFailedCopyWithImpl<HistoryViewEventLeaveFailed>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventShowSnackBar&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventLeaveFailed&&(identical(other.reason, reason) || other.reason == reason));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,reason);
 
 @override
 String toString() {
-  return 'HistoryViewEvent.showSnackBar(message: $message)';
+  return 'HistoryViewEvent.leaveFailed(reason: $reason)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $HistoryViewEventShowSnackBarCopyWith<$Res> implements $HistoryViewEventCopyWith<$Res> {
-  factory $HistoryViewEventShowSnackBarCopyWith(HistoryViewEventShowSnackBar value, $Res Function(HistoryViewEventShowSnackBar) _then) = _$HistoryViewEventShowSnackBarCopyWithImpl;
+abstract mixin class $HistoryViewEventLeaveFailedCopyWith<$Res> implements $HistoryViewEventCopyWith<$Res> {
+  factory $HistoryViewEventLeaveFailedCopyWith(HistoryViewEventLeaveFailed value, $Res Function(HistoryViewEventLeaveFailed) _then) = _$HistoryViewEventLeaveFailedCopyWithImpl;
 @useResult
 $Res call({
- String message
+ String reason
 });
 
 
@@ -528,18 +525,18 @@ $Res call({
 
 }
 /// @nodoc
-class _$HistoryViewEventShowSnackBarCopyWithImpl<$Res>
-    implements $HistoryViewEventShowSnackBarCopyWith<$Res> {
-  _$HistoryViewEventShowSnackBarCopyWithImpl(this._self, this._then);
+class _$HistoryViewEventLeaveFailedCopyWithImpl<$Res>
+    implements $HistoryViewEventLeaveFailedCopyWith<$Res> {
+  _$HistoryViewEventLeaveFailedCopyWithImpl(this._self, this._then);
 
-  final HistoryViewEventShowSnackBar _self;
-  final $Res Function(HistoryViewEventShowSnackBar) _then;
+  final HistoryViewEventLeaveFailed _self;
+  final $Res Function(HistoryViewEventLeaveFailed) _then;
 
 /// Create a copy of HistoryViewEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(HistoryViewEventShowSnackBar(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+  return _then(HistoryViewEventLeaveFailed(
+null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

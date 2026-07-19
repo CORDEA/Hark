@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_state.dart';
 
 class OrganizationCard extends StatelessWidget {
@@ -22,6 +23,7 @@ class OrganizationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     return InkWell(
       onTap: onOpen,
       borderRadius: BorderRadius.circular(16),
@@ -101,7 +103,7 @@ class OrganizationCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Notifications on',
+                  l10n.orgCardNotificationsOn,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
@@ -109,7 +111,7 @@ class OrganizationCard extends StatelessWidget {
                 TextButton(
                   onPressed: onLeave,
                   child: Text(
-                    'Disconnect',
+                    l10n.orgCardDisconnect,
                     style: TextStyle(
                       color: colors.critical,
                       fontWeight: FontWeight.w600,

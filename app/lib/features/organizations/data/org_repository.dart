@@ -56,6 +56,7 @@ class OrgRepository {
     required String invitationCode,
     required String fcmToken,
     required String deviceName,
+    required String locale,
   }) async {
     final dio = _apiClientFactory.create(serverUrl);
     final ds = OrgRemoteDataSource(dio);
@@ -64,6 +65,7 @@ class OrgRepository {
         invitationCode: invitationCode,
         fcmToken: fcmToken,
         deviceName: deviceName,
+        locale: locale,
       ),
     );
     return OrgProfile(

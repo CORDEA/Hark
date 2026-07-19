@@ -13,13 +13,13 @@ import (
 )
 
 type userView struct {
-	ID             string        `json:"id"`
-	DisplayName    string        `json:"display_name"`
-	InvitationCode string        `json:"invitation_code"`
-	Status         string        `json:"status"`
-	CreatedAt      time.Time     `json:"created_at"`
-	Devices        []deviceView  `json:"devices"`
-	LastActivityAt *time.Time    `json:"last_activity_at,omitempty"`
+	ID             string       `json:"id"`
+	DisplayName    string       `json:"display_name"`
+	InvitationCode string       `json:"invitation_code"`
+	Status         string       `json:"status"`
+	CreatedAt      time.Time    `json:"created_at"`
+	Devices        []deviceView `json:"devices"`
+	LastActivityAt *time.Time   `json:"last_activity_at,omitempty"`
 }
 
 type deviceView struct {

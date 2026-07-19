@@ -9,6 +9,7 @@ abstract class RegisterRequestDto with _$RegisterRequestDto {
     @JsonKey(name: 'invitation_code') required String invitationCode,
     @JsonKey(name: 'fcm_token') required String fcmToken,
     @JsonKey(name: 'device_name') required String deviceName,
+    @JsonKey(name: 'locale') required String locale,
   }) = _RegisterRequestDto;
 
   factory RegisterRequestDto.fromJson(Map<String, dynamic> json) =>

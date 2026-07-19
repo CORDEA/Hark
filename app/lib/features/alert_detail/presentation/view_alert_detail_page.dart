@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'alert_detail_view_model.dart';
 import 'alert_detail_view_state.dart';
 
@@ -47,12 +48,13 @@ class _ErrorView extends StatelessWidget {
   final VoidCallback onRetry;
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Failed to load alert',
+            l10n.alertDetailLoadFailed,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -66,7 +68,7 @@ class _ErrorView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          FilledButton(onPressed: onRetry, child: const Text('Retry')),
+          FilledButton(onPressed: onRetry, child: Text(l10n.alertDetailRetry)),
         ],
       ),
     );
@@ -81,6 +83,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.harkColors;
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -100,7 +103,7 @@ class _Body extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  '←  ${state.orgName}',
+                  l10n.alertDetailBack(state.orgName),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     fontWeight: FontWeight.w600,
@@ -115,13 +118,15 @@ class _Body extends StatelessWidget {
           _MetaCard(state: state),
           const SizedBox(height: AppSpacing.lg),
           if (state.acknowledged.isNotEmpty) ...[
-            _SectionLabel('Acknowledged (${state.acknowledged.length})'),
+            _SectionLabel(
+              l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
+            ),
             const SizedBox(height: AppSpacing.sm),
             ...state.acknowledged.map(_ackRow),
             const SizedBox(height: AppSpacing.md),
           ],
           if (state.pending.isNotEmpty) ...[
-            _SectionLabel('Pending (${state.pending.length})'),
+            _SectionLabel(l10n.alertDetailSectionPending(state.pending.length)),
             const SizedBox(height: AppSpacing.sm),
             ...state.pending.map(
               (r) => Padding(
@@ -137,7 +142,9 @@ class _Body extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
           ],
           if (state.declined.isNotEmpty) ...[
-            _SectionLabel('Declined (${state.declined.length})'),
+            _SectionLabel(
+              l10n.alertDetailSectionDeclined(state.declined.length),
+            ),
             const SizedBox(height: AppSpacing.sm),
             ...state.declined.map(
               (r) => Padding(
@@ -169,7 +176,9 @@ class _Body extends StatelessWidget {
               ),
             ),
             Text(
-              r.respondedAt != null ? _fmtTime(r.respondedAt!) : '—',
+              r.respondedAt != null
+                  ? _fmtTime(r.respondedAt!)
+                  : AppLocalizations.of(context).alertDetailValueEmpty,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontFamily: 'Menlo',
                 color: Theme.of(
@@ -190,6 +199,7 @@ class _StatusPills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     final ackByMe = state.isAcknowledgedByMe;
     return Row(
       children: [
@@ -206,14 +216,16 @@ class _StatusPills extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         if (state.status == 'resolved')
           _Pill(
-            text: ackByMe ? 'ACKNOWLEDGED' : 'RESOLVED',
+            text: ackByMe
+                ? l10n.alertDetailStatusAcknowledged
+                : l10n.alertDetailStatusResolved,
             background: colors.ackBackground,
             border: colors.ackBorder,
             foreground: colors.ackText,
           )
         else
           _Pill(
-            text: 'ACTIVE',
+            text: l10n.alertDetailStatusActive,
             background: colors.critical.withValues(alpha: 0.15),
             border: colors.critical.withValues(alpha: 0.4),
             foreground: colors.criticalStrong,
@@ -263,6 +275,7 @@ class _MetaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF151517),
@@ -271,30 +284,47 @@ class _MetaCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _row('Type', _typeLabel(state), context),
+          _row(l10n.alertDetailRowType, _typeLabel(l10n, state), context),
           _divider(colors),
           _row(
-            'Target',
+            l10n.alertDetailRowTarget,
             state.isBroadcast
-                ? 'All subscribers'
+                ? l10n.alertDetailTargetAll
                 : state.targetNames.join(', '),
             context,
           ),
           _divider(colors),
-          _row('Triggered', _fmtTime(state.triggeredAt), context, mono: true),
+          _row(
+            l10n.alertDetailRowTriggered,
+            _fmtTime(state.triggeredAt),
+            context,
+            mono: true,
+          ),
           if (state.resolvedAt != null) ...[
             _divider(colors),
-            _row('Resolved', _fmtTime(state.resolvedAt!), context, mono: true),
+            _row(
+              l10n.alertDetailRowResolved,
+              _fmtTime(state.resolvedAt!),
+              context,
+              mono: true,
+            ),
           ],
           _divider(colors),
-          _row('Responder', state.responderName ?? '—', context, bold: true),
+          _row(
+            l10n.alertDetailRowResponder,
+            state.responderName ?? l10n.alertDetailValueEmpty,
+            context,
+            bold: true,
+          ),
         ],
       ),
     );
   }
 
-  static String _typeLabel(AlertDetailViewState s) {
-    return s.isCritical ? 'Service outage' : 'Warning';
+  static String _typeLabel(AppLocalizations l10n, AlertDetailViewState s) {
+    return s.isCritical
+        ? l10n.activeAlertTypeCritical
+        : l10n.activeAlertTypeWarning;
   }
 
   static Widget _divider(AppColorSchemeExtension colors) =>

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RegisterRequestDto {
 
-@JsonKey(name: 'invitation_code') String get invitationCode;@JsonKey(name: 'fcm_token') String get fcmToken;@JsonKey(name: 'device_name') String get deviceName;
+@JsonKey(name: 'invitation_code') String get invitationCode;@JsonKey(name: 'fcm_token') String get fcmToken;@JsonKey(name: 'device_name') String get deviceName;@JsonKey(name: 'locale') String get locale;
 /// Create a copy of RegisterRequestDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RegisterRequestDtoCopyWith<RegisterRequestDto> get copyWith => _$RegisterReques
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterRequestDto&&(identical(other.invitationCode, invitationCode) || other.invitationCode == invitationCode)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RegisterRequestDto&&(identical(other.invitationCode, invitationCode) || other.invitationCode == invitationCode)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName)&&(identical(other.locale, locale) || other.locale == locale));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,invitationCode,fcmToken,deviceName);
+int get hashCode => Object.hash(runtimeType,invitationCode,fcmToken,deviceName,locale);
 
 @override
 String toString() {
-  return 'RegisterRequestDto(invitationCode: $invitationCode, fcmToken: $fcmToken, deviceName: $deviceName)';
+  return 'RegisterRequestDto(invitationCode: $invitationCode, fcmToken: $fcmToken, deviceName: $deviceName, locale: $locale)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RegisterRequestDtoCopyWith<$Res>  {
   factory $RegisterRequestDtoCopyWith(RegisterRequestDto value, $Res Function(RegisterRequestDto) _then) = _$RegisterRequestDtoCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'invitation_code') String invitationCode,@JsonKey(name: 'fcm_token') String fcmToken,@JsonKey(name: 'device_name') String deviceName
+@JsonKey(name: 'invitation_code') String invitationCode,@JsonKey(name: 'fcm_token') String fcmToken,@JsonKey(name: 'device_name') String deviceName,@JsonKey(name: 'locale') String locale
 });
 
 
@@ -65,11 +65,12 @@ class _$RegisterRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of RegisterRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? invitationCode = null,Object? fcmToken = null,Object? deviceName = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? invitationCode = null,Object? fcmToken = null,Object? deviceName = null,Object? locale = null,}) {
   return _then(_self.copyWith(
 invitationCode: null == invitationCode ? _self.invitationCode : invitationCode // ignore: cast_nullable_to_non_nullable
 as String,fcmToken: null == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String,deviceName: null == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String,locale: null == locale ? _self.locale : locale // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName, @JsonKey(name: 'locale')  String locale)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterRequestDto() when $default != null:
-return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
+return $default(_that.invitationCode,_that.fcmToken,_that.deviceName,_that.locale);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName, @JsonKey(name: 'locale')  String locale)  $default,) {final _that = this;
 switch (_that) {
 case _RegisterRequestDto():
-return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
+return $default(_that.invitationCode,_that.fcmToken,_that.deviceName,_that.locale);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'invitation_code')  String invitationCode, @JsonKey(name: 'fcm_token')  String fcmToken, @JsonKey(name: 'device_name')  String deviceName, @JsonKey(name: 'locale')  String locale)?  $default,) {final _that = this;
 switch (_that) {
 case _RegisterRequestDto() when $default != null:
-return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
+return $default(_that.invitationCode,_that.fcmToken,_that.deviceName,_that.locale);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.invitationCode,_that.fcmToken,_that.deviceName);case _:
 @JsonSerializable()
 
 class _RegisterRequestDto implements RegisterRequestDto {
-  const _RegisterRequestDto({@JsonKey(name: 'invitation_code') required this.invitationCode, @JsonKey(name: 'fcm_token') required this.fcmToken, @JsonKey(name: 'device_name') required this.deviceName});
+  const _RegisterRequestDto({@JsonKey(name: 'invitation_code') required this.invitationCode, @JsonKey(name: 'fcm_token') required this.fcmToken, @JsonKey(name: 'device_name') required this.deviceName, @JsonKey(name: 'locale') required this.locale});
   factory _RegisterRequestDto.fromJson(Map<String, dynamic> json) => _$RegisterRequestDtoFromJson(json);
 
 @override@JsonKey(name: 'invitation_code') final  String invitationCode;
 @override@JsonKey(name: 'fcm_token') final  String fcmToken;
 @override@JsonKey(name: 'device_name') final  String deviceName;
+@override@JsonKey(name: 'locale') final  String locale;
 
 /// Create a copy of RegisterRequestDto
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterRequestDto&&(identical(other.invitationCode, invitationCode) || other.invitationCode == invitationCode)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterRequestDto&&(identical(other.invitationCode, invitationCode) || other.invitationCode == invitationCode)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName)&&(identical(other.locale, locale) || other.locale == locale));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,invitationCode,fcmToken,deviceName);
+int get hashCode => Object.hash(runtimeType,invitationCode,fcmToken,deviceName,locale);
 
 @override
 String toString() {
-  return 'RegisterRequestDto(invitationCode: $invitationCode, fcmToken: $fcmToken, deviceName: $deviceName)';
+  return 'RegisterRequestDto(invitationCode: $invitationCode, fcmToken: $fcmToken, deviceName: $deviceName, locale: $locale)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$RegisterRequestDtoCopyWith<$Res> implements $RegisterRequ
   factory _$RegisterRequestDtoCopyWith(_RegisterRequestDto value, $Res Function(_RegisterRequestDto) _then) = __$RegisterRequestDtoCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'invitation_code') String invitationCode,@JsonKey(name: 'fcm_token') String fcmToken,@JsonKey(name: 'device_name') String deviceName
+@JsonKey(name: 'invitation_code') String invitationCode,@JsonKey(name: 'fcm_token') String fcmToken,@JsonKey(name: 'device_name') String deviceName,@JsonKey(name: 'locale') String locale
 });
 
 
@@ -268,11 +270,12 @@ class __$RegisterRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of RegisterRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? invitationCode = null,Object? fcmToken = null,Object? deviceName = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? invitationCode = null,Object? fcmToken = null,Object? deviceName = null,Object? locale = null,}) {
   return _then(_RegisterRequestDto(
 invitationCode: null == invitationCode ? _self.invitationCode : invitationCode // ignore: cast_nullable_to_non_nullable
 as String,fcmToken: null == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String,deviceName: null == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String,locale: null == locale ? _self.locale : locale // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

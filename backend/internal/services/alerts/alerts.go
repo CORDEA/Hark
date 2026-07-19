@@ -13,20 +13,22 @@ import (
 
 	"github.com/cordea/hark/internal/models"
 	"github.com/cordea/hark/internal/services/fcm"
+	"github.com/cordea/hark/internal/services/i18n"
 )
 
 var (
-	ErrInvalidType   = errors.New("invalid alert type")
-	ErrNoRecipients  = errors.New("no recipients")
-	ErrAlertNotFound = errors.New("alert not found")
-	ErrUserNotOnAlert = errors.New("user not a recipient")
+	ErrInvalidType     = errors.New("invalid alert type")
+	ErrNoRecipients    = errors.New("no recipients")
+	ErrAlertNotFound   = errors.New("alert not found")
+	ErrUserNotOnAlert  = errors.New("user not a recipient")
 	ErrAlreadyResolved = errors.New("alert already resolved")
-	ErrInvalidAction = errors.New("invalid action")
+	ErrInvalidAction   = errors.New("invalid action")
 )
 
 type Service struct {
-	DB     *gorm.DB
-	Sender fcm.Sender
+	DB        *gorm.DB
+	Sender    fcm.Sender
+	Localizer *i18n.Localizer
 }
 
 // Trigger creates the alert and fans out a high-priority push. When
@@ -214,6 +216,8 @@ func (s *Service) silentResolveFanout(ctx context.Context, alertID, exceptUserID
 			Token:   d.FCMToken,
 			Kind:    fcm.KindResolve,
 			AlertID: alertID,
+			Title:   s.t(d.Locale, "push.resolve.title", nil),
+			Body:    s.t(d.Locale, "push.resolve.body", nil),
 			Data: map[string]string{
 				"kind":     fcm.KindResolve,
 				"alert_id": alertID,
@@ -231,12 +235,20 @@ func (s *Service) fanoutAlert(ctx context.Context, alert models.Alert, devices [
 	}
 	msgs := make([]fcm.Message, 0, len(devices))
 	critical := alert.Type == models.AlertTypeCritical
+	titleKey := "push.alert.warning.title"
+	bodyKey := "push.alert.warning.body"
+	if critical {
+		titleKey = "push.alert.critical.title"
+		bodyKey = "push.alert.critical.body"
+	}
 	for _, d := range devices {
 		msgs = append(msgs, fcm.Message{
 			Token:    d.FCMToken,
 			Kind:     fcm.KindAlert,
 			AlertID:  alert.ID,
 			Critical: critical,
+			Title:    s.t(d.Locale, titleKey, nil),
+			Body:     s.t(d.Locale, bodyKey, nil),
 			Data: map[string]string{
 				"kind":     fcm.KindAlert,
 				"alert_id": alert.ID,
@@ -262,12 +274,25 @@ func (s *Service) TestPing(ctx context.Context, userID string) error {
 		msgs = append(msgs, fcm.Message{
 			Token: d.FCMToken,
 			Kind:  fcm.KindTest,
+			Title: s.t(d.Locale, "push.test.title", nil),
+			Body:  s.t(d.Locale, "push.test.body", nil),
 			Data:  map[string]string{"kind": fcm.KindTest},
 		})
 	}
 	res := s.Sender.Send(ctx, msgs)
 	s.pruneDeadTokens(res.DeadTokens)
 	return nil
+}
+
+// t resolves a localization key against the service's Localizer. Falls back
+// to just the key when no Localizer is configured (test wiring, older
+// callers), so notification title/body degrade gracefully instead of blowing
+// up the fanout.
+func (s *Service) t(locale, key string, args map[string]string) string {
+	if s.Localizer == nil {
+		return key
+	}
+	return s.Localizer.T(locale, key, args)
 }
 
 func (s *Service) pruneDeadTokens(tokens []string) {

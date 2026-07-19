@@ -91,8 +91,8 @@ func (h *API) RespondAlert(w http.ResponseWriter, r *http.Request) {
 }
 
 type resolveAdminResponse struct {
-	AlertID    string  `json:"alert_id"`
-	Status     string  `json:"status"`
+	AlertID    string     `json:"alert_id"`
+	Status     string     `json:"status"`
 	ResolvedAt *time.Time `json:"resolved_at"`
 }
 
@@ -113,4 +113,3 @@ func (h *API) ResolveAlertAdmin(w http.ResponseWriter, r *http.Request) {
 		fail(w, http.StatusInternalServerError, "internal", err.Error())
 	}
 }
-

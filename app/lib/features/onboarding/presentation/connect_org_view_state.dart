@@ -5,8 +5,10 @@ part 'connect_org_view_state.freezed.dart';
 @freezed
 sealed class ConnectOrgViewEvent with _$ConnectOrgViewEvent {
   const factory ConnectOrgViewEvent.none() = ConnectOrgViewEventNone;
-  const factory ConnectOrgViewEvent.showSnackBar(String message) =
-      ConnectOrgViewEventShowSnackBar;
+  const factory ConnectOrgViewEvent.missingFields() =
+      ConnectOrgViewEventMissingFields;
+  const factory ConnectOrgViewEvent.registerFailed(String reason) =
+      ConnectOrgViewEventRegisterFailed;
   const factory ConnectOrgViewEvent.navigateToOrgs() =
       ConnectOrgViewEventNavigateToOrgs;
 }

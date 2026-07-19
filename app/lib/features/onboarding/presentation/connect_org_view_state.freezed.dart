@@ -55,12 +55,13 @@ extension ConnectOrgViewEventPatterns on ConnectOrgViewEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ConnectOrgViewEventNone value)?  none,TResult Function( ConnectOrgViewEventShowSnackBar value)?  showSnackBar,TResult Function( ConnectOrgViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ConnectOrgViewEventNone value)?  none,TResult Function( ConnectOrgViewEventMissingFields value)?  missingFields,TResult Function( ConnectOrgViewEventRegisterFailed value)?  registerFailed,TResult Function( ConnectOrgViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
-return none(_that);case ConnectOrgViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none(_that);case ConnectOrgViewEventMissingFields() when missingFields != null:
+return missingFields(_that);case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
+return registerFailed(_that);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs(_that);case _:
   return orElse();
 
@@ -79,12 +80,13 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ConnectOrgViewEventNone value)  none,required TResult Function( ConnectOrgViewEventShowSnackBar value)  showSnackBar,required TResult Function( ConnectOrgViewEventNavigateToOrgs value)  navigateToOrgs,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ConnectOrgViewEventNone value)  none,required TResult Function( ConnectOrgViewEventMissingFields value)  missingFields,required TResult Function( ConnectOrgViewEventRegisterFailed value)  registerFailed,required TResult Function( ConnectOrgViewEventNavigateToOrgs value)  navigateToOrgs,}){
 final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone():
-return none(_that);case ConnectOrgViewEventShowSnackBar():
-return showSnackBar(_that);case ConnectOrgViewEventNavigateToOrgs():
+return none(_that);case ConnectOrgViewEventMissingFields():
+return missingFields(_that);case ConnectOrgViewEventRegisterFailed():
+return registerFailed(_that);case ConnectOrgViewEventNavigateToOrgs():
 return navigateToOrgs(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -99,12 +101,13 @@ return navigateToOrgs(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ConnectOrgViewEventNone value)?  none,TResult? Function( ConnectOrgViewEventShowSnackBar value)?  showSnackBar,TResult? Function( ConnectOrgViewEventNavigateToOrgs value)?  navigateToOrgs,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ConnectOrgViewEventNone value)?  none,TResult? Function( ConnectOrgViewEventMissingFields value)?  missingFields,TResult? Function( ConnectOrgViewEventRegisterFailed value)?  registerFailed,TResult? Function( ConnectOrgViewEventNavigateToOrgs value)?  navigateToOrgs,}){
 final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
-return none(_that);case ConnectOrgViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none(_that);case ConnectOrgViewEventMissingFields() when missingFields != null:
+return missingFields(_that);case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
+return registerFailed(_that);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs(_that);case _:
   return null;
 
@@ -122,11 +125,12 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String message)?  showSnackBar,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function()?  missingFields,TResult Function( String reason)?  registerFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
-return none();case ConnectOrgViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none();case ConnectOrgViewEventMissingFields() when missingFields != null:
+return missingFields();case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
+return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return orElse();
 
@@ -145,11 +149,12 @@ return navigateToOrgs();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String message)  showSnackBar,required TResult Function()  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function()  missingFields,required TResult Function( String reason)  registerFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone():
-return none();case ConnectOrgViewEventShowSnackBar():
-return showSnackBar(_that.message);case ConnectOrgViewEventNavigateToOrgs():
+return none();case ConnectOrgViewEventMissingFields():
+return missingFields();case ConnectOrgViewEventRegisterFailed():
+return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs():
 return navigateToOrgs();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -164,11 +169,12 @@ return navigateToOrgs();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String message)?  showSnackBar,TResult? Function()?  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function()?  missingFields,TResult? Function( String reason)?  registerFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
 switch (_that) {
 case ConnectOrgViewEventNone() when none != null:
-return none();case ConnectOrgViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
+return none();case ConnectOrgViewEventMissingFields() when missingFields != null:
+return missingFields();case ConnectOrgViewEventRegisterFailed() when registerFailed != null:
+return registerFailed(_that.reason);case ConnectOrgViewEventNavigateToOrgs() when navigateToOrgs != null:
 return navigateToOrgs();case _:
   return null;
 
@@ -212,43 +218,75 @@ String toString() {
 /// @nodoc
 
 
-class ConnectOrgViewEventShowSnackBar implements ConnectOrgViewEvent {
-  const ConnectOrgViewEventShowSnackBar(this.message);
+class ConnectOrgViewEventMissingFields implements ConnectOrgViewEvent {
+  const ConnectOrgViewEventMissingFields();
   
 
- final  String message;
 
-/// Create a copy of ConnectOrgViewEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$ConnectOrgViewEventShowSnackBarCopyWith<ConnectOrgViewEventShowSnackBar> get copyWith => _$ConnectOrgViewEventShowSnackBarCopyWithImpl<ConnectOrgViewEventShowSnackBar>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectOrgViewEventShowSnackBar&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectOrgViewEventMissingFields);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ConnectOrgViewEvent.showSnackBar(message: $message)';
+  return 'ConnectOrgViewEvent.missingFields()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ConnectOrgViewEventRegisterFailed implements ConnectOrgViewEvent {
+  const ConnectOrgViewEventRegisterFailed(this.reason);
+  
+
+ final  String reason;
+
+/// Create a copy of ConnectOrgViewEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ConnectOrgViewEventRegisterFailedCopyWith<ConnectOrgViewEventRegisterFailed> get copyWith => _$ConnectOrgViewEventRegisterFailedCopyWithImpl<ConnectOrgViewEventRegisterFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectOrgViewEventRegisterFailed&&(identical(other.reason, reason) || other.reason == reason));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason);
+
+@override
+String toString() {
+  return 'ConnectOrgViewEvent.registerFailed(reason: $reason)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ConnectOrgViewEventShowSnackBarCopyWith<$Res> implements $ConnectOrgViewEventCopyWith<$Res> {
-  factory $ConnectOrgViewEventShowSnackBarCopyWith(ConnectOrgViewEventShowSnackBar value, $Res Function(ConnectOrgViewEventShowSnackBar) _then) = _$ConnectOrgViewEventShowSnackBarCopyWithImpl;
+abstract mixin class $ConnectOrgViewEventRegisterFailedCopyWith<$Res> implements $ConnectOrgViewEventCopyWith<$Res> {
+  factory $ConnectOrgViewEventRegisterFailedCopyWith(ConnectOrgViewEventRegisterFailed value, $Res Function(ConnectOrgViewEventRegisterFailed) _then) = _$ConnectOrgViewEventRegisterFailedCopyWithImpl;
 @useResult
 $Res call({
- String message
+ String reason
 });
 
 
@@ -256,18 +294,18 @@ $Res call({
 
 }
 /// @nodoc
-class _$ConnectOrgViewEventShowSnackBarCopyWithImpl<$Res>
-    implements $ConnectOrgViewEventShowSnackBarCopyWith<$Res> {
-  _$ConnectOrgViewEventShowSnackBarCopyWithImpl(this._self, this._then);
+class _$ConnectOrgViewEventRegisterFailedCopyWithImpl<$Res>
+    implements $ConnectOrgViewEventRegisterFailedCopyWith<$Res> {
+  _$ConnectOrgViewEventRegisterFailedCopyWithImpl(this._self, this._then);
 
-  final ConnectOrgViewEventShowSnackBar _self;
-  final $Res Function(ConnectOrgViewEventShowSnackBar) _then;
+  final ConnectOrgViewEventRegisterFailed _self;
+  final $Res Function(ConnectOrgViewEventRegisterFailed) _then;
 
 /// Create a copy of ConnectOrgViewEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(ConnectOrgViewEventShowSnackBar(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+  return _then(ConnectOrgViewEventRegisterFailed(
+null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

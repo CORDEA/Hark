@@ -59,7 +59,7 @@ final class ConnectOrgViewModelProvider
 }
 
 String _$connectOrgViewModelHash() =>
-    r'6ac2a5ed9674d59a578e4cd4f4f63e5cd823adcb';
+    r'bab346ff08c0894447c5564ded56d544aa468c60';
 
 final class ConnectOrgViewModelFamily extends $Family
     with

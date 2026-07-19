@@ -55,12 +55,12 @@ extension ActiveAlertViewEventPatterns on ActiveAlertViewEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ActiveAlertViewEventNone value)?  none,TResult Function( ActiveAlertViewEventShowSnackBar value)?  showSnackBar,TResult Function( ActiveAlertViewEventDismiss value)?  dismiss,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ActiveAlertViewEventNone value)?  none,TResult Function( ActiveAlertViewEventRespondFailed value)?  respondFailed,TResult Function( ActiveAlertViewEventDismiss value)?  dismiss,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone() when none != null:
-return none(_that);case ActiveAlertViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case ActiveAlertViewEventDismiss() when dismiss != null:
+return none(_that);case ActiveAlertViewEventRespondFailed() when respondFailed != null:
+return respondFailed(_that);case ActiveAlertViewEventDismiss() when dismiss != null:
 return dismiss(_that);case _:
   return orElse();
 
@@ -79,12 +79,12 @@ return dismiss(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ActiveAlertViewEventNone value)  none,required TResult Function( ActiveAlertViewEventShowSnackBar value)  showSnackBar,required TResult Function( ActiveAlertViewEventDismiss value)  dismiss,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ActiveAlertViewEventNone value)  none,required TResult Function( ActiveAlertViewEventRespondFailed value)  respondFailed,required TResult Function( ActiveAlertViewEventDismiss value)  dismiss,}){
 final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone():
-return none(_that);case ActiveAlertViewEventShowSnackBar():
-return showSnackBar(_that);case ActiveAlertViewEventDismiss():
+return none(_that);case ActiveAlertViewEventRespondFailed():
+return respondFailed(_that);case ActiveAlertViewEventDismiss():
 return dismiss(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -99,12 +99,12 @@ return dismiss(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ActiveAlertViewEventNone value)?  none,TResult? Function( ActiveAlertViewEventShowSnackBar value)?  showSnackBar,TResult? Function( ActiveAlertViewEventDismiss value)?  dismiss,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ActiveAlertViewEventNone value)?  none,TResult? Function( ActiveAlertViewEventRespondFailed value)?  respondFailed,TResult? Function( ActiveAlertViewEventDismiss value)?  dismiss,}){
 final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone() when none != null:
-return none(_that);case ActiveAlertViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that);case ActiveAlertViewEventDismiss() when dismiss != null:
+return none(_that);case ActiveAlertViewEventRespondFailed() when respondFailed != null:
+return respondFailed(_that);case ActiveAlertViewEventDismiss() when dismiss != null:
 return dismiss(_that);case _:
   return null;
 
@@ -122,11 +122,11 @@ return dismiss(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String message)?  showSnackBar,TResult Function()?  dismiss,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( String reason)?  respondFailed,TResult Function()?  dismiss,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone() when none != null:
-return none();case ActiveAlertViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case ActiveAlertViewEventDismiss() when dismiss != null:
+return none();case ActiveAlertViewEventRespondFailed() when respondFailed != null:
+return respondFailed(_that.reason);case ActiveAlertViewEventDismiss() when dismiss != null:
 return dismiss();case _:
   return orElse();
 
@@ -145,11 +145,11 @@ return dismiss();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String message)  showSnackBar,required TResult Function()  dismiss,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( String reason)  respondFailed,required TResult Function()  dismiss,}) {final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone():
-return none();case ActiveAlertViewEventShowSnackBar():
-return showSnackBar(_that.message);case ActiveAlertViewEventDismiss():
+return none();case ActiveAlertViewEventRespondFailed():
+return respondFailed(_that.reason);case ActiveAlertViewEventDismiss():
 return dismiss();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -164,11 +164,11 @@ return dismiss();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String message)?  showSnackBar,TResult? Function()?  dismiss,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( String reason)?  respondFailed,TResult? Function()?  dismiss,}) {final _that = this;
 switch (_that) {
 case ActiveAlertViewEventNone() when none != null:
-return none();case ActiveAlertViewEventShowSnackBar() when showSnackBar != null:
-return showSnackBar(_that.message);case ActiveAlertViewEventDismiss() when dismiss != null:
+return none();case ActiveAlertViewEventRespondFailed() when respondFailed != null:
+return respondFailed(_that.reason);case ActiveAlertViewEventDismiss() when dismiss != null:
 return dismiss();case _:
   return null;
 
@@ -212,43 +212,43 @@ String toString() {
 /// @nodoc
 
 
-class ActiveAlertViewEventShowSnackBar implements ActiveAlertViewEvent {
-  const ActiveAlertViewEventShowSnackBar(this.message);
+class ActiveAlertViewEventRespondFailed implements ActiveAlertViewEvent {
+  const ActiveAlertViewEventRespondFailed(this.reason);
   
 
- final  String message;
+ final  String reason;
 
 /// Create a copy of ActiveAlertViewEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ActiveAlertViewEventShowSnackBarCopyWith<ActiveAlertViewEventShowSnackBar> get copyWith => _$ActiveAlertViewEventShowSnackBarCopyWithImpl<ActiveAlertViewEventShowSnackBar>(this, _$identity);
+$ActiveAlertViewEventRespondFailedCopyWith<ActiveAlertViewEventRespondFailed> get copyWith => _$ActiveAlertViewEventRespondFailedCopyWithImpl<ActiveAlertViewEventRespondFailed>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveAlertViewEventShowSnackBar&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveAlertViewEventRespondFailed&&(identical(other.reason, reason) || other.reason == reason));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,reason);
 
 @override
 String toString() {
-  return 'ActiveAlertViewEvent.showSnackBar(message: $message)';
+  return 'ActiveAlertViewEvent.respondFailed(reason: $reason)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ActiveAlertViewEventShowSnackBarCopyWith<$Res> implements $ActiveAlertViewEventCopyWith<$Res> {
-  factory $ActiveAlertViewEventShowSnackBarCopyWith(ActiveAlertViewEventShowSnackBar value, $Res Function(ActiveAlertViewEventShowSnackBar) _then) = _$ActiveAlertViewEventShowSnackBarCopyWithImpl;
+abstract mixin class $ActiveAlertViewEventRespondFailedCopyWith<$Res> implements $ActiveAlertViewEventCopyWith<$Res> {
+  factory $ActiveAlertViewEventRespondFailedCopyWith(ActiveAlertViewEventRespondFailed value, $Res Function(ActiveAlertViewEventRespondFailed) _then) = _$ActiveAlertViewEventRespondFailedCopyWithImpl;
 @useResult
 $Res call({
- String message
+ String reason
 });
 
 
@@ -256,18 +256,18 @@ $Res call({
 
 }
 /// @nodoc
-class _$ActiveAlertViewEventShowSnackBarCopyWithImpl<$Res>
-    implements $ActiveAlertViewEventShowSnackBarCopyWith<$Res> {
-  _$ActiveAlertViewEventShowSnackBarCopyWithImpl(this._self, this._then);
+class _$ActiveAlertViewEventRespondFailedCopyWithImpl<$Res>
+    implements $ActiveAlertViewEventRespondFailedCopyWith<$Res> {
+  _$ActiveAlertViewEventRespondFailedCopyWithImpl(this._self, this._then);
 
-  final ActiveAlertViewEventShowSnackBar _self;
-  final $Res Function(ActiveAlertViewEventShowSnackBar) _then;
+  final ActiveAlertViewEventRespondFailed _self;
+  final $Res Function(ActiveAlertViewEventRespondFailed) _then;
 
 /// Create a copy of ActiveAlertViewEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(ActiveAlertViewEventShowSnackBar(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+  return _then(ActiveAlertViewEventRespondFailed(
+null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

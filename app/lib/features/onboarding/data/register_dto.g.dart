@@ -11,6 +11,7 @@ _RegisterRequestDto _$RegisterRequestDtoFromJson(Map<String, dynamic> json) =>
       invitationCode: json['invitation_code'] as String,
       fcmToken: json['fcm_token'] as String,
       deviceName: json['device_name'] as String,
+      locale: json['locale'] as String,
     );
 
 Map<String, dynamic> _$RegisterRequestDtoToJson(_RegisterRequestDto instance) =>
@@ -18,6 +19,7 @@ Map<String, dynamic> _$RegisterRequestDtoToJson(_RegisterRequestDto instance) =>
       'invitation_code': instance.invitationCode,
       'fcm_token': instance.fcmToken,
       'device_name': instance.deviceName,
+      'locale': instance.locale,
     };
 
 _RegisterResponseDto _$RegisterResponseDtoFromJson(Map<String, dynamic> json) =>

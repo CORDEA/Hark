@@ -15,6 +15,7 @@ import (
 	"github.com/cordea/hark/internal/handlers"
 	alertsvc "github.com/cordea/hark/internal/services/alerts"
 	"github.com/cordea/hark/internal/services/fcm"
+	"github.com/cordea/hark/internal/services/i18n"
 	"github.com/cordea/hark/internal/webui"
 )
 
@@ -44,7 +45,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	alertService := &alertsvc.Service{DB: gdb, Sender: sender}
+	localizer := i18n.New()
+	alertService := &alertsvc.Service{DB: gdb, Sender: sender, Localizer: localizer}
 
 	handler := handlers.NewRouter(handlers.Deps{
 		DB:     gdb,

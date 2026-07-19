@@ -19,12 +19,14 @@ class RegisterDeviceUseCase {
     required String invitationCode,
     required String fcmToken,
     required String deviceName,
+    required String locale,
   }) async {
     final profile = await _repository.register(
       serverUrl: serverUrl,
       invitationCode: invitationCode,
       fcmToken: fcmToken,
       deviceName: deviceName,
+      locale: locale,
     );
     await _repository.save(profile);
     return profile;

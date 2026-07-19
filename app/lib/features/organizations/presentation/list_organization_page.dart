@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_model.dart';
 import 'organization_card.dart';
 
@@ -14,6 +15,7 @@ class ListOrganizationPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -24,7 +26,7 @@ class ListOrganizationPage extends ConsumerWidget {
             children: [
               const SizedBox(height: AppSpacing.xxl),
               Text(
-                'Organizations',
+                l10n.orgListTitle,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                   color: theme.colorScheme.onSurface,
@@ -32,7 +34,7 @@ class ListOrganizationPage extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Connected accounts receiving alerts on this device',
+                l10n.orgListSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -59,7 +61,7 @@ class ListOrganizationPage extends ConsumerWidget {
                       const Icon(Icons.add, size: 20, color: Color(0xFF8A8A90)),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
-                        'Add Organization',
+                        l10n.orgListAdd,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: const Color(0xFFC8C8CE),
                           fontWeight: FontWeight.w600,
@@ -89,7 +91,7 @@ class _OrgList extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(
         child: Text(
-          'Failed to load: $e',
+          AppLocalizations.of(context).orgListLoadFailed(e.toString()),
           style: TextStyle(color: colors.declineText),
         ),
       ),
@@ -128,6 +130,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -139,7 +142,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'No organizations yet',
+            l10n.orgListEmptyHeadline,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
@@ -147,7 +150,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Tap Add Organization to join one',
+            l10n.orgListEmptyBody,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),

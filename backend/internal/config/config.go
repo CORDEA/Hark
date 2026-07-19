@@ -5,12 +5,12 @@ import (
 )
 
 type Config struct {
-	Port            string
-	DBDriver        string
-	DBDSN           string
-	FCMCredentials  string
-	PublicURL       string
-	OrgName         string
+	Port           string
+	DBDriver       string
+	DBDSN          string
+	FCMCredentials string
+	PublicURL      string
+	OrgName        string
 }
 
 func Load() Config {

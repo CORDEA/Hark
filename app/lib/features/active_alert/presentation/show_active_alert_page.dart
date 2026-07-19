@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'active_alert_view_model.dart';
 import 'active_alert_view_state.dart';
 
@@ -38,11 +39,12 @@ class ShowActiveAlertPage extends HookConsumerWidget {
 
     ref.listen(provider.select((s) => s.event), (_, event) {
       switch (event) {
-        case ActiveAlertViewEventShowSnackBar(:final message):
+        case ActiveAlertViewEventRespondFailed(:final reason):
           if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message)));
+            final l10n = AppLocalizations.of(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.activeAlertRespondFailed(reason))),
+            );
             ref.read(provider.notifier).onEventConsumed();
           }
         case ActiveAlertViewEventDismiss():
@@ -96,6 +98,7 @@ class _Content extends ConsumerWidget {
     final theme = Theme.of(context);
     final colors = context.harkColors;
     final state = ref.watch(provider);
+    final l10n = AppLocalizations.of(context);
 
     if (state.isResolved) {
       return _ResolvedContent(state: state);
@@ -104,7 +107,7 @@ class _Content extends ConsumerWidget {
     return Column(
       children: [
         Text(
-          'Alert · ${_shortOrg(state.orgId)}',
+          l10n.activeAlertHeader(_shortOrg(state.orgId)),
           style: theme.textTheme.labelSmall?.copyWith(
             color: colors.criticalTextMuted,
             fontWeight: FontWeight.w600,
@@ -140,22 +143,26 @@ class _Content extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _KeyValue(
-                label: 'Type',
-                value: state.isCritical ? 'Service outage' : 'Warning',
+                label: l10n.activeAlertRowType,
+                value: state.isCritical
+                    ? l10n.activeAlertTypeCritical
+                    : l10n.activeAlertTypeWarning,
                 colors: colors,
                 valueBold: true,
               ),
               const _CriticalDivider(),
               _KeyValue(
-                label: 'Your action',
-                value: state.isSending ? 'Sending…' : 'Pending',
+                label: l10n.activeAlertRowAction,
+                value: state.isSending
+                    ? l10n.activeAlertActionSending
+                    : l10n.activeAlertActionPending,
                 colors: colors,
                 valueColor: colors.warning,
                 valueBold: true,
               ),
               const _CriticalDivider(),
               _KeyValue(
-                label: 'Triggered',
+                label: l10n.activeAlertRowTriggered,
                 value: _fmtTime(state.triggeredAt),
                 colors: colors,
                 monoValue: true,
@@ -165,7 +172,7 @@ class _Content extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
-          _elapsed(state.triggeredAt),
+          _elapsed(l10n, state.triggeredAt),
           style: TextStyle(
             fontFamily: 'Menlo',
             color: colors.criticalTextDim,
@@ -185,6 +192,7 @@ class _ResolvedContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -216,7 +224,7 @@ class _ResolvedContent extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                _resolutionHeadline(state.outcome!),
+                _resolutionHeadline(l10n, state.outcome!),
                 style: TextStyle(
                   color: colors.resolvedText,
                   fontWeight: FontWeight.w700,
@@ -225,7 +233,7 @@ class _ResolvedContent extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                _resolutionSubtitle(state.outcome!),
+                _resolutionSubtitle(l10n, state.outcome!),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -239,25 +247,25 @@ class _ResolvedContent extends StatelessWidget {
   }
 }
 
-String _resolutionHeadline(ActiveAlertOutcome outcome) {
+String _resolutionHeadline(AppLocalizations l10n, ActiveAlertOutcome outcome) {
   switch (outcome) {
     case ActiveAlertOutcome.acknowledgedByMe:
-      return 'Acknowledged';
+      return l10n.activeAlertResolvedByMeHeadline;
     case ActiveAlertOutcome.declinedByMe:
-      return 'Declined';
+      return l10n.activeAlertDeclinedHeadline;
     case ActiveAlertOutcome.resolvedByOther:
-      return 'Resolved by teammate';
+      return l10n.activeAlertResolvedByOtherHeadline;
   }
 }
 
-String _resolutionSubtitle(ActiveAlertOutcome outcome) {
+String _resolutionSubtitle(AppLocalizations l10n, ActiveAlertOutcome outcome) {
   switch (outcome) {
     case ActiveAlertOutcome.acknowledgedByMe:
-      return 'You are on it';
+      return l10n.activeAlertResolvedByMeSubtitle;
     case ActiveAlertOutcome.declinedByMe:
-      return 'Marked as unavailable';
+      return l10n.activeAlertDeclinedSubtitle;
     case ActiveAlertOutcome.resolvedByOther:
-      return 'No action needed';
+      return l10n.activeAlertResolvedByOtherSubtitle;
   }
 }
 
@@ -322,6 +330,7 @@ class _ActionButtons extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(provider);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
 
     if (state.isResolved) {
       return SizedBox(
@@ -336,9 +345,9 @@ class _ActionButtons extends ConsumerWidget {
             ),
             backgroundColor: colors.surfaceInput,
           ),
-          child: const Text(
-            'Dismiss',
-            style: TextStyle(
+          child: Text(
+            l10n.activeAlertDismiss,
+            style: const TextStyle(
               color: Color(0xFFC8C8CE),
               fontWeight: FontWeight.w600,
               fontSize: 15,
@@ -373,9 +382,12 @@ class _ActionButtons extends ConsumerWidget {
                       color: Colors.white,
                     ),
                   )
-                : const Text(
-                    "Acknowledge — I'm on it",
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+                : Text(
+                    l10n.activeAlertAck,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 17,
+                    ),
                   ),
           ),
         ),
@@ -394,7 +406,7 @@ class _ActionButtons extends ConsumerWidget {
               ),
             ),
             child: Text(
-              "Decline — Can't respond",
+              l10n.activeAlertDecline,
               style: TextStyle(
                 color: colors.criticalTextMuted,
                 fontWeight: FontWeight.w600,
@@ -420,10 +432,10 @@ String _fmtTime(DateTime t) {
   return '${p(u.hour)}:${p(u.minute)}:${p(u.second)} UTC';
 }
 
-String _elapsed(DateTime t) {
+String _elapsed(AppLocalizations l10n, DateTime t) {
   final d = DateTime.now().toUtc().difference(t.toUtc());
   final m = d.inMinutes;
   final s = d.inSeconds - m * 60;
   String p(int n) => n.toString().padLeft(2, '0');
-  return '${p(m)}:${p(s.clamp(0, 59))} elapsed';
+  return l10n.activeAlertElapsed(p(m), p(s.clamp(0, 59)));
 }

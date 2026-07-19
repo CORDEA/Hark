@@ -1,0 +1,194 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Hark",
+  "@appTitle": { "description": "The application title" },
+
+  "connectOrgTitle": "Connect to your org",
+  "@connectOrgTitle": {},
+  "connectOrgSubtitle": "Join an organization to start receiving on-call alerts.",
+  "@connectOrgSubtitle": {},
+  "connectOrgServerUrlLabel": "Server URL",
+  "@connectOrgServerUrlLabel": {},
+  "connectOrgServerUrlHint": "alerts.example.com",
+  "@connectOrgServerUrlHint": {},
+  "connectOrgInvitationCodeLabel": "Invitation Code",
+  "@connectOrgInvitationCodeLabel": {},
+  "connectOrgInvitationCodeHint": "7F2K-91QZ",
+  "@connectOrgInvitationCodeHint": {},
+  "connectOrgSubmit": "Connect",
+  "@connectOrgSubmit": {},
+  "connectOrgAlreadyHaveOrgs": "Already have organizations? ",
+  "@connectOrgAlreadyHaveOrgs": {},
+  "connectOrgViewList": "View list",
+  "@connectOrgViewList": {},
+  "connectOrgMissingFields": "Enter a server URL and an invitation code",
+  "@connectOrgMissingFields": {},
+  "connectOrgRegisterFailed": "{reason}",
+  "@connectOrgRegisterFailed": {
+    "placeholders": { "reason": { "type": "String" } }
+  },
+
+  "orgListTitle": "Organizations",
+  "@orgListTitle": {},
+  "orgListSubtitle": "Connected accounts receiving alerts on this device",
+  "@orgListSubtitle": {},
+  "orgListAdd": "Add Organization",
+  "@orgListAdd": {},
+  "orgListEmptyHeadline": "No organizations yet",
+  "@orgListEmptyHeadline": {},
+  "orgListEmptyBody": "Tap Add Organization to join one",
+  "@orgListEmptyBody": {},
+  "orgListLoadFailed": "Failed to load: {error}",
+  "@orgListLoadFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "orgCardNotificationsOn": "Notifications on",
+  "@orgCardNotificationsOn": {},
+  "orgCardDisconnect": "Disconnect",
+  "@orgCardDisconnect": {},
+
+  "activeAlertHeader": "Alert · {org}",
+  "@activeAlertHeader": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "activeAlertRowType": "Type",
+  "@activeAlertRowType": {},
+  "activeAlertRowAction": "Your action",
+  "@activeAlertRowAction": {},
+  "activeAlertRowTriggered": "Triggered",
+  "@activeAlertRowTriggered": {},
+  "activeAlertActionSending": "Sending…",
+  "@activeAlertActionSending": {},
+  "activeAlertActionPending": "Pending",
+  "@activeAlertActionPending": {},
+  "activeAlertTypeCritical": "Service outage",
+  "@activeAlertTypeCritical": {},
+  "activeAlertTypeWarning": "Warning",
+  "@activeAlertTypeWarning": {},
+  "activeAlertAck": "Acknowledge — I'm on it",
+  "@activeAlertAck": {},
+  "activeAlertDecline": "Decline — Can't respond",
+  "@activeAlertDecline": {},
+  "activeAlertDismiss": "Dismiss",
+  "@activeAlertDismiss": {},
+  "activeAlertResolvedByMeHeadline": "Acknowledged",
+  "@activeAlertResolvedByMeHeadline": {},
+  "activeAlertResolvedByMeSubtitle": "You are on it",
+  "@activeAlertResolvedByMeSubtitle": {},
+  "activeAlertDeclinedHeadline": "Declined",
+  "@activeAlertDeclinedHeadline": {},
+  "activeAlertDeclinedSubtitle": "Marked as unavailable",
+  "@activeAlertDeclinedSubtitle": {},
+  "activeAlertResolvedByOtherHeadline": "Resolved by teammate",
+  "@activeAlertResolvedByOtherHeadline": {},
+  "activeAlertResolvedByOtherSubtitle": "No action needed",
+  "@activeAlertResolvedByOtherSubtitle": {},
+  "activeAlertRespondFailed": "Response failed: {reason}",
+  "@activeAlertRespondFailed": {
+    "placeholders": { "reason": { "type": "String" } }
+  },
+  "activeAlertElapsed": "{mm}:{ss} elapsed",
+  "@activeAlertElapsed": {
+    "placeholders": {
+      "mm": { "type": "String" },
+      "ss": { "type": "String" }
+    }
+  },
+
+  "alertDetailBack": "←  {org}",
+  "@alertDetailBack": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "alertDetailLoadFailed": "Failed to load alert",
+  "@alertDetailLoadFailed": {},
+  "alertDetailRetry": "Retry",
+  "@alertDetailRetry": {},
+  "alertDetailSectionAcknowledged": "Acknowledged ({count})",
+  "@alertDetailSectionAcknowledged": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "alertDetailSectionPending": "Pending ({count})",
+  "@alertDetailSectionPending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "alertDetailSectionDeclined": "Declined ({count})",
+  "@alertDetailSectionDeclined": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "alertDetailStatusActive": "ACTIVE",
+  "@alertDetailStatusActive": {},
+  "alertDetailStatusResolved": "RESOLVED",
+  "@alertDetailStatusResolved": {},
+  "alertDetailStatusAcknowledged": "ACKNOWLEDGED",
+  "@alertDetailStatusAcknowledged": {},
+  "alertDetailRowType": "Type",
+  "@alertDetailRowType": {},
+  "alertDetailRowTarget": "Target",
+  "@alertDetailRowTarget": {},
+  "alertDetailRowTriggered": "Triggered",
+  "@alertDetailRowTriggered": {},
+  "alertDetailRowResolved": "Resolved",
+  "@alertDetailRowResolved": {},
+  "alertDetailRowResponder": "Responder",
+  "@alertDetailRowResponder": {},
+  "alertDetailTargetAll": "All subscribers",
+  "@alertDetailTargetAll": {},
+  "alertDetailValueEmpty": "—",
+  "@alertDetailValueEmpty": {},
+
+  "historyTitle": "History",
+  "@historyTitle": {},
+  "historyEmpty": "No alerts yet",
+  "@historyEmpty": {},
+  "historyLoadFailed": "Failed: {error}",
+  "@historyLoadFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "historyBadgeAck": "ACK {hhmm}",
+  "@historyBadgeAck": {
+    "placeholders": { "hhmm": { "type": "String" } }
+  },
+  "historyBadgeDeclined": "DECLINED",
+  "@historyBadgeDeclined": {},
+  "historyBadgeResolved": "RESOLVED",
+  "@historyBadgeResolved": {},
+  "historyRowTitleCritical": "Service outage",
+  "@historyRowTitleCritical": {},
+  "historyRowTitleWarning": "Warning",
+  "@historyRowTitleWarning": {},
+  "historyTimeToday": "Today · {hhmm}",
+  "@historyTimeToday": {
+    "placeholders": { "hhmm": { "type": "String" } }
+  },
+  "historyTimeYesterday": "Yesterday · {hhmm}",
+  "@historyTimeYesterday": {
+    "placeholders": { "hhmm": { "type": "String" } }
+  },
+  "historyTimeAbsolute": "{date} · {hhmm}",
+  "@historyTimeAbsolute": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "hhmm": { "type": "String" }
+    }
+  },
+  "historyDisconnect": "Disconnect from {org}",
+  "@historyDisconnect": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "historyLeaveFailed": "Leave failed: {reason}",
+  "@historyLeaveFailed": {
+    "placeholders": { "reason": { "type": "String" } }
+  },
+  "historyDisconnectDialogTitle": "Disconnect",
+  "@historyDisconnectDialogTitle": {},
+  "historyDisconnectDialogBody": "This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.",
+  "@historyDisconnectDialogBody": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "historyDisconnectDialogCancel": "Cancel",
+  "@historyDisconnectDialogCancel": {},
+  "historyDisconnectDialogConfirm": "Disconnect",
+  "@historyDisconnectDialogConfirm": {}
+}

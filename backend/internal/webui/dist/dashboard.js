@@ -11,9 +11,9 @@ const state = {
 };
 
 function targetLabel(a) {
-  if (a.is_broadcast) return 'All subscribers';
+  if (a.is_broadcast) return t('targetLabel.all');
   const names = a.target_names || [];
-  if (names.length === 0) return 'No recipients';
+  if (names.length === 0) return t('targetLabel.none');
   return names.join(', ');
 }
 
@@ -50,18 +50,22 @@ function renderOngoing() {
           <div class="text-base font-bold text-white truncate">${escapeHtml(targetLabel(a))}</div>
         </div>
         <div class="text-xs mono mt-1.5" style="color:var(--red-decline-text)">
-          ${escapeHtml(fmtTime(a.triggered_at))} · ${a.ack_count} acknowledged · ${a.pending_count} pending
+          ${escapeHtml(t('ongoing.progress', {
+            time: fmtTime(a.triggered_at),
+            ack: a.ack_count,
+            pending: a.pending_count,
+          }))}
         </div>
       </div>
       <button type="button" class="h-9 px-4 rounded-md font-bold text-sm flex-shrink-0"
               style="background:#fff;color:var(--red-6)"
-              data-resolve-admin="${a.id}">Resolve</button>
+              data-resolve-admin="${a.id}">${escapeHtml(t('ongoing.resolve'))}</button>
     </div>
   `).join('');
 }
 
 function actionLabel(a) {
-  return a.status === 'active' ? 'Ongoing' : 'Resolved';
+  return a.status === 'active' ? t('history.action.ongoing') : t('history.action.resolved');
 }
 
 function actionColor(a) {
@@ -71,13 +75,13 @@ function actionColor(a) {
 function renderHistory() {
   const list = q('#history-list');
   if (state.alerts.length === 0) {
-    list.innerHTML = `<div class="px-5 py-6 text-sm" style="color:var(--text-5)">No alerts yet. Trigger one above to see it here.</div>`;
+    list.innerHTML = `<div class="px-5 py-6 text-sm" style="color:var(--text-5)">${escapeHtml(t('history.empty'))}</div>`;
     return;
   }
   list.innerHTML = state.alerts.map(a => {
     const dt = a.status === 'active'
       ? fmtTime(a.triggered_at)
-      : `${fmtTime(a.triggered_at)} → ${fmtTime(a.resolved_at)}`;
+      : t('history.rangeArrow', { from: fmtTime(a.triggered_at), to: fmtTime(a.resolved_at) });
     return `
       <div class="row-btn grid gap-4 px-5 py-3.5 border-b items-center"
            style="grid-template-columns:1.1fr 1fr 1.8fr 1.1fr;border-color:var(--n-4)"
@@ -85,7 +89,7 @@ function renderHistory() {
         <div>${typeBadge(a.type)}</div>
         <div class="text-sm font-semibold" style="color:${actionColor(a)}">${actionLabel(a)}</div>
         <div class="text-xs mono" style="color:var(--text-4)">${escapeHtml(dt)}</div>
-        <div class="text-sm font-semibold" style="color:var(--text-2)">${escapeHtml(a.responder_name || '—')}</div>
+        <div class="text-sm font-semibold" style="color:var(--text-2)">${escapeHtml(a.responder_name || t('empty.dash'))}</div>
       </div>
     `;
   }).join('');
@@ -104,18 +108,15 @@ function renderTargetList() {
         </label>
       `;
     }).join('');
-  const label = state.triggerType === 'critical'
-    ? `Trigger → ${triggerSummary()}`
-    : `Trigger → ${triggerSummary()}`;
   const btn = q('#trigger-send');
-  btn.textContent = label;
+  btn.textContent = t('trigger.button', { summary: triggerSummary() });
   btn.style.background = state.triggerType === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
   btn.style.color      = state.triggerType === 'critical' ? '#fff' : '#241a04';
 }
 
 function triggerSummary() {
-  if (state.targetAll) return 'everyone';
-  return `${state.selected.size} selected`;
+  if (state.targetAll) return t('trigger.summary.everyone');
+  return t('trigger.summary.selected', { n: state.selected.size });
 }
 
 // ---------- detail modal ----------
@@ -132,8 +133,8 @@ async function openDetail(id) {
 
   q('#detail-target').textContent    = targetLabel(detail);
   q('#detail-triggered').textContent = fmtTime(detail.triggered_at);
-  q('#detail-resolved').textContent  = detail.resolved_at ? fmtTime(detail.resolved_at) : '—';
-  q('#detail-responder').textContent = detail.responder_name || '—';
+  q('#detail-resolved').textContent  = detail.resolved_at ? fmtTime(detail.resolved_at) : t('empty.dash');
+  q('#detail-responder').textContent = detail.responder_name || t('empty.dash');
 
   const acked    = detail.recipients.filter(r => r.response_status === 'acknowledged');
   const pending  = detail.recipients.filter(r => r.response_status === 'pending');
@@ -146,7 +147,7 @@ async function openDetail(id) {
           <span class="font-semibold" style="color:var(--text-2)">${escapeHtml(r.name)}</span>
           <span class="mono text-xs" style="color:var(--text-4)">${escapeHtml(fmtTime(r.responded_at))}</span>
         </div>`).join('')
-    : `<div class="text-sm" style="color:var(--text-5)">Nobody yet</div>`;
+    : `<div class="text-sm" style="color:var(--text-5)">${escapeHtml(t('detail.nobodyYet'))}</div>`;
 
   q('#detail-pending-count').textContent = pending.length;
   q('#detail-pending-block').classList.toggle('hidden', pending.length === 0);
@@ -176,7 +177,9 @@ function openTrigger(type) {
   state.triggerType = type;
   state.targetAll = true;
   state.selected.clear();
-  q('#trigger-title').textContent = `Trigger ${type[0].toUpperCase()}${type.slice(1)} Alert`;
+  q('#trigger-title').textContent = type === 'critical'
+    ? t('trigger.title.critical')
+    : t('trigger.title.warning');
   q('#target-all').checked = true;
   renderTargetList();
   const modal = q('#trigger-modal');
@@ -197,7 +200,7 @@ async function sendTrigger() {
     await api('/api/alerts/trigger', { method: 'POST', body: JSON.stringify(body) });
     closeTrigger();
     await refresh();
-  } catch (e) { alert(`Trigger failed: ${e.message}`); }
+  } catch (e) { alert(t('trigger.failed', { error: e.message })); }
 }
 
 async function resolveAdmin(id) {
@@ -205,7 +208,7 @@ async function resolveAdmin(id) {
     await api(`/api/alerts/${id}/resolve-admin`, { method: 'POST' });
     if (state.detailId === id) closeDetail();
     await refresh();
-  } catch (e) { alert(`Resolve failed: ${e.message}`); }
+  } catch (e) { alert(t('detail.resolveFailed', { error: e.message })); }
 }
 
 // ---------- refresh loop ----------
@@ -261,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.targetAll = false;
     q('#target-all').checked = false;
     if (cb.checked) state.selected.add(cb.dataset.uid); else state.selected.delete(cb.dataset.uid);
-    q('#trigger-send').textContent = `Trigger → ${triggerSummary()}`;
+    q('#trigger-send').textContent = t('trigger.button', { summary: triggerSummary() });
   });
 
   document.body.addEventListener('click', (e) => {

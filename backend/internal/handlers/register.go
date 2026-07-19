@@ -17,13 +17,14 @@ type registerRequest struct {
 	InvitationCode string `json:"invitation_code"`
 	FCMToken       string `json:"fcm_token"`
 	DeviceName     string `json:"device_name"`
+	Locale         string `json:"locale"`
 }
 
 type registerResponse struct {
-	UserID     string `json:"user_id"`
-	DeviceID   string `json:"device_id"`
-	OrgName    string `json:"org_name"`
-	OrgID      string `json:"org_id"`
+	UserID   string `json:"user_id"`
+	DeviceID string `json:"device_id"`
+	OrgName  string `json:"org_name"`
+	OrgID    string `json:"org_id"`
 }
 
 func (h *API) Register(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +51,8 @@ func (h *API) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	locale := defaultLocale(req.Locale)
+
 	// Idempotent per fcm_token: if a device row already exists, reuse it and
 	// re-point it at this user (supports token rotation).
 	var device models.Device
@@ -60,6 +63,7 @@ func (h *API) Register(w http.ResponseWriter, r *http.Request) {
 		if req.DeviceName != "" {
 			device.DeviceName = req.DeviceName
 		}
+		device.Locale = locale
 		if err := h.DB.Save(&device).Error; err != nil {
 			slog.Error("update device", "err", err)
 			fail(w, http.StatusInternalServerError, "db", "could not update device")
@@ -71,6 +75,7 @@ func (h *API) Register(w http.ResponseWriter, r *http.Request) {
 			UserID:     user.ID,
 			FCMToken:   req.FCMToken,
 			DeviceName: defaultDeviceName(req.DeviceName),
+			Locale:     locale,
 			CreatedAt:  time.Now().UTC(),
 		}
 		if err := h.DB.Create(&device).Error; err != nil {
@@ -105,4 +110,12 @@ func defaultDeviceName(name string) string {
 		return "device"
 	}
 	return name
+}
+
+func defaultLocale(locale string) string {
+	locale = strings.TrimSpace(locale)
+	if locale == "" {
+		return "en"
+	}
+	return locale
 }

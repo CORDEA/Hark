@@ -33,21 +33,25 @@ type User struct {
 }
 
 type Device struct {
-	ID         string    `gorm:"primaryKey;size:64" json:"id"`
-	UserID     string    `gorm:"size:64;index" json:"user_id"`
-	FCMToken   string    `gorm:"uniqueIndex;size:512" json:"fcm_token"`
-	DeviceName string    `gorm:"size:120" json:"device_name"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID         string `gorm:"primaryKey;size:64" json:"id"`
+	UserID     string `gorm:"size:64;index" json:"user_id"`
+	FCMToken   string `gorm:"uniqueIndex;size:512" json:"fcm_token"`
+	DeviceName string `gorm:"size:120" json:"device_name"`
+	// Locale is the BCP-47 tag the device reported at register (e.g. "en",
+	// "en-US"). Used by the FCM sender to pick a localized notification
+	// title/body. Defaults to "en" for legacy rows.
+	Locale    string    `gorm:"size:16;default:en" json:"locale"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Alert struct {
-	ID           string     `gorm:"primaryKey;size:64" json:"id"`
-	Type         string     `gorm:"size:16;index" json:"type"`
-	Status       string     `gorm:"size:16;index" json:"status"`
-	ResponderID  *string    `gorm:"size:64" json:"responder_id"`
-	IsBroadcast  bool       `gorm:"not null;default:false" json:"is_broadcast"`
-	TriggeredAt  time.Time  `gorm:"index" json:"triggered_at"`
-	ResolvedAt   *time.Time `json:"resolved_at"`
+	ID          string     `gorm:"primaryKey;size:64" json:"id"`
+	Type        string     `gorm:"size:16;index" json:"type"`
+	Status      string     `gorm:"size:16;index" json:"status"`
+	ResponderID *string    `gorm:"size:64" json:"responder_id"`
+	IsBroadcast bool       `gorm:"not null;default:false" json:"is_broadcast"`
+	TriggeredAt time.Time  `gorm:"index" json:"triggered_at"`
+	ResolvedAt  *time.Time `json:"resolved_at"`
 
 	Recipients []AlertRecipient `gorm:"constraint:OnDelete:CASCADE" json:"recipients,omitempty"`
 }

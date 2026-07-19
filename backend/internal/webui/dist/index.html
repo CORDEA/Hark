@@ -48,35 +48,35 @@
     <!-- Header -->
     <header class="flex items-end justify-between py-9 border-b" style="border-color:var(--n-4)">
       <div>
-        <div class="text-xs font-semibold uppercase tracking-widest" style="color:var(--text-5)">On-call notification control</div>
-        <div class="text-3xl font-black tracking-tight mt-1" style="color:var(--text-1)">Hark Admin</div>
+        <div class="text-xs font-semibold uppercase tracking-widest" style="color:var(--text-5)" data-i18n="header.tagline">On-call notification control</div>
+        <div class="text-3xl font-black tracking-tight mt-1" style="color:var(--text-1)" data-i18n="header.title">Hark Admin</div>
       </div>
       <div class="flex items-center gap-8">
         <div class="text-right">
           <div class="text-[22px] font-extrabold" style="color:var(--text-1)">
             <span id="stat-active">–</span><span style="color:var(--text-6);font-weight:500">/<span id="stat-total">–</span></span>
           </div>
-          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)">Active subscribers</div>
+          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)" data-i18n="header.activeSubscribers">Active subscribers</div>
         </div>
         <div class="text-right">
           <div class="text-[22px] font-extrabold" id="stat-today" style="color:var(--text-1)">–</div>
-          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)">Alerts today</div>
+          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)" data-i18n="header.alertsToday">Alerts today</div>
         </div>
         <a href="subscribers.html" class="h-11 px-5 rounded-lg font-semibold text-sm flex items-center"
-           style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">Subscribers &rarr;</a>
+           style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)" data-i18n="header.subscribers">Subscribers &rarr;</a>
       </div>
     </header>
 
     <!-- Broadcast -->
     <section class="mt-8">
-      <div class="text-xs font-bold uppercase tracking-widest mb-3" style="color:var(--text-5)">Broadcast an alert</div>
+      <div class="text-xs font-bold uppercase tracking-widest mb-3" style="color:var(--text-5)" data-i18n="broadcast.section">Broadcast an alert</div>
       <div class="grid grid-cols-2 gap-3.5">
         <button id="btn-critical" type="button"
-                class="h-16 rounded-xl font-bold text-lg" style="background:var(--red-6);color:#fff">
+                class="h-16 rounded-xl font-bold text-lg" style="background:var(--red-6);color:#fff" data-i18n="broadcast.critical">
           Trigger Critical Alert
         </button>
         <button id="btn-warning" type="button"
-                class="h-16 rounded-xl font-bold text-lg" style="background:var(--amber-8);color:#241a04">
+                class="h-16 rounded-xl font-bold text-lg" style="background:var(--amber-8);color:#241a04" data-i18n="broadcast.warning">
           Trigger Warning Alert
         </button>
       </div>
@@ -84,20 +84,20 @@
 
     <!-- Ongoing -->
     <section id="ongoing-section" class="mt-9 hidden">
-      <div class="text-2xl font-extrabold mb-3.5" style="color:var(--text-1)">Ongoing alerts</div>
+      <div class="text-2xl font-extrabold mb-3.5" style="color:var(--text-1)" data-i18n="ongoing.section">Ongoing alerts</div>
       <div id="ongoing-list" class="flex flex-col gap-3"></div>
     </section>
 
     <!-- History -->
     <section class="mt-11">
-      <div class="text-2xl font-extrabold" style="color:var(--text-1)">Alert history</div>
-      <div class="text-xs mb-3.5 mt-0.5" style="color:var(--text-5)">Chronological log of every alert broadcast from this org · click a row for detail</div>
+      <div class="text-2xl font-extrabold" style="color:var(--text-1)" data-i18n="history.section">Alert history</div>
+      <div class="text-xs mb-3.5 mt-0.5" style="color:var(--text-5)" data-i18n="history.subtitle">Chronological log of every alert broadcast from this org · click a row for detail</div>
       <div class="rounded-xl overflow-hidden" style="background:var(--n-2);border:1px solid var(--n-5)">
         <div class="grid gap-4 px-5 py-3.5 border-b" style="grid-template-columns:1.1fr 1fr 1.8fr 1.1fr;border-color:var(--n-4)">
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Type</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Action</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Date / time</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Responder</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="history.col.type">Type</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="history.col.action">Action</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="history.col.date">Date / time</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="history.col.responder">Responder</div>
         </div>
         <div id="history-list"></div>
       </div>
@@ -108,13 +108,13 @@
   <div id="trigger-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6 modal-backdrop">
     <div id="trigger-card" class="w-full max-w-[480px] rounded-xl p-7"
          style="background:var(--n-2);border:1px solid var(--n-5)">
-      <div class="text-2xl font-extrabold" id="trigger-title" style="color:var(--text-1)">Trigger Alert</div>
-      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)">Choose who receives this page</div>
+      <div class="text-2xl font-extrabold" id="trigger-title" style="color:var(--text-1)" data-i18n="trigger.title.default">Trigger Alert</div>
+      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)" data-i18n="trigger.subtitle">Choose who receives this page</div>
 
       <label class="flex items-center gap-3 px-3.5 py-3 rounded-lg cursor-pointer mb-2.5"
              style="background:var(--n-3);border:1px solid var(--n-6)">
         <input type="checkbox" id="target-all" class="w-5 h-5 accent-red-500" checked>
-        <span class="text-sm font-bold" style="color:var(--text-1)">All subscribers</span>
+        <span class="text-sm font-bold" style="color:var(--text-1)" data-i18n="trigger.targetAll">All subscribers</span>
       </label>
 
       <div id="target-list" class="flex flex-col gap-0.5 max-h-[260px] overflow-auto mb-5"></div>
@@ -125,7 +125,8 @@
                 style="background:var(--red-6);color:#fff;height:52px"></button>
         <button id="trigger-cancel" type="button"
                 class="px-5 rounded-lg font-semibold text-sm"
-                style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:52px">
+                style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:52px"
+                data-i18n="trigger.cancel">
           Cancel
         </button>
       </div>
@@ -143,27 +144,27 @@
       <div id="detail-target" class="text-xl font-extrabold mt-2" style="color:var(--text-1)">–</div>
 
       <div class="mt-4 pt-4 flex flex-col gap-2.5 border-t" style="border-color:var(--n-4)">
-        <div class="flex justify-between text-sm"><span style="color:var(--text-5)">Triggered</span><span class="mono" id="detail-triggered" style="color:var(--text-2)">–</span></div>
-        <div class="flex justify-between text-sm"><span style="color:var(--text-5)">Resolved</span><span class="mono" id="detail-resolved" style="color:var(--text-2)">–</span></div>
-        <div class="flex justify-between text-sm"><span style="color:var(--text-5)">Responder</span><span class="font-semibold" id="detail-responder" style="color:var(--text-2)">–</span></div>
+        <div class="flex justify-between text-sm"><span style="color:var(--text-5)" data-i18n="detail.field.triggered">Triggered</span><span class="mono" id="detail-triggered" style="color:var(--text-2)">–</span></div>
+        <div class="flex justify-between text-sm"><span style="color:var(--text-5)" data-i18n="detail.field.resolved">Resolved</span><span class="mono" id="detail-resolved" style="color:var(--text-2)">–</span></div>
+        <div class="flex justify-between text-sm"><span style="color:var(--text-5)" data-i18n="detail.field.responder">Responder</span><span class="font-semibold" id="detail-responder" style="color:var(--text-2)">–</span></div>
       </div>
 
       <div class="mt-4 pt-4 border-t" style="border-color:var(--n-4)">
         <div class="text-xs font-bold uppercase tracking-widest mb-2.5" style="color:var(--text-5)">
-          Acknowledged (<span id="detail-ack-count">0</span>)
+          <span data-i18n="detail.section.acknowledged">Acknowledged</span> (<span id="detail-ack-count">0</span>)
         </div>
         <div id="detail-ack-list" class="flex flex-col gap-2"></div>
 
         <div class="mt-3.5" id="detail-pending-block">
           <div class="text-xs font-bold uppercase tracking-widest mb-2.5" style="color:var(--text-5)">
-            Pending (<span id="detail-pending-count">0</span>)
+            <span data-i18n="detail.section.pending">Pending</span> (<span id="detail-pending-count">0</span>)
           </div>
           <div id="detail-pending-list" class="flex flex-col gap-2"></div>
         </div>
 
         <div class="mt-3.5 hidden" id="detail-declined-block">
           <div class="text-xs font-bold uppercase tracking-widest mb-2.5" style="color:var(--text-5)">
-            Declined (<span id="detail-declined-count">0</span>)
+            <span data-i18n="detail.section.declined">Declined</span> (<span id="detail-declined-count">0</span>)
           </div>
           <div id="detail-declined-list" class="flex flex-col gap-2"></div>
         </div>
@@ -171,9 +172,10 @@
 
       <div class="flex gap-2.5 mt-6">
         <button id="detail-resolve" type="button" class="hidden flex-1 rounded-lg font-bold text-sm"
-                style="background:var(--red-6);color:#fff;height:48px">Resolve alert</button>
+                style="background:var(--red-6);color:#fff;height:48px" data-i18n="detail.resolve">Resolve alert</button>
         <button id="detail-close" type="button" class="px-5 rounded-lg font-semibold text-sm"
-                style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:48px">Close</button>
+                style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:48px"
+                data-i18n="detail.close">Close</button>
       </div>
     </div>
   </div>

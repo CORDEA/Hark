@@ -47,7 +47,7 @@ class HistoryViewModel extends _$HistoryViewModel {
       state = AsyncValue.data(
         current.copyWith(
           isLeaving: false,
-          event: HistoryViewEvent.showSnackBar('Leave failed: $e'),
+          event: HistoryViewEvent.leaveFailed(e.toString()),
         ),
       );
     }
@@ -65,7 +65,6 @@ class HistoryViewModel extends _$HistoryViewModel {
 }
 
 HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
-  final title = a.type == AlertType.critical ? 'Service outage' : 'Warning';
   HistoryRowBadge badge;
   DateTime? badgeAt;
   if (a.status == 'resolved') {
@@ -83,7 +82,6 @@ HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
   return HistoryRowViewState(
     alertId: a.id,
     type: a.type,
-    title: title,
     triggeredAt: a.triggeredAt,
     badge: badge,
     badgeAt: badgeAt,

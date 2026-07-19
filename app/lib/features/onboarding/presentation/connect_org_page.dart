@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'connect_org_view_model.dart';
 import 'connect_org_view_state.dart';
 
@@ -28,14 +29,22 @@ class ConnectOrgPage extends HookConsumerWidget {
     final codeController = useTextEditingController(text: prefillCode);
     final theme = Theme.of(context);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
 
     ref.listen(provider.select((s) => s.event), (_, event) {
       switch (event) {
-        case ConnectOrgViewEventShowSnackBar(:final message):
+        case ConnectOrgViewEventMissingFields():
           if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.connectOrgMissingFields)),
+            );
+            ref.read(provider.notifier).onEventConsumed();
+          }
+        case ConnectOrgViewEventRegisterFailed(:final reason):
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.connectOrgRegisterFailed(reason))),
+            );
             ref.read(provider.notifier).onEventConsumed();
           }
         case ConnectOrgViewEventNavigateToOrgs():
@@ -78,7 +87,7 @@ class ConnectOrgPage extends HookConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Connect to your org',
+                l10n.connectOrgTitle,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                   color: theme.colorScheme.onSurface,
@@ -86,27 +95,30 @@ class ConnectOrgPage extends HookConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Join an organization to start receiving on-call alerts.',
+                l10n.connectOrgSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
               const SizedBox(height: AppSpacing.xl),
-              _FieldLabel(text: 'Server URL', colors: colors),
+              _FieldLabel(text: l10n.connectOrgServerUrlLabel, colors: colors),
               const SizedBox(height: AppSpacing.xs),
               _MonoInput(
                 controller: serverController,
-                hint: 'alerts.example.com',
+                hint: l10n.connectOrgServerUrlHint,
                 colors: colors,
                 onChanged: (v) =>
                     ref.read(provider.notifier).onServerUrlChanged(v),
               ),
               const SizedBox(height: AppSpacing.md),
-              _FieldLabel(text: 'Invitation Code', colors: colors),
+              _FieldLabel(
+                text: l10n.connectOrgInvitationCodeLabel,
+                colors: colors,
+              ),
               const SizedBox(height: AppSpacing.xs),
               _MonoInput(
                 controller: codeController,
-                hint: 'XXXX-XXXX',
+                hint: l10n.connectOrgInvitationCodeHint,
                 colors: colors,
                 textCapitalization: TextCapitalization.characters,
                 onChanged: (v) =>
@@ -140,9 +152,9 @@ class ConnectOrgPage extends HookConsumerWidget {
                                 color: Colors.white,
                               ),
                             )
-                          : const Text(
-                              'Connect',
-                              style: TextStyle(
+                          : Text(
+                              l10n.connectOrgSubmit,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -157,7 +169,7 @@ class ConnectOrgPage extends HookConsumerWidget {
                   onTap: () => context.go('/orgs'),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Already have organizations? ',
+                      text: l10n.connectOrgAlreadyHaveOrgs,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.6,
@@ -165,7 +177,7 @@ class ConnectOrgPage extends HookConsumerWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: 'View list',
+                          text: l10n.connectOrgViewList,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w600,

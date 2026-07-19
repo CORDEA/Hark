@@ -3,8 +3,8 @@
 const substate = { users: [] };
 
 function statusBadge(status) {
-  if (status === 'active') return `<span class="badge badge-active">Active</span>`;
-  return `<span class="badge badge-invited">Invited</span>`;
+  if (status === 'active') return `<span class="badge badge-active">${escapeHtml(t('subscribers.status.active'))}</span>`;
+  return `<span class="badge badge-invited">${escapeHtml(t('subscribers.status.invited'))}</span>`;
 }
 
 function renderStats() {
@@ -17,15 +17,13 @@ function renderStats() {
 function renderRows() {
   const el = q('#rows');
   if (substate.users.length === 0) {
-    el.innerHTML = `<div class="px-5 py-6 text-sm" style="color:var(--text-5)">
-      No subscribers yet. Tap “Invite New User” to add one.
-    </div>`;
+    el.innerHTML = `<div class="px-5 py-6 text-sm" style="color:var(--text-5)">${escapeHtml(t('subscribers.empty'))}</div>`;
     return;
   }
   el.innerHTML = substate.users.map(u => {
     const device = u.devices && u.devices[0]
       ? u.devices[0].device_name
-      : (u.status === 'invited' ? 'Awaiting device' : '—');
+      : (u.status === 'invited' ? t('subscribers.device.awaiting') : t('empty.dash'));
     return `
       <div class="grid gap-4 px-5 py-4 border-b items-center"
            style="grid-template-columns:2fr 1fr 1.3fr 1.6fr;border-color:var(--n-4)">
@@ -42,15 +40,15 @@ function renderRows() {
         <div>${statusBadge(u.status)}</div>
         <div class="text-xs mono" style="color:var(--text-4)">${escapeHtml(lastActivity(u.last_activity_at))}</div>
         <div class="flex gap-2 justify-end">
-          <button type="button" title="Test Ping" data-test-ping="${u.id}"
+          <button type="button" title="${escapeHtml(t('subscribers.actions.testPing'))}" data-test-ping="${u.id}"
                   class="w-8 h-8 rounded-md text-sm"
                   style="border:1px solid var(--n-6);color:var(--text-4);background:transparent">↻</button>
           <button type="button" data-reinvite="${u.id}"
                   class="h-8 px-3 rounded-md font-semibold text-xs"
-                  style="border:1px solid var(--n-6);color:var(--text-4);background:transparent">Re-invite</button>
+                  style="border:1px solid var(--n-6);color:var(--text-4);background:transparent">${escapeHtml(t('subscribers.actions.reinvite'))}</button>
           <button type="button" data-kick="${u.id}"
                   class="h-8 px-3 rounded-md font-semibold text-xs"
-                  style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">Kick</button>
+                  style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">${escapeHtml(t('subscribers.actions.kick'))}</button>
         </div>
       </div>
     `;
@@ -101,7 +99,7 @@ async function submitInvite(displayName) {
     showInviteCard(data);
     await refresh(); // pick up the new "invited" row immediately
   } catch (e) {
-    errEl.textContent = `Invite failed: ${e.message}`;
+    errEl.textContent = t('invite.failed', { error: e.message });
     errEl.classList.remove('hidden');
   } finally {
     submitBtn.disabled = false;
@@ -113,22 +111,22 @@ async function reinvite(id) {
     const data = await api(`/api/users/${id}/reinvite`, { method: 'POST' });
     showInviteCard(data);
     await refresh();
-  } catch (e) { alert(`Re-invite failed: ${e.message}`); }
+  } catch (e) { alert(t('subscribers.reinvite.failed', { error: e.message })); }
 }
 
 async function testPing(id) {
   try {
     const data = await api(`/api/users/${id}/test-ping`, { method: 'POST' });
-    alert(`Test ping sent to ${data.sent} device(s).`);
-  } catch (e) { alert(`Test ping failed: ${e.message}`); }
+    alert(t('subscribers.testPing.sent', { n: data.sent }));
+  } catch (e) { alert(t('subscribers.testPing.failed', { error: e.message })); }
 }
 
 async function kick(id) {
-  if (!confirm('Kick this subscriber? Their devices lose access immediately.')) return;
+  if (!confirm(t('subscribers.kick.confirm'))) return;
   try {
     await api(`/api/users/${id}`, { method: 'DELETE' });
     await refresh();
-  } catch (e) { alert(`Kick failed: ${e.message}`); }
+  } catch (e) { alert(t('subscribers.kick.failed', { error: e.message })); }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

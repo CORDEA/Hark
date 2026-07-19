@@ -36,32 +36,32 @@
 <body>
   <div class="max-w-[1180px] mx-auto px-10 pb-16">
     <div class="pt-9 pb-2">
-      <a href="index.html" style="color:var(--text-5)" class="text-sm font-semibold">&larr; Dashboard</a>
+      <a href="index.html" style="color:var(--text-5)" class="text-sm font-semibold" data-i18n="subscribers.backToDashboard">&larr; Dashboard</a>
     </div>
     <header class="flex items-end justify-between py-2 pb-7 border-b" style="border-color:var(--n-4)">
       <div>
-        <div class="text-xs font-semibold uppercase tracking-widest" style="color:var(--text-5)">Hark admin</div>
-        <div class="text-3xl font-black tracking-tight mt-1" style="color:var(--text-1)">Subscribers</div>
+        <div class="text-xs font-semibold uppercase tracking-widest" style="color:var(--text-5)" data-i18n="subscribers.eyebrow">Hark admin</div>
+        <div class="text-3xl font-black tracking-tight mt-1" style="color:var(--text-1)" data-i18n="subscribers.title">Subscribers</div>
       </div>
       <div class="flex gap-7">
         <div class="text-right">
           <div class="text-[22px] font-extrabold" id="count-active" style="color:var(--text-1)">–</div>
-          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)">Active</div>
+          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)" data-i18n="subscribers.countActive">Active</div>
         </div>
         <div class="text-right">
           <div class="text-[22px] font-extrabold" id="count-invited" style="color:var(--text-1)">–</div>
-          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)">Invited</div>
+          <div class="text-[11px] uppercase tracking-widest mt-0.5" style="color:var(--text-5)" data-i18n="subscribers.countInvited">Invited</div>
         </div>
       </div>
     </header>
 
     <section class="mt-7">
       <div class="flex items-center justify-between mb-3.5">
-        <div class="text-xs" style="color:var(--text-5)">Devices registered to receive on-call pages</div>
+        <div class="text-xs" style="color:var(--text-5)" data-i18n="subscribers.description">Devices registered to receive on-call pages</div>
         <button id="btn-invite" type="button"
                 class="h-11 px-5 rounded-lg font-semibold text-sm flex items-center gap-2"
                 style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">
-          <span class="text-base leading-none">+</span> Invite New User
+          <span class="text-base leading-none">+</span> <span data-i18n="subscribers.inviteButton">Invite New User</span>
         </button>
       </div>
 
@@ -69,22 +69,22 @@
            style="background:var(--n-2);border:1px solid var(--n-5)">
         <div class="grid gap-7 items-center" style="grid-template-columns:1fr 140px">
           <div class="flex flex-col gap-3.5 min-w-0">
-            <div class="text-sm font-bold" style="color:var(--text-1)">Temporary join link</div>
+            <div class="text-sm font-bold" style="color:var(--text-1)" data-i18n="invite.cardTitle">Temporary join link</div>
             <div>
-              <div class="text-xs font-semibold mb-1.5" style="color:var(--text-5)">Invite URL</div>
+              <div class="text-xs font-semibold mb-1.5" style="color:var(--text-5)" data-i18n="invite.urlLabel">Invite URL</div>
               <div id="invite-url" class="mono text-sm p-3 rounded-md break-all"
                    style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">…</div>
             </div>
             <div class="flex gap-2.5">
               <button id="btn-copy" type="button"
                       class="h-10 px-4 rounded-md font-bold text-xs"
-                      style="background:var(--red-6);color:#fff">Copy link</button>
+                      style="background:var(--red-6);color:#fff" data-i18n="invite.copy">Copy link</button>
               <button id="btn-invite-close" type="button"
                       class="h-10 px-4 rounded-md font-semibold text-xs"
-                      style="background:transparent;border:1px solid var(--n-6);color:var(--text-4)">Done</button>
+                      style="background:transparent;border:1px solid var(--n-6);color:var(--text-4)" data-i18n="invite.done">Done</button>
             </div>
           </div>
-          <img id="invite-qr" alt="Invite QR code" width="140" height="140"
+          <img id="invite-qr" alt="Invite QR code" data-i18n-attr="alt:invite.qrAlt" width="140" height="140"
                class="rounded-md" style="background:#fff">
         </div>
       </div>
@@ -92,10 +92,10 @@
       <div class="rounded-xl overflow-hidden" style="background:var(--n-2);border:1px solid var(--n-5)">
         <div class="grid gap-4 px-5 py-3.5 border-b"
              style="grid-template-columns:2fr 1fr 1.3fr 1.6fr;border-color:var(--n-4)">
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Subscriber / device</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Status</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)">Last activity</div>
-          <div class="text-[11px] font-bold uppercase tracking-widest text-right" style="color:var(--text-6)">Actions</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="subscribers.col.subscriber">Subscriber / device</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="subscribers.col.status">Status</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--text-6)" data-i18n="subscribers.col.lastActivity">Last activity</div>
+          <div class="text-[11px] font-bold uppercase tracking-widest text-right" style="color:var(--text-6)" data-i18n="subscribers.col.actions">Actions</div>
         </div>
         <div id="rows"></div>
       </div>
@@ -106,13 +106,14 @@
   <div id="invite-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6 modal-backdrop">
     <div class="w-full max-w-[420px] rounded-xl p-7"
          style="background:var(--n-2);border:1px solid var(--n-5)">
-      <div class="text-2xl font-extrabold" style="color:var(--text-1)">Invite new user</div>
-      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)">Give this subscriber a display name so responders can tell devices apart.</div>
+      <div class="text-2xl font-extrabold" style="color:var(--text-1)" data-i18n="invite.modal.title">Invite new user</div>
+      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)" data-i18n="invite.modal.subtitle">Give this subscriber a display name so responders can tell devices apart.</div>
 
       <form id="invite-form" novalidate>
-        <label for="invite-name" class="text-[11px] font-bold uppercase tracking-widest mb-1.5 block" style="color:var(--text-5)">Display name</label>
+        <label for="invite-name" class="text-[11px] font-bold uppercase tracking-widest mb-1.5 block" style="color:var(--text-5)" data-i18n="invite.modal.displayNameLabel">Display name</label>
         <input id="invite-name" name="displayName" type="text" autocomplete="off" maxlength="80"
                placeholder="e.g. Jordan Marsh"
+               data-i18n-attr="placeholder:invite.modal.displayNamePlaceholder"
                class="w-full h-11 px-3 rounded-md text-sm outline-none"
                style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-1)">
         <div id="invite-error" class="text-xs mt-2 hidden" style="color:var(--red-9)"></div>
@@ -120,10 +121,10 @@
         <div class="flex gap-2.5 mt-6">
           <button id="invite-create" type="submit"
                   class="flex-1 rounded-lg font-bold text-base"
-                  style="background:var(--red-6);color:#fff;height:48px">Create invite</button>
+                  style="background:var(--red-6);color:#fff;height:48px" data-i18n="invite.modal.create">Create invite</button>
           <button id="invite-cancel" type="button"
                   class="px-5 rounded-lg font-semibold text-sm"
-                  style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:48px">Cancel</button>
+                  style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:48px" data-i18n="invite.modal.cancel">Cancel</button>
         </div>
       </form>
     </div>

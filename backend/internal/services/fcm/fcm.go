@@ -1,4 +1,7 @@
-// Package fcm delivers data-only, high-priority push notifications.
+// Package fcm delivers high-priority push notifications. The wire payload is
+// primarily data-only (the mobile client renders UI from its own strings),
+// but a localized title/body is included so the OS shelf has text for the
+// (rare) case where the app can't process the data payload in-process.
 package fcm
 
 import (
@@ -20,8 +23,10 @@ const (
 	KindTest    = "test"
 )
 
-// Message is our thin wrapper over the FCM data model. The client renders UI
-// solely from these fields — no notification/body strings are sent.
+// Message is our thin wrapper over the FCM data model. The client renders
+// in-app UI solely from Data; Title/Body populate the OS notification shelf
+// as a fallback. Both are already localized to the target device's locale by
+// the caller (usually via services/i18n) before Send is invoked.
 type Message struct {
 	Token   string            // per-device
 	Data    map[string]string // required (contextless payload)
@@ -29,12 +34,16 @@ type Message struct {
 	Kind    string            // KindAlert / KindResolve / KindTest
 	// Critical flag decides interruption-level + collapse behavior.
 	Critical bool
+	// Title/Body are pre-localized notification strings. Leaving them empty
+	// keeps the legacy data-only behavior for backwards compatibility.
+	Title string
+	Body  string
 }
 
 // SendResult tells callers which tokens are dead so they can be deleted.
 type SendResult struct {
-	Success   int
-	Failure   int
+	Success    int
+	Failure    int
 	DeadTokens []string
 }
 
@@ -111,6 +120,13 @@ func buildFirebaseMessage(m Message) *messaging.Message {
 				Aps: &messaging.Aps{ContentAvailable: true},
 			},
 		},
+	}
+	if m.Title != "" || m.Body != "" {
+		fm.Notification = &messaging.Notification{Title: m.Title, Body: m.Body}
+		fm.APNS.Payload.Aps.Alert = &messaging.ApsAlert{
+			Title: m.Title,
+			Body:  m.Body,
+		}
 	}
 	if m.AlertID != "" {
 		fm.APNS.Headers["apns-collapse-id"] = m.AlertID

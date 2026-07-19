@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import 'history_view_model.dart';
 import 'history_view_state.dart';
 
@@ -23,11 +24,12 @@ class ListAlertHistoryPage extends ConsumerWidget {
     ref.listen(provider.select((s) => s.value?.event), (_, event) {
       if (event == null) return;
       switch (event) {
-        case HistoryViewEventShowSnackBar(:final message):
+        case HistoryViewEventLeaveFailed(:final reason):
           if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message)));
+            final l10n = AppLocalizations.of(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.historyLeaveFailed(reason))),
+            );
             ref.read(provider.notifier).onEventConsumed();
           }
         case HistoryViewEventNavigateToOrgs():
@@ -41,7 +43,11 @@ class ListAlertHistoryPage extends ConsumerWidget {
       body: SafeArea(
         child: async.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('Failed: $e')),
+          error: (e, _) => Center(
+            child: Text(
+              AppLocalizations.of(context).historyLoadFailed(e.toString()),
+            ),
+          ),
           data: (state) => _Body(state: state, provider: provider),
         ),
       ),
@@ -57,6 +63,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Column(
@@ -74,7 +81,7 @@ class _Body extends ConsumerWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'History',
+                l10n.historyTitle,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -109,7 +116,7 @@ class _RowList extends StatelessWidget {
     if (rows.isEmpty) {
       return Center(
         child: Text(
-          'No alerts yet',
+          AppLocalizations.of(context).historyEmpty,
           style: TextStyle(
             color: Theme.of(
               context,
@@ -134,6 +141,7 @@ class _Row extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: AppSpacing.md,
@@ -155,7 +163,9 @@ class _Row extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  row.title,
+                  row.type == 'critical'
+                      ? l10n.historyRowTitleCritical
+                      : l10n.historyRowTitleWarning,
                   style: TextStyle(
                     color: row.badge == HistoryRowBadge.resolved
                         ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
@@ -168,7 +178,7 @@ class _Row extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  _timeLabel(row.triggeredAt),
+                  _timeLabel(l10n, row.triggeredAt),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
@@ -189,6 +199,7 @@ class _BadgePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     late Color bg;
     late Color fg;
     late String label;
@@ -196,15 +207,15 @@ class _BadgePill extends StatelessWidget {
       case HistoryRowBadge.ackedAt:
         bg = colors.ackBackground;
         fg = colors.ackText;
-        label = 'ACK ${_hm(row.badgeAt ?? row.triggeredAt)}';
+        label = l10n.historyBadgeAck(_hm(row.badgeAt ?? row.triggeredAt));
       case HistoryRowBadge.declined:
         bg = colors.declineBackground;
         fg = colors.declineText;
-        label = 'DECLINED';
+        label = l10n.historyBadgeDeclined;
       case HistoryRowBadge.resolved:
         bg = colors.resolvedBackground;
         fg = colors.resolvedText;
-        label = 'RESOLVED';
+        label = l10n.historyBadgeResolved;
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -233,6 +244,7 @@ class _DisconnectButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
     return SizedBox(
       height: 48,
       width: double.infinity,
@@ -252,7 +264,7 @@ class _DisconnectButton extends ConsumerWidget {
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             : Text(
-                'Disconnect from ${state.orgName}',
+                l10n.historyDisconnect(state.orgName),
                 style: TextStyle(
                   color: colors.critical,
                   fontWeight: FontWeight.w600,
@@ -265,21 +277,20 @@ class _DisconnectButton extends ConsumerWidget {
 }
 
 Future<bool> _confirmLeave(BuildContext context, String orgName) async {
+  final l10n = AppLocalizations.of(context);
   final result = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Disconnect'),
-      content: Text(
-        'This device will stop receiving alerts from $orgName. You can rejoin with a new invitation code.',
-      ),
+      title: Text(l10n.historyDisconnectDialogTitle),
+      content: Text(l10n.historyDisconnectDialogBody(orgName)),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(false),
-          child: const Text('Cancel'),
+          child: Text(l10n.historyDisconnectDialogCancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(ctx).pop(true),
-          child: const Text('Disconnect'),
+          child: Text(l10n.historyDisconnectDialogConfirm),
         ),
       ],
     ),
@@ -293,17 +304,20 @@ Color _dotColor(HistoryRowViewState row, AppColorSchemeExtension colors) {
   return colors.warning;
 }
 
-String _timeLabel(DateTime iso) {
+String _timeLabel(AppLocalizations l10n, DateTime iso) {
   final d = iso.toLocal();
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final dayStart = DateTime(d.year, d.month, d.day);
   final hhmm = _hm(d);
-  if (dayStart == today) return 'Today · $hhmm';
+  if (dayStart == today) return l10n.historyTimeToday(hhmm);
   if (dayStart == today.subtract(const Duration(days: 1))) {
-    return 'Yesterday · $hhmm';
+    return l10n.historyTimeYesterday(hhmm);
   }
-  return '${d.year}-${_p(d.month)}-${_p(d.day)} · $hhmm';
+  return l10n.historyTimeAbsolute(
+    '${d.year}-${_p(d.month)}-${_p(d.day)}',
+    hhmm,
+  );
 }
 
 String _hm(DateTime t) => '${_p(t.hour)}:${_p(t.minute)}';

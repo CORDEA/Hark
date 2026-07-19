@@ -11,7 +11,6 @@ abstract class HistoryRowViewState with _$HistoryRowViewState {
   const factory HistoryRowViewState({
     required String alertId,
     required String type,
-    required String title,
     required DateTime triggeredAt,
     required HistoryRowBadge badge,
     DateTime? badgeAt, // populated for ackedAt
@@ -21,8 +20,8 @@ abstract class HistoryRowViewState with _$HistoryRowViewState {
 @freezed
 sealed class HistoryViewEvent with _$HistoryViewEvent {
   const factory HistoryViewEvent.none() = HistoryViewEventNone;
-  const factory HistoryViewEvent.showSnackBar(String message) =
-      HistoryViewEventShowSnackBar;
+  const factory HistoryViewEvent.leaveFailed(String reason) =
+      HistoryViewEventLeaveFailed;
   const factory HistoryViewEvent.navigateToOrgs() =
       HistoryViewEventNavigateToOrgs;
 }

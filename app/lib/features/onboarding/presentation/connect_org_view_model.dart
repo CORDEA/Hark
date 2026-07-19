@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/fcm_token_provider.dart';
@@ -30,11 +31,7 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
     final serverUrl = state.serverUrl.trim();
     final code = state.invitationCode.trim();
     if (serverUrl.isEmpty || code.isEmpty) {
-      state = state.copyWith(
-        event: const ConnectOrgViewEvent.showSnackBar(
-          'Enter a server URL and an invitation code',
-        ),
-      );
+      state = state.copyWith(event: const ConnectOrgViewEvent.missingFields());
       return;
     }
 
@@ -53,6 +50,7 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
             deviceName: state.deviceName.trim().isEmpty
                 ? 'device'
                 : state.deviceName.trim(),
+            locale: _currentLocaleTag(),
           );
       state = state.copyWith(
         isSubmitting: false,
@@ -61,7 +59,7 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
     } catch (e) {
       state = state.copyWith(
         isSubmitting: false,
-        event: ConnectOrgViewEvent.showSnackBar(_prettifyError(e)),
+        event: ConnectOrgViewEvent.registerFailed(_prettifyError(e)),
       );
     }
   }
@@ -78,5 +76,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
     final s = err.toString();
     if (s.length > 160) return '${s.substring(0, 160)}…';
     return s;
+  }
+
+  String _currentLocaleTag() {
+    final locale = WidgetsBinding.instance.platformDispatcher.locale;
+    return locale.toLanguageTag();
   }
 }
