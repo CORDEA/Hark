@@ -1,0 +1,18 @@
+services:
+  hark:
+    build: .
+    image: hark:latest
+    container_name: hark
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Override PUBLIC_URL to the address your reverse-proxy exposes.
+      PUBLIC_URL: "http://localhost:8080"
+      ORG_NAME: "Hark"
+    volumes:
+      # Persistent SQLite database + FCM key.
+      - ./data:/data
+      # Drop your Firebase service-account JSON next to this file; the
+      # container reads it from /data/firebase.json by default.
+      - ./firebase.json:/data/firebase.json:ro
