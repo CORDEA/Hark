@@ -56,142 +56,120 @@ class ConnectOrgPage extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.xxl,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Text(l10n.connectOrgTitle),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: colors.critical,
-                  borderRadius: BorderRadius.circular(12),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.xxl,
                 ),
-                child: Center(
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: theme.scaffoldBackgroundColor,
-                        width: 3,
-                      ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _FieldLabel(
+                      text: l10n.connectOrgServerUrlLabel,
+                      colors: colors,
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                l10n.connectOrgTitle,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                l10n.connectOrgSubtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              _FieldLabel(text: l10n.connectOrgServerUrlLabel, colors: colors),
-              const SizedBox(height: AppSpacing.xs),
-              _MonoInput(
-                controller: serverController,
-                hint: l10n.connectOrgServerUrlHint,
-                colors: colors,
-                onChanged: (v) =>
-                    ref.read(provider.notifier).onServerUrlChanged(v),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _FieldLabel(
-                text: l10n.connectOrgInvitationCodeLabel,
-                colors: colors,
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              _MonoInput(
-                controller: codeController,
-                hint: l10n.connectOrgInvitationCodeHint,
-                colors: colors,
-                textCapitalization: TextCapitalization.characters,
-                onChanged: (v) =>
-                    ref.read(provider.notifier).onInvitationCodeChanged(v),
-              ),
-              const Spacer(),
-              Consumer(
-                builder: (context, ref, _) {
-                  final isSubmitting = ref.watch(
-                    provider.select((s) => s.isSubmitting),
-                  );
-                  return SizedBox(
-                    height: 56,
-                    child: FilledButton(
-                      onPressed: isSubmitting
-                          ? null
-                          : () => ref.read(provider.notifier).onSubmitTapped(),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: colors.critical,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: isSubmitting
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              l10n.connectOrgSubmit,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                    const SizedBox(height: AppSpacing.xs),
+                    _MonoInput(
+                      controller: serverController,
+                      hint: l10n.connectOrgServerUrlHint,
+                      colors: colors,
+                      onChanged: (v) =>
+                          ref.read(provider.notifier).onServerUrlChanged(v),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _FieldLabel(
+                      text: l10n.connectOrgInvitationCodeLabel,
+                      colors: colors,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    _MonoInput(
+                      controller: codeController,
+                      hint: l10n.connectOrgInvitationCodeHint,
+                      colors: colors,
+                      textCapitalization: TextCapitalization.characters,
+                      onChanged: (v) =>
+                          ref.read(provider.notifier).onInvitationCodeChanged(v),
+                    ),
+                    const Spacer(),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final isSubmitting = ref.watch(
+                          provider.select((s) => s.isSubmitting),
+                        );
+                        return SizedBox(
+                          height: 56,
+                          child: FilledButton(
+                            onPressed: isSubmitting
+                                ? null
+                                : () =>
+                                    ref.read(provider.notifier).onSubmitTapped(),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: colors.critical,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
                               ),
                             ),
+                            child: isSubmitting
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    l10n.connectOrgSubmit,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Center(
-                child: GestureDetector(
-                  onTap: () => context.go('/'),
-                  child: Text.rich(
-                    TextSpan(
-                      text: l10n.connectOrgAlreadyHaveOrgs,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.6,
-                        ),
-                      ),
-                      children: [
-                        TextSpan(
-                          text: l10n.connectOrgViewList,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface,
-                            fontWeight: FontWeight.w600,
+                    const SizedBox(height: AppSpacing.md),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () => context.go('/'),
+                        child: Text.rich(
+                          TextSpan(
+                            text: l10n.connectOrgAlreadyHaveOrgs,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.6,
+                              ),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: l10n.connectOrgViewList,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurface,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
