@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1.7
 
 # Build stage: full Go toolchain, CGO on for the SQLite driver.
-FROM golang:1.23-alpine AS build
+# 1.25 matches the toolchain go.mod pulls in via GOTOOLCHAIN=auto.
+FROM golang:1.25-alpine AS build
 RUN apk add --no-cache build-base git
 WORKDIR /src
 COPY go.mod go.sum ./

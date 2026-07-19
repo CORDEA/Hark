@@ -3,7 +3,10 @@ package fcm
 
 import (
 	"context"
+	"errors"
+	"io/fs"
 	"log/slog"
+	"os"
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
@@ -39,21 +42,33 @@ type Sender interface {
 	Send(ctx context.Context, msgs []Message) SendResult
 }
 
-// New returns a Sender: a real Firebase client if credentialsPath is set,
-// otherwise a no-op that logs the outbound payload (useful for local dev and
-// integration tests without a Firebase project).
+// New returns a Sender: a real Firebase client when a readable credentials
+// file is provided, otherwise a no-op that logs the outbound payload. The
+// no-op path is intentional — the container image ships with a default
+// FCM_CREDENTIALS path that only exists once the operator drops in the
+// service-account JSON, so the server has to start cleanly without it.
 func New(ctx context.Context, credentialsPath string) (Sender, error) {
 	if credentialsPath == "" {
 		slog.Warn("fcm: FCM_CREDENTIALS is empty — using no-op sender (payloads will be logged)")
 		return &noopSender{}, nil
 	}
+	if _, err := os.Stat(credentialsPath); err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			slog.Warn("fcm: credentials file not found — using no-op sender",
+				"path", credentialsPath)
+			return &noopSender{}, nil
+		}
+		return nil, err
+	}
 	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(credentialsPath))
 	if err != nil {
-		return nil, err
+		slog.Warn("fcm: firebase init failed — using no-op sender", "err", err)
+		return &noopSender{}, nil
 	}
 	client, err := app.Messaging(ctx)
 	if err != nil {
-		return nil, err
+		slog.Warn("fcm: messaging client init failed — using no-op sender", "err", err)
+		return &noopSender{}, nil
 	}
 	return &firebaseSender{client: client}, nil
 }
