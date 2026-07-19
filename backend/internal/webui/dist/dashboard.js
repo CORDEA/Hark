@@ -1,5 +1,4 @@
-// Hark admin — dashboard client. Single file, no build step.
-// Talks to the API on the same origin.
+// Hark admin — dashboard-specific client. Shared helpers live in common.js.
 
 const state = {
   users: [],           // GET /api/users
@@ -10,36 +9,6 @@ const state = {
   selected: new Set(), // user_ids when !targetAll
   detailId: null,
 };
-
-// ---------- fetch helpers ----------
-async function api(path, opts = {}) {
-  const res = await fetch(path, {
-    headers: { 'content-type': 'application/json', ...(opts.headers || {}) },
-    ...opts,
-  });
-  const body = await res.json().catch(() => null);
-  if (!res.ok || (body && body.error)) {
-    const msg = body?.error?.message || `${res.status} ${res.statusText}`;
-    throw new Error(msg);
-  }
-  return body?.data;
-}
-
-const q  = (sel) => document.querySelector(sel);
-const qa = (sel) => Array.from(document.querySelectorAll(sel));
-
-// ---------- rendering ----------
-function fmtTime(iso) {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-  const dayStart = new Date(d); dayStart.setHours(0, 0, 0, 0);
-  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' }) + ' UTC';
-  if (dayStart.getTime() === today.getTime())     return `Today · ${time}`;
-  if (dayStart.getTime() === yesterday.getTime()) return `Yesterday · ${time}`;
-  return `${d.toISOString().slice(0, 10)} · ${time}`;
-}
 
 function targetLabel(a) {
   if (a.is_broadcast) return 'All subscribers';
@@ -259,11 +228,6 @@ async function refresh() {
 }
 
 // ---------- event wiring ----------
-function escapeHtml(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({
-    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
-  }[c]));
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   q('#btn-critical').addEventListener('click', () => openTrigger('critical'));
