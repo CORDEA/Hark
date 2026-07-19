@@ -34,6 +34,9 @@ func NewRouter(d Deps) http.Handler {
 		r.Post("/invite", api.Invite)
 		r.Post("/register", api.Register)
 		r.Post("/users/leave", api.Leave)
+		r.Post("/users/{id}/test-ping", api.TestPing)
+		r.Post("/users/{id}/reinvite", api.Reinvite)
+		r.Delete("/users/{id}", api.KickUser)
 
 		r.Get("/alerts", api.ListAlerts)
 		r.Get("/alerts/{id}", api.GetAlert)
