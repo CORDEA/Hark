@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,21 +17,16 @@ DeepLinkService deepLinkService(Ref ref) {
   return service;
 }
 
-/// Listens for `hark://join?server=<url>&code=<code>` links from cold-start
-/// and warm-start and routes to /connect with the fields pre-filled.
+/// Listens for `hark://join?server=<url>&code=<code>` warm-start links
+/// and routes to /connect with the fields pre-filled.
+/// Cold-start handling is done in main() via [initialRouteProvider].
 class DeepLinkService {
   DeepLinkService() : _appLinks = AppLinks();
 
   final AppLinks _appLinks;
   StreamSubscription<Uri>? _sub;
 
-  Future<void> start() async {
-    try {
-      final initial = await _appLinks.getInitialLink();
-      if (initial != null) _handle(initial);
-    } catch (e) {
-      debugPrint('deep-link initial: $e');
-    }
+  void start() {
     _sub = _appLinks.uriLinkStream.listen(
       _handle,
       onError: (Object e) => debugPrint('deep-link stream: $e'),
@@ -47,15 +41,7 @@ class DeepLinkService {
       path: '/connect',
       queryParameters: {'server': server, 'code': code},
     ).toString();
-    final context = navigatorKey.currentContext;
-    if (context != null) {
-      context.go(location);
-    } else {
-      // Cold-start: navigator not mounted yet; defer until the first frame.
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        navigatorKey.currentContext?.go(location);
-      });
-    }
+    navigatorKey.currentContext?.go(location);
   }
 
   Future<void> dispose() async {

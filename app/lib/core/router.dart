@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../features/active_alert/presentation/show_active_alert_page.dart';
@@ -10,6 +11,10 @@ import '../features/organizations/presentation/list_organization_page.dart';
 
 part 'router.g.dart';
 
+// Overridden in main() when the app cold-starts from a hark://join deep link
+// so the router never flashes ListOrganizationPage before ConnectOrgPage.
+final initialRouteProvider = Provider<String>((ref) => '/');
+
 /// A [GlobalKey] on the root [Navigator] so background code (an FCM handler
 /// firing from a background isolate, for example) can push the active-alert
 /// route without needing a [BuildContext].
@@ -19,7 +24,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 GoRouter router(Ref ref) {
   return GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: '/',
+    initialLocation: ref.read(initialRouteProvider),
     routes: [
       GoRoute(
         path: '/',

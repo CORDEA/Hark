@@ -19,63 +19,72 @@ class ListOrganizationPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: AppSpacing.xxl),
-              Text(
-                l10n.orgListTitle,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                l10n.orgListSubtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Expanded(child: _OrgList(colors: colors)),
-              const SizedBox(height: AppSpacing.md),
-              InkWell(
-                onTap: () => context.go('/connect'),
-                borderRadius: BorderRadius.circular(14),
-                child: Container(
-                  height: 52,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: colors.borderSubtle,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.add, size: 20, color: Color(0xFF8A8A90)),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(
-                        l10n.orgListAdd,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: const Color(0xFFC8C8CE),
-                          fontWeight: FontWeight.w600,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Text(l10n.orgListTitle),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      l10n.orgListSubtitle,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Expanded(child: _OrgList(colors: colors)),
+                    const SizedBox(height: AppSpacing.md),
+                    InkWell(
+                      onTap: () => context.go('/connect'),
+                      borderRadius: BorderRadius.circular(14),
+                      child: Container(
+                        height: 52,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: colors.borderSubtle,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Color(0xFF8A8A90),
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            Text(
+                              l10n.orgListAdd,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: const Color(0xFFC8C8CE),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                  ],
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
