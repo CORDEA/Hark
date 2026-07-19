@@ -32,6 +32,14 @@ class AlertRepository {
     return ds.getDetail(alertId);
   }
 
+  Future<List<AlertSummaryDto>> findAll({
+    required String orgId,
+    int limit = 50,
+  }) async {
+    final ds = await _dsFor(orgId);
+    return ds.list(limit: limit);
+  }
+
   /// [action] is `acknowledged` or `declined`.
   Future<RespondAlertResponseDto> respond({
     required String orgId,

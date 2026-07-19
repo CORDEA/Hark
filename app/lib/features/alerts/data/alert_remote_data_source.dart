@@ -14,6 +14,17 @@ class AlertRemoteDataSource {
     return AlertDetailDto.fromJson(_unwrapData(res.data));
   }
 
+  Future<List<AlertSummaryDto>> list({int limit = 50}) async {
+    final res = await _dio.get<Map<String, dynamic>>(
+      '/api/alerts',
+      queryParameters: {'limit': limit},
+    );
+    final data = _unwrapDataList(res.data);
+    return data
+        .map((e) => AlertSummaryDto.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<RespondAlertResponseDto> respond({
     required String alertId,
     required RespondAlertRequestDto body,
@@ -27,6 +38,20 @@ class AlertRemoteDataSource {
 }
 
 Map<String, dynamic> _unwrapData(Map<String, dynamic>? envelope) {
+  _throwIfError(envelope);
+  final data = envelope!['data'];
+  if (data is Map<String, dynamic>) return data;
+  return const <String, dynamic>{};
+}
+
+List<dynamic> _unwrapDataList(Map<String, dynamic>? envelope) {
+  _throwIfError(envelope);
+  final data = envelope!['data'];
+  if (data is List) return data;
+  return const <dynamic>[];
+}
+
+void _throwIfError(Map<String, dynamic>? envelope) {
   if (envelope == null) throw const HarkApiException('empty response');
   final err = envelope['error'];
   if (err is Map<String, dynamic>) {
@@ -35,7 +60,4 @@ Map<String, dynamic> _unwrapData(Map<String, dynamic>? envelope) {
       code: err['code'] as String?,
     );
   }
-  final data = envelope['data'];
-  if (data is Map<String, dynamic>) return data;
-  return const <String, dynamic>{};
 }
