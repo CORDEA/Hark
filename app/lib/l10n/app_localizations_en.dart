@@ -44,6 +44,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a server URL and an invitation code';
 
   @override
+  String get connectOrgLookup => 'Continue';
+
+  @override
+  String connectOrgConfirmTitle(String org) {
+    return 'Join $org?';
+  }
+
+  @override
+  String connectOrgConfirmBody(String org) {
+    return 'You will create a passkey on this device that lets you receive alerts from $org.';
+  }
+
+  @override
+  String get connectOrgConfirmCta => 'Create passkey';
+
+  @override
+  String get connectOrgConfirmCancel => 'Back';
+
+  @override
+  String get connectOrgFinishing => 'Finalizing…';
+
+  @override
+  String get connectOrgPasskeyFailed =>
+      'Passkey creation was cancelled or failed';
+
+  @override
+  String get connectOrgDeviceFailed =>
+      'Registered, but could not enable notifications. You can retry from the org list.';
+
+  @override
   String get commonError => 'Something went wrong. Please try again.';
 
   @override

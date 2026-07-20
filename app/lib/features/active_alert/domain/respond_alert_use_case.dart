@@ -14,10 +14,14 @@ class RespondAlertUseCase {
   final AlertRepository _repository;
 
   Future<RespondAlertResponseDto> execute({
-    required String orgId,
+    required String serverUrl,
     required String alertId,
     required String action,
   }) {
-    return _repository.respond(orgId: orgId, alertId: alertId, action: action);
+    return _repository.respond(
+      serverUrl: serverUrl,
+      alertId: alertId,
+      action: action,
+    );
   }
 }

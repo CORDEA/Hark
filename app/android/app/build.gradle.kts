@@ -27,6 +27,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Host that satisfies the app-link intent-filter in AndroidManifest.
+        // Override at build time via -PharkLinkHost=<your-host> to bind the
+        // installed app to a self-hosted deployment.
+        manifestPlaceholders["harkLinkHost"] =
+            (project.findProperty("harkLinkHost") as String?) ?: "hark.example.com"
     }
 
     buildTypes {

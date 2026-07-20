@@ -16,7 +16,7 @@ final class AlertDetailViewModelProvider
     extends $AsyncNotifierProvider<AlertDetailViewModel, AlertDetailViewState> {
   AlertDetailViewModelProvider._({
     required AlertDetailViewModelFamily super.from,
-    required ({String orgId, String alertId}) super.argument,
+    required ({String serverUrl, String alertId}) super.argument,
   }) : super(
          retry: null,
          name: r'alertDetailViewModelProvider',
@@ -51,7 +51,7 @@ final class AlertDetailViewModelProvider
 }
 
 String _$alertDetailViewModelHash() =>
-    r'36b8ec88fe6d359337844df4d9c3f8c3f7653ead';
+    r'0dae7a57b17e02257465348dbc62ae7d453a4779';
 
 final class AlertDetailViewModelFamily extends $Family
     with
@@ -60,7 +60,7 @@ final class AlertDetailViewModelFamily extends $Family
           AsyncValue<AlertDetailViewState>,
           AlertDetailViewState,
           FutureOr<AlertDetailViewState>,
-          ({String orgId, String alertId})
+          ({String serverUrl, String alertId})
         > {
   AlertDetailViewModelFamily._()
     : super(
@@ -72,10 +72,10 @@ final class AlertDetailViewModelFamily extends $Family
       );
 
   AlertDetailViewModelProvider call({
-    required String orgId,
+    required String serverUrl,
     required String alertId,
   }) => AlertDetailViewModelProvider._(
-    argument: (orgId: orgId, alertId: alertId),
+    argument: (serverUrl: serverUrl, alertId: alertId),
     from: this,
   );
 
@@ -85,12 +85,12 @@ final class AlertDetailViewModelFamily extends $Family
 
 abstract class _$AlertDetailViewModel
     extends $AsyncNotifier<AlertDetailViewState> {
-  late final _$args = ref.$arg as ({String orgId, String alertId});
-  String get orgId => _$args.orgId;
+  late final _$args = ref.$arg as ({String serverUrl, String alertId});
+  String get serverUrl => _$args.serverUrl;
   String get alertId => _$args.alertId;
 
   FutureOr<AlertDetailViewState> build({
-    required String orgId,
+    required String serverUrl,
     required String alertId,
   });
   @$mustCallSuper
@@ -112,7 +112,7 @@ abstract class _$AlertDetailViewModel
             >;
     return element.handleCreate(
       ref,
-      () => build(orgId: _$args.orgId, alertId: _$args.alertId),
+      () => build(serverUrl: _$args.serverUrl, alertId: _$args.alertId),
     );
   }
 }

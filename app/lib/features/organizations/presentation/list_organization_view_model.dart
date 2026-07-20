@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/fcm/fcm_token_provider.dart';
 import '../data/org_profile.dart';
+import '../data/org_repository.dart';
 import '../domain/get_organizations_use_case.dart';
 import '../domain/leave_organization_use_case.dart';
 import 'list_organization_view_state.dart';
@@ -15,26 +17,36 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     return orgs.map(_map).toList();
   }
 
-  Future<void> onLeaveTapped(String orgId) async {
-    final orgs = await ref.read(getOrganizationsUseCaseProvider).execute();
-    final target = orgs.where((o) => o.orgId == orgId).firstOrNull;
+  Future<void> onLeaveTapped(String serverUrl) async {
+    final target = await ref
+        .read(orgRepositoryProvider)
+        .findByServerUrl(serverUrl);
     if (target == null) return;
-    await ref.read(leaveOrganizationUseCaseProvider).execute(target);
+    final fcmToken = await ref.read(fcmTokenProvider.future);
+    await ref
+        .read(leaveOrganizationUseCaseProvider)
+        .execute(target, fcmToken: fcmToken);
     ref.invalidateSelf();
   }
 
   OrganizationRowViewState _map(OrgProfile p) {
+    final name = _hostOf(p.serverUrl);
     return OrganizationRowViewState(
-      orgId: p.orgId,
-      orgName: p.orgName,
       serverUrl: p.serverUrl,
-      initials: _initials(p.orgName),
+      orgName: name,
+      initials: _initials(name),
     );
+  }
+
+  String _hostOf(String url) {
+    final u = Uri.tryParse(url);
+    if (u == null || u.host.isEmpty) return url;
+    return u.host;
   }
 
   String _initials(String name) {
     final parts = name
-        .split(RegExp(r'\s+'))
+        .split(RegExp(r'[\s.]+'))
         .where((s) => s.isNotEmpty)
         .toList();
     if (parts.isEmpty) return '·';

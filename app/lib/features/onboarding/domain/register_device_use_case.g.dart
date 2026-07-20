@@ -55,4 +55,4 @@ final class RegisterDeviceUseCaseProvider
 }
 
 String _$registerDeviceUseCaseHash() =>
-    r'05dc0705cd0925ab919e5342dfbad1a879081a10';
+    r'8c43c8cbcee0ba7947b77959c6d28e76d540f779';

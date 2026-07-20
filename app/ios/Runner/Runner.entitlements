@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<!-- Replace hark.example.com with your PUBLIC_URL host so both the
+		     Universal Link (/join?code=...) and WebAuthn ceremony resolve
+		     against the same origin. -->
+		<string>applinks:hark.example.com</string>
+		<string>webcredentials:hark.example.com</string>
+	</array>
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>

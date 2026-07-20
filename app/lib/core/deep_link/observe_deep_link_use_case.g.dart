@@ -83,7 +83,7 @@ final class ObserveDeepLinkUseCaseProvider
 }
 
 String _$observeDeepLinkUseCaseHash() =>
-    r'8997918265bff32bafc53f328a6aac4d01b9cf34';
+    r'0b8bb6cc0313e50ebf152e8c78201780e4bf72e1';
 
 abstract class _$ObserveDeepLinkUseCase extends $Notifier<PendingDeepLink> {
   PendingDeepLink build();

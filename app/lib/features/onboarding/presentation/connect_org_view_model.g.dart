@@ -8,12 +8,48 @@ part of 'connect_org_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Drives the new-user onboarding wizard:
+///
+/// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+/// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+///    showing "Join {org_name}?"
+/// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+/// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+///
+/// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+/// registration failure after a successful passkey mint is treated as
+/// non-fatal — the profile is already saved, so we still navigate but
+/// surface a snackbar so the user can retry from the list page (M4).
 
 @ProviderFor(ConnectOrgViewModel)
 final connectOrgViewModelProvider = ConnectOrgViewModelFamily._();
 
+/// Drives the new-user onboarding wizard:
+///
+/// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+/// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+///    showing "Join {org_name}?"
+/// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+/// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+///
+/// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+/// registration failure after a successful passkey mint is treated as
+/// non-fatal — the profile is already saved, so we still navigate but
+/// surface a snackbar so the user can retry from the list page (M4).
 final class ConnectOrgViewModelProvider
     extends $NotifierProvider<ConnectOrgViewModel, ConnectOrgViewState> {
+  /// Drives the new-user onboarding wizard:
+  ///
+  /// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+  /// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+  ///    showing "Join {org_name}?"
+  /// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+  /// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+  ///
+  /// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+  /// registration failure after a successful passkey mint is treated as
+  /// non-fatal — the profile is already saved, so we still navigate but
+  /// surface a snackbar so the user can retry from the list page (M4).
   ConnectOrgViewModelProvider._({
     required ConnectOrgViewModelFamily super.from,
     required ({String? initialServer, String? initialCode}) super.argument,
@@ -59,7 +95,20 @@ final class ConnectOrgViewModelProvider
 }
 
 String _$connectOrgViewModelHash() =>
-    r'0702a408c6eb12ddbbb9c0aecbd0b69dd064d17b';
+    r'8cd65404003f67c2fa8a51264dd1b85e440358bd';
+
+/// Drives the new-user onboarding wizard:
+///
+/// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+/// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+///    showing "Join {org_name}?"
+/// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+/// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+///
+/// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+/// registration failure after a successful passkey mint is treated as
+/// non-fatal — the profile is already saved, so we still navigate but
+/// surface a snackbar so the user can retry from the list page (M4).
 
 final class ConnectOrgViewModelFamily extends $Family
     with
@@ -79,6 +128,19 @@ final class ConnectOrgViewModelFamily extends $Family
         isAutoDispose: true,
       );
 
+  /// Drives the new-user onboarding wizard:
+  ///
+  /// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+  /// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+  ///    showing "Join {org_name}?"
+  /// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+  /// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+  ///
+  /// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+  /// registration failure after a successful passkey mint is treated as
+  /// non-fatal — the profile is already saved, so we still navigate but
+  /// surface a snackbar so the user can retry from the list page (M4).
+
   ConnectOrgViewModelProvider call({
     String? initialServer,
     String? initialCode,
@@ -90,6 +152,19 @@ final class ConnectOrgViewModelFamily extends $Family
   @override
   String toString() => r'connectOrgViewModelProvider';
 }
+
+/// Drives the new-user onboarding wizard:
+///
+/// 1. [ConnectOrgStep.input] — user enters server URL + invitation code
+/// 2. [ConnectOrgStep.confirm] — we've resolved the invitation and are
+///    showing "Join {org_name}?"
+/// 3. [ConnectOrgStep.registering] — passkey ceremony + JWT mint
+/// 4. [ConnectOrgStep.registeringDevice] — /api/devices attaches FCM
+///
+/// On success we emit [ConnectOrgViewEvent.navigateToOrgs]. A device
+/// registration failure after a successful passkey mint is treated as
+/// non-fatal — the profile is already saved, so we still navigate but
+/// surface a snackbar so the user can retry from the list page (M4).
 
 abstract class _$ConnectOrgViewModel extends $Notifier<ConnectOrgViewState> {
   late final _$args =

@@ -29,6 +29,10 @@ type Service struct {
 	DB        *gorm.DB
 	Sender    fcm.Sender
 	Localizer *i18n.Localizer
+	// PublicURL is stamped into every alert payload as `org_id`. It's the
+	// stable server identifier the mobile client uses to route the push to
+	// the right stored profile before it makes any authenticated call.
+	PublicURL string
 }
 
 // Trigger creates the alert and fans out a high-priority push. When
@@ -221,6 +225,7 @@ func (s *Service) silentResolveFanout(ctx context.Context, alertID, exceptUserID
 			Data: map[string]string{
 				"kind":     fcm.KindResolve,
 				"alert_id": alertID,
+				"org_id":   s.PublicURL,
 			},
 		})
 	}
@@ -253,6 +258,7 @@ func (s *Service) fanoutAlert(ctx context.Context, alert models.Alert, devices [
 				"kind":     fcm.KindAlert,
 				"alert_id": alert.ID,
 				"type":     alert.Type,
+				"org_id":   s.PublicURL,
 			},
 		})
 	}
@@ -276,7 +282,10 @@ func (s *Service) TestPing(ctx context.Context, userID string) error {
 			Kind:  fcm.KindTest,
 			Title: s.t(d.Locale, "push.test.title", nil),
 			Body:  s.t(d.Locale, "push.test.body", nil),
-			Data:  map[string]string{"kind": fcm.KindTest},
+			Data: map[string]string{
+				"kind":   fcm.KindTest,
+				"org_id": s.PublicURL,
+			},
 		})
 	}
 	res := s.Sender.Send(ctx, msgs)

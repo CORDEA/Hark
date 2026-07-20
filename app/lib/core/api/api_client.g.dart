@@ -10,14 +10,16 @@ part of 'api_client.dart';
 // ignore_for_file: type=lint, type=warning
 /// Builds a Dio client aimed at a specific org's server URL. Each org can
 /// point at a different Hark deployment so we don't share a single global
-/// client — callers pass in the base URL.
+/// client — callers pass in the base URL and, optionally, the JWT to attach
+/// on every request.
 
 @ProviderFor(apiClientFactory)
 final apiClientFactoryProvider = ApiClientFactoryProvider._();
 
 /// Builds a Dio client aimed at a specific org's server URL. Each org can
 /// point at a different Hark deployment so we don't share a single global
-/// client — callers pass in the base URL.
+/// client — callers pass in the base URL and, optionally, the JWT to attach
+/// on every request.
 
 final class ApiClientFactoryProvider
     extends
@@ -29,7 +31,8 @@ final class ApiClientFactoryProvider
     with $Provider<ApiClientFactory> {
   /// Builds a Dio client aimed at a specific org's server URL. Each org can
   /// point at a different Hark deployment so we don't share a single global
-  /// client — callers pass in the base URL.
+  /// client — callers pass in the base URL and, optionally, the JWT to attach
+  /// on every request.
   ApiClientFactoryProvider._()
     : super(
         from: null,

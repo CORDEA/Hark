@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/fcm/fcm_token_provider.dart';
 import '../../alerts/data/alert_dto.dart';
 import '../../organizations/data/org_repository.dart';
 import '../../organizations/domain/leave_organization_use_case.dart';
@@ -11,19 +12,21 @@ part 'history_view_model.g.dart';
 @riverpod
 class HistoryViewModel extends _$HistoryViewModel {
   @override
-  Future<HistoryViewState> build({required String orgId}) async {
-    final profile = await ref.read(orgRepositoryProvider).findById(orgId);
+  Future<HistoryViewState> build({required String serverUrl}) async {
+    final profile = await ref
+        .read(orgRepositoryProvider)
+        .findByServerUrl(serverUrl);
     if (profile == null) {
-      throw StateError('No connected org for id $orgId');
+      throw StateError('No connected org for server $serverUrl');
     }
     final alerts = await ref
         .watch(getHistoryUseCaseProvider)
-        .execute(orgId: orgId);
+        .execute(serverUrl: serverUrl);
     final rows = alerts
         .map((a) => _mapRow(a, profile.userId))
         .whereType<HistoryRowViewState>()
         .toList();
-    return HistoryViewState(orgName: profile.orgName, rows: rows);
+    return HistoryViewState(orgName: _hostOf(serverUrl), rows: rows);
   }
 
   Future<void> onLeaveTapped() async {
@@ -33,9 +36,12 @@ class HistoryViewModel extends _$HistoryViewModel {
     try {
       final profile = await ref
           .read(orgRepositoryProvider)
-          .findById(_orgIdArg());
+          .findByServerUrl(serverUrl);
       if (profile != null) {
-        await ref.read(leaveOrganizationUseCaseProvider).execute(profile);
+        final fcmToken = await ref.read(fcmTokenProvider.future);
+        await ref
+            .read(leaveOrganizationUseCaseProvider)
+            .execute(profile, fcmToken: fcmToken);
       }
       state = AsyncValue.data(
         current.copyWith(
@@ -61,7 +67,11 @@ class HistoryViewModel extends _$HistoryViewModel {
     );
   }
 
-  String _orgIdArg() => orgId;
+  String _hostOf(String url) {
+    final u = Uri.tryParse(url);
+    if (u == null || u.host.isEmpty) return url;
+    return u.host;
+  }
 }
 
 HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
@@ -75,8 +85,6 @@ HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
       badge = HistoryRowBadge.resolved;
     }
   } else {
-    // Active alerts don't belong in the history log — they're on the
-    // active-alert screen. Filter out.
     return null;
   }
   return HistoryRowViewState(

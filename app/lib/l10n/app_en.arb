@@ -24,6 +24,26 @@
   "@connectOrgViewList": {},
   "connectOrgMissingFields": "Enter a server URL and an invitation code",
   "@connectOrgMissingFields": {},
+  "connectOrgLookup": "Continue",
+  "@connectOrgLookup": {},
+  "connectOrgConfirmTitle": "Join {org}?",
+  "@connectOrgConfirmTitle": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "connectOrgConfirmBody": "You will create a passkey on this device that lets you receive alerts from {org}.",
+  "@connectOrgConfirmBody": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "connectOrgConfirmCta": "Create passkey",
+  "@connectOrgConfirmCta": {},
+  "connectOrgConfirmCancel": "Back",
+  "@connectOrgConfirmCancel": {},
+  "connectOrgFinishing": "Finalizing…",
+  "@connectOrgFinishing": {},
+  "connectOrgPasskeyFailed": "Passkey creation was cancelled or failed",
+  "@connectOrgPasskeyFailed": {},
+  "connectOrgDeviceFailed": "Registered, but could not enable notifications. You can retry from the org list.",
+  "@connectOrgDeviceFailed": {},
 
   "commonError": "Something went wrong. Please try again.",
   "@commonError": {},

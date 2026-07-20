@@ -14,21 +14,21 @@ import 'alert_detail_view_state.dart';
 class ViewAlertDetailPage extends ConsumerWidget {
   const ViewAlertDetailPage({
     super.key,
-    required this.orgId,
+    required this.serverUrl,
     required this.alertId,
   });
 
-  final String orgId;
+  final String serverUrl;
   final String alertId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = alertDetailViewModelProvider(
-      orgId: orgId,
+      serverUrl: serverUrl,
       alertId: alertId,
     );
     final orgName = ref.watch(
-      provider.select((s) => s.value?.orgName ?? orgId),
+      provider.select((s) => s.value?.orgName ?? serverUrl),
     );
     final async = ref.watch(provider);
 

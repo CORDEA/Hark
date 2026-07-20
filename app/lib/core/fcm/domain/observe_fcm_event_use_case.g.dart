@@ -42,7 +42,7 @@ final class ObserveFcmEventUseCaseProvider
 }
 
 String _$observeFcmEventUseCaseHash() =>
-    r'986a7c6a539f5fb0c4b78e496e507cd15b9fba2f';
+    r'ba893668b663c6f11794c18d82b96211bc61e62c';
 
 abstract class _$ObserveFcmEventUseCase extends $Notifier<FcmEvent> {
   FcmEvent build();

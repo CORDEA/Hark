@@ -50,7 +50,7 @@ final class HistoryViewModelProvider
   }
 }
 
-String _$historyViewModelHash() => r'6682b58664908bc0c062d5ed98a886a4d66cb981';
+String _$historyViewModelHash() => r'1e7ae7f786e9f00d6c1f5d8258b606c7ab22d255';
 
 final class HistoryViewModelFamily extends $Family
     with
@@ -70,8 +70,8 @@ final class HistoryViewModelFamily extends $Family
         isAutoDispose: true,
       );
 
-  HistoryViewModelProvider call({required String orgId}) =>
-      HistoryViewModelProvider._(argument: orgId, from: this);
+  HistoryViewModelProvider call({required String serverUrl}) =>
+      HistoryViewModelProvider._(argument: serverUrl, from: this);
 
   @override
   String toString() => r'historyViewModelProvider';
@@ -79,9 +79,9 @@ final class HistoryViewModelFamily extends $Family
 
 abstract class _$HistoryViewModel extends $AsyncNotifier<HistoryViewState> {
   late final _$args = ref.$arg as String;
-  String get orgId => _$args;
+  String get serverUrl => _$args;
 
-  FutureOr<HistoryViewState> build({required String orgId});
+  FutureOr<HistoryViewState> build({required String serverUrl});
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
@@ -95,6 +95,6 @@ abstract class _$HistoryViewModel extends $AsyncNotifier<HistoryViewState> {
               Object?,
               Object?
             >;
-    return element.handleCreate(ref, () => build(orgId: _$args));
+    return element.handleCreate(ref, () => build(serverUrl: _$args));
   }
 }

@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/storage/secure_org_store.dart';
-import '../../onboarding/data/register_dto.dart';
 import 'org_profile.dart';
 import 'org_remote_data_source.dart';
 
@@ -15,7 +14,8 @@ OrgRepository orgRepository(Ref ref) => OrgRepository(
 );
 
 /// Coordinates local persistence (secure storage) with the remote server for
-/// the connected orgs collection.
+/// the connected orgs collection. Orgs are identified by [OrgProfile.serverUrl]
+/// (one server = one org, per PASSKEY_v2 §0).
 class OrgRepository {
   const OrgRepository(this._store, this._apiClientFactory);
 
@@ -24,17 +24,17 @@ class OrgRepository {
 
   Future<List<OrgProfile>> findAll() => _store.readAll();
 
-  Future<OrgProfile?> findById(String orgId) async {
+  Future<OrgProfile?> findByServerUrl(String serverUrl) async {
     final all = await _store.readAll();
     for (final p in all) {
-      if (p.orgId == orgId) return p;
+      if (p.serverUrl == serverUrl) return p;
     }
     return null;
   }
 
   Future<void> save(OrgProfile profile) async {
     final all = await _store.readAll();
-    final idx = all.indexWhere((p) => p.orgId == profile.orgId);
+    final idx = all.indexWhere((p) => p.serverUrl == profile.serverUrl);
     if (idx >= 0) {
       all[idx] = profile;
     } else {
@@ -43,50 +43,25 @@ class OrgRepository {
     await _store.writeAll(all);
   }
 
-  Future<void> delete(String orgId) async {
+  Future<void> delete(String serverUrl) async {
     final all = await _store.readAll();
-    all.removeWhere((p) => p.orgId == orgId);
+    all.removeWhere((p) => p.serverUrl == serverUrl);
     await _store.writeAll(all);
-  }
-
-  /// Registers this device with a Hark server. Returns the fresh profile;
-  /// caller is responsible for calling [save] to persist it.
-  Future<OrgProfile> register({
-    required String serverUrl,
-    required String invitationCode,
-    required String fcmToken,
-    required String deviceName,
-    required String locale,
-  }) async {
-    final dio = _apiClientFactory.create(serverUrl);
-    final ds = OrgRemoteDataSource(dio);
-    final res = await ds.register(
-      RegisterRequestDto(
-        invitationCode: invitationCode,
-        fcmToken: fcmToken,
-        deviceName: deviceName,
-        locale: locale,
-      ),
-    );
-    return OrgProfile(
-      orgId: res.orgId,
-      orgName: res.orgName,
-      serverUrl: serverUrl,
-      userId: res.userId,
-      token: fcmToken,
-    );
   }
 
   /// Best-effort call to release the device on the server, then removes the
   /// org locally regardless of network outcome so the user isn't stuck.
-  Future<void> leave(OrgProfile profile) async {
+  Future<void> leave(OrgProfile profile, {required String fcmToken}) async {
     try {
-      final dio = _apiClientFactory.create(profile.serverUrl);
+      final dio = _apiClientFactory.create(
+        profile.serverUrl,
+        authToken: profile.authToken,
+      );
       final ds = OrgRemoteDataSource(dio);
-      await ds.leave(userId: profile.userId, token: profile.token);
+      await ds.leave(userId: profile.userId, fcmToken: fcmToken);
     } catch (_) {
       // Swallow — a rotated key or offline network shouldn't trap the user.
     }
-    await delete(profile.orgId);
+    await delete(profile.serverUrl);
   }
 }

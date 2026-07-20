@@ -54,6 +54,13 @@ func NewRouter(d Deps) http.Handler {
 		r.Post("/webauthn/register/begin", api.RegisterBegin)
 		r.Post("/webauthn/register/finish", api.RegisterFinish)
 
+		// JWT-guarded endpoints: caller identity is resolved from the token,
+		// never from the body.
+		r.Group(func(r chi.Router) {
+			r.Use(appmw.JWT(d.DB, d.Signer))
+			r.Post("/devices", api.RegisterDevice)
+		})
+
 		r.Post("/users/leave", api.Leave)
 		r.Post("/users/{id}/test-ping", api.TestPing)
 		r.Delete("/users/{id}", api.KickUser)

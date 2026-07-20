@@ -30,7 +30,6 @@ class ConnectOrgPage extends HookConsumerWidget {
     );
     final serverController = useTextEditingController(text: prefillServerUrl);
     final codeController = useTextEditingController(text: prefillCode);
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     ref.listen(provider.select((s) => s.event), (_, event) {
@@ -40,10 +39,20 @@ class ConnectOrgPage extends HookConsumerWidget {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(l10n.connectOrgMissingFields)));
-        case ConnectOrgViewEventRegisterFailed(:final error):
+        case ConnectOrgViewEventLookupFailed(:final error):
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
           );
+        case ConnectOrgViewEventPasskeyFailed():
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.connectOrgPasskeyFailed)));
+        case ConnectOrgViewEventDeviceRegisterFailed():
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.connectOrgDeviceFailed)));
+          ref.read(observeDeepLinkUseCaseProvider.notifier).consume();
+          context.go('/');
         case ConnectOrgViewEventNavigateToOrgs():
           ref.read(observeDeepLinkUseCaseProvider.notifier).consume();
           context.go('/');
@@ -68,99 +77,237 @@ class ConnectOrgPage extends HookConsumerWidget {
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.xxl,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _FieldLabel(text: l10n.connectOrgServerUrlLabel),
-                    const SizedBox(height: AppSpacing.xs),
-                    _MonoInput(
-                      controller: serverController,
-                      hint: l10n.connectOrgServerUrlHint,
-                      onChanged: (v) =>
-                          ref.read(provider.notifier).onServerUrlChanged(v),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    _FieldLabel(text: l10n.connectOrgInvitationCodeLabel),
-                    const SizedBox(height: AppSpacing.xs),
-                    _MonoInput(
-                      controller: codeController,
-                      hint: l10n.connectOrgInvitationCodeHint,
-                      textCapitalization: TextCapitalization.characters,
-                      onChanged: (v) => ref
-                          .read(provider.notifier)
-                          .onInvitationCodeChanged(v),
-                    ),
-                    const Spacer(),
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final isSubmitting = ref.watch(
-                          provider.select((s) => s.isSubmitting),
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final step = ref.watch(provider.select((s) => s.step));
+                    switch (step) {
+                      case ConnectOrgStep.input:
+                        return _InputPane(
+                          provider: provider,
+                          serverController: serverController,
+                          codeController: codeController,
                         );
-                        final colors = context.harkColors;
-                        return SizedBox(
-                          height: 56,
-                          child: FilledButton(
-                            onPressed: isSubmitting
-                                ? null
-                                : () => ref
-                                      .read(provider.notifier)
-                                      .onSubmitTapped(),
-                            style: FilledButton.styleFrom(
-                              backgroundColor: colors.critical,
-                              foregroundColor: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            child: isSubmitting
-                                ? SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary,
-                                    ),
-                                  )
-                                : Text(l10n.connectOrgSubmit),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Center(
-                      child: GestureDetector(
-                        onTap: ref.read(provider.notifier).onOrgsTapped,
-                        child: Text.rich(
-                          TextSpan(
-                            text: l10n.connectOrgAlreadyHaveOrgs,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.6,
-                              ),
-                            ),
-                            children: [
-                              TextSpan(
-                                text: l10n.connectOrgViewList,
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                      case ConnectOrgStep.confirm:
+                      case ConnectOrgStep.registering:
+                      case ConnectOrgStep.registeringDevice:
+                        return _ConfirmPane(provider: provider);
+                    }
+                  },
                 ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _InputPane extends ConsumerWidget {
+  const _InputPane({
+    required this.provider,
+    required this.serverController,
+    required this.codeController,
+  });
+
+  final ConnectOrgViewModelProvider provider;
+  final TextEditingController serverController;
+  final TextEditingController codeController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _FieldLabel(text: l10n.connectOrgServerUrlLabel),
+        const SizedBox(height: AppSpacing.xs),
+        _MonoInput(
+          controller: serverController,
+          hint: l10n.connectOrgServerUrlHint,
+          onChanged: (v) => ref.read(provider.notifier).onServerUrlChanged(v),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        _FieldLabel(text: l10n.connectOrgInvitationCodeLabel),
+        const SizedBox(height: AppSpacing.xs),
+        _MonoInput(
+          controller: codeController,
+          hint: l10n.connectOrgInvitationCodeHint,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: (v) =>
+              ref.read(provider.notifier).onInvitationCodeChanged(v),
+        ),
+        const Spacer(),
+        Consumer(
+          builder: (context, ref, _) {
+            final isBusy = ref.watch(provider.select((s) => s.isBusy));
+            final colors = context.harkColors;
+            return SizedBox(
+              height: 56,
+              child: FilledButton(
+                onPressed: isBusy
+                    ? null
+                    : () => ref.read(provider.notifier).onContinueTapped(),
+                style: FilledButton.styleFrom(
+                  backgroundColor: colors.critical,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: isBusy ? _spinner(context) : Text(l10n.connectOrgLookup),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Center(
+          child: GestureDetector(
+            onTap: ref.read(provider.notifier).onOrgsTapped,
+            child: Text.rich(
+              TextSpan(
+                text: l10n.connectOrgAlreadyHaveOrgs,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                children: [
+                  TextSpan(
+                    text: l10n.connectOrgViewList,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ConfirmPane extends ConsumerWidget {
+  const _ConfirmPane({required this.provider});
+
+  final ConnectOrgViewModelProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(provider);
+    final invitation = state.invitation;
+    if (invitation == null) return const SizedBox.shrink();
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
+    final isBusy = state.isBusy;
+
+    final progressLabel = switch (state.step) {
+      ConnectOrgStep.registering => l10n.activeAlertActionSending,
+      ConnectOrgStep.registeringDevice => l10n.connectOrgFinishing,
+      _ => null,
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.connectOrgConfirmTitle(invitation.orgName),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          l10n.connectOrgConfirmBody(invitation.orgName),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: colors.borderSubtle),
+          ),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _kv(context, l10n.connectOrgServerUrlLabel, state.serverUrl),
+              const SizedBox(height: AppSpacing.sm),
+              _kv(
+                context,
+                l10n.connectOrgInvitationCodeLabel,
+                state.invitationCode,
+              ),
+            ],
+          ),
+        ),
+        const Spacer(),
+        if (progressLabel != null) ...[
+          Center(
+            child: Text(
+              progressLabel,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+        SizedBox(
+          height: 56,
+          child: FilledButton(
+            onPressed: isBusy
+                ? null
+                : () => ref.read(provider.notifier).onCreatePasskeyTapped(),
+            style: FilledButton.styleFrom(
+              backgroundColor: colors.critical,
+              foregroundColor: theme.colorScheme.onPrimary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: isBusy ? _spinner(context) : Text(l10n.connectOrgConfirmCta),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Center(
+          child: TextButton(
+            onPressed: isBusy
+                ? null
+                : () => ref.read(provider.notifier).onBackToInputTapped(),
+            child: Text(l10n.connectOrgConfirmCancel),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _kv(BuildContext context, String label, String value) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          value,
+          style: AppTheme.monoStyle(
+            theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -236,3 +383,12 @@ class _MonoInput extends StatelessWidget {
     );
   }
 }
+
+Widget _spinner(BuildContext context) => SizedBox(
+  width: 20,
+  height: 20,
+  child: CircularProgressIndicator(
+    strokeWidth: 2,
+    color: Theme.of(context).colorScheme.onPrimary,
+  ),
+);

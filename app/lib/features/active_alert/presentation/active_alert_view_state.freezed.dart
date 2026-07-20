@@ -309,7 +309,7 @@ String toString() {
 /// @nodoc
 mixin _$ActiveAlertViewState {
 
- String get alertId; String get orgId; String get type; DateTime get triggeredAt; bool get isSending; ActiveAlertOutcome? get outcome; String? get resolvedByName; ActiveAlertViewEvent get event;
+ String get alertId; String get serverUrl; String get type; DateTime get triggeredAt; bool get isSending; ActiveAlertOutcome? get outcome; String? get resolvedByName; ActiveAlertViewEvent get event;
 /// Create a copy of ActiveAlertViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -320,16 +320,16 @@ $ActiveAlertViewStateCopyWith<ActiveAlertViewState> get copyWith => _$ActiveAler
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveAlertViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.resolvedByName, resolvedByName) || other.resolvedByName == resolvedByName)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveAlertViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.resolvedByName, resolvedByName) || other.resolvedByName == resolvedByName)&&(identical(other.event, event) || other.event == event));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,orgId,type,triggeredAt,isSending,outcome,resolvedByName,event);
+int get hashCode => Object.hash(runtimeType,alertId,serverUrl,type,triggeredAt,isSending,outcome,resolvedByName,event);
 
 @override
 String toString() {
-  return 'ActiveAlertViewState(alertId: $alertId, orgId: $orgId, type: $type, triggeredAt: $triggeredAt, isSending: $isSending, outcome: $outcome, resolvedByName: $resolvedByName, event: $event)';
+  return 'ActiveAlertViewState(alertId: $alertId, serverUrl: $serverUrl, type: $type, triggeredAt: $triggeredAt, isSending: $isSending, outcome: $outcome, resolvedByName: $resolvedByName, event: $event)';
 }
 
 
@@ -340,7 +340,7 @@ abstract mixin class $ActiveAlertViewStateCopyWith<$Res>  {
   factory $ActiveAlertViewStateCopyWith(ActiveAlertViewState value, $Res Function(ActiveAlertViewState) _then) = _$ActiveAlertViewStateCopyWithImpl;
 @useResult
 $Res call({
- String alertId, String orgId, String type, DateTime triggeredAt, bool isSending, ActiveAlertOutcome? outcome, String? resolvedByName, ActiveAlertViewEvent event
+ String alertId, String serverUrl, String type, DateTime triggeredAt, bool isSending, ActiveAlertOutcome? outcome, String? resolvedByName, ActiveAlertViewEvent event
 });
 
 
@@ -357,10 +357,10 @@ class _$ActiveAlertViewStateCopyWithImpl<$Res>
 
 /// Create a copy of ActiveAlertViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? orgId = null,Object? type = null,Object? triggeredAt = null,Object? isSending = null,Object? outcome = freezed,Object? resolvedByName = freezed,Object? event = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? serverUrl = null,Object? type = null,Object? triggeredAt = null,Object? isSending = null,Object? outcome = freezed,Object? resolvedByName = freezed,Object? event = null,}) {
   return _then(_self.copyWith(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
-as String,orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
+as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,triggeredAt: null == triggeredAt ? _self.triggeredAt : triggeredAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isSending: null == isSending ? _self.isSending : isSending // ignore: cast_nullable_to_non_nullable
@@ -461,10 +461,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String orgId,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String serverUrl,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ActiveAlertViewState() when $default != null:
-return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
+return $default(_that.alertId,_that.serverUrl,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
   return orElse();
 
 }
@@ -482,10 +482,10 @@ return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isS
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String orgId,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String serverUrl,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)  $default,) {final _that = this;
 switch (_that) {
 case _ActiveAlertViewState():
-return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
+return $default(_that.alertId,_that.serverUrl,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -502,10 +502,10 @@ return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isS
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String orgId,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String serverUrl,  String type,  DateTime triggeredAt,  bool isSending,  ActiveAlertOutcome? outcome,  String? resolvedByName,  ActiveAlertViewEvent event)?  $default,) {final _that = this;
 switch (_that) {
 case _ActiveAlertViewState() when $default != null:
-return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
+return $default(_that.alertId,_that.serverUrl,_that.type,_that.triggeredAt,_that.isSending,_that.outcome,_that.resolvedByName,_that.event);case _:
   return null;
 
 }
@@ -517,11 +517,11 @@ return $default(_that.alertId,_that.orgId,_that.type,_that.triggeredAt,_that.isS
 
 
 class _ActiveAlertViewState extends ActiveAlertViewState {
-  const _ActiveAlertViewState({required this.alertId, required this.orgId, required this.type, required this.triggeredAt, this.isSending = false, this.outcome, this.resolvedByName, this.event = const ActiveAlertViewEvent.none()}): super._();
+  const _ActiveAlertViewState({required this.alertId, required this.serverUrl, required this.type, required this.triggeredAt, this.isSending = false, this.outcome, this.resolvedByName, this.event = const ActiveAlertViewEvent.none()}): super._();
   
 
 @override final  String alertId;
-@override final  String orgId;
+@override final  String serverUrl;
 @override final  String type;
 @override final  DateTime triggeredAt;
 @override@JsonKey() final  bool isSending;
@@ -539,16 +539,16 @@ _$ActiveAlertViewStateCopyWith<_ActiveAlertViewState> get copyWith => __$ActiveA
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActiveAlertViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.resolvedByName, resolvedByName) || other.resolvedByName == resolvedByName)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActiveAlertViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.type, type) || other.type == type)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.resolvedByName, resolvedByName) || other.resolvedByName == resolvedByName)&&(identical(other.event, event) || other.event == event));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,orgId,type,triggeredAt,isSending,outcome,resolvedByName,event);
+int get hashCode => Object.hash(runtimeType,alertId,serverUrl,type,triggeredAt,isSending,outcome,resolvedByName,event);
 
 @override
 String toString() {
-  return 'ActiveAlertViewState(alertId: $alertId, orgId: $orgId, type: $type, triggeredAt: $triggeredAt, isSending: $isSending, outcome: $outcome, resolvedByName: $resolvedByName, event: $event)';
+  return 'ActiveAlertViewState(alertId: $alertId, serverUrl: $serverUrl, type: $type, triggeredAt: $triggeredAt, isSending: $isSending, outcome: $outcome, resolvedByName: $resolvedByName, event: $event)';
 }
 
 
@@ -559,7 +559,7 @@ abstract mixin class _$ActiveAlertViewStateCopyWith<$Res> implements $ActiveAler
   factory _$ActiveAlertViewStateCopyWith(_ActiveAlertViewState value, $Res Function(_ActiveAlertViewState) _then) = __$ActiveAlertViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String alertId, String orgId, String type, DateTime triggeredAt, bool isSending, ActiveAlertOutcome? outcome, String? resolvedByName, ActiveAlertViewEvent event
+ String alertId, String serverUrl, String type, DateTime triggeredAt, bool isSending, ActiveAlertOutcome? outcome, String? resolvedByName, ActiveAlertViewEvent event
 });
 
 
@@ -576,10 +576,10 @@ class __$ActiveAlertViewStateCopyWithImpl<$Res>
 
 /// Create a copy of ActiveAlertViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? orgId = null,Object? type = null,Object? triggeredAt = null,Object? isSending = null,Object? outcome = freezed,Object? resolvedByName = freezed,Object? event = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? serverUrl = null,Object? type = null,Object? triggeredAt = null,Object? isSending = null,Object? outcome = freezed,Object? resolvedByName = freezed,Object? event = null,}) {
   return _then(_ActiveAlertViewState(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
-as String,orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
+as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,triggeredAt: null == triggeredAt ? _self.triggeredAt : triggeredAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isSending: null == isSending ? _self.isSending : isSending // ignore: cast_nullable_to_non_nullable

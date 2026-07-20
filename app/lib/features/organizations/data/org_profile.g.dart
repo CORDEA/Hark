@@ -7,18 +7,14 @@ part of 'org_profile.dart';
 // **************************************************************************
 
 _OrgProfile _$OrgProfileFromJson(Map<String, dynamic> json) => _OrgProfile(
-  orgId: json['orgId'] as String,
-  orgName: json['orgName'] as String,
-  serverUrl: json['serverUrl'] as String,
-  userId: json['userId'] as String,
-  token: json['token'] as String,
+  serverUrl: json['server_url'] as String,
+  userId: json['user_id'] as String,
+  authToken: json['auth_token'] as String,
 );
 
 Map<String, dynamic> _$OrgProfileToJson(_OrgProfile instance) =>
     <String, dynamic>{
-      'orgId': instance.orgId,
-      'orgName': instance.orgName,
-      'serverUrl': instance.serverUrl,
-      'userId': instance.userId,
-      'token': instance.token,
+      'server_url': instance.serverUrl,
+      'user_id': instance.userId,
+      'auth_token': instance.authToken,
     };

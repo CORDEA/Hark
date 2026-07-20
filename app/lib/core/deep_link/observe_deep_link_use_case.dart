@@ -52,18 +52,27 @@ class ObserveDeepLinkUseCase extends _$ObserveDeepLinkUseCase {
     return const PendingDeepLink.consumed();
   }
 
+  /// Universal links land here as `https://<host>/join?code=<code>`. We
+  /// treat the origin (`scheme://host[:port]`) as the server URL and
+  /// forward the invitation code to the connect wizard.
   void _handle(Uri? uri) {
-    if (uri == null || uri.scheme != 'hark' || uri.host != 'join') {
-      return;
-    }
-    final server = uri.queryParameters['server'] ?? '';
+    if (uri == null) return;
+    if (uri.scheme != 'https' && uri.scheme != 'http') return;
+    if (uri.path != '/join') return;
     final code = uri.queryParameters['code'] ?? '';
+    if (code.isEmpty) return;
+    final origin = _origin(uri);
     state = PendingDeepLink.waiting(
       Uri(
         path: '/connect',
-        queryParameters: {'server': server, 'code': code},
+        queryParameters: {'server': origin, 'code': code},
       ).toString(),
     );
+  }
+
+  String _origin(Uri uri) {
+    final port = uri.hasPort ? ':${uri.port}' : '';
+    return '${uri.scheme}://${uri.host}$port';
   }
 
   void consume() {

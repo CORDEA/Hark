@@ -12,7 +12,7 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
   @override
   ActiveAlertViewState build({
     required String alertId,
-    required String orgId,
+    required String serverUrl,
     required String type,
     required DateTime triggeredAt,
   }) {
@@ -29,7 +29,7 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
 
     return ActiveAlertViewState(
       alertId: alertId,
-      orgId: orgId,
+      serverUrl: serverUrl,
       type: type,
       triggeredAt: triggeredAt,
     );
@@ -51,7 +51,11 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
     try {
       await ref
           .read(respondAlertUseCaseProvider)
-          .execute(orgId: state.orgId, alertId: state.alertId, action: action);
+          .execute(
+            serverUrl: state.serverUrl,
+            alertId: state.alertId,
+            action: action,
+          );
       state = state.copyWith(
         isSending: false,
         outcome: action == RecipientResponse.acknowledged

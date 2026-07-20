@@ -24,11 +24,18 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <intent-filter android:autoVerify="false">
+            <!-- Universal-link handler for the passkey-era invitation flow.
+                 The host is intentionally a build-time placeholder; self-hosters
+                 must replace HARK_LINK_HOST in app/build.gradle.kts with their
+                 backend's PUBLIC_URL hostname and publish an assetlinks.json at
+                 that host for autoVerify to succeed. -->
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="hark" android:host="join"/>
+                <data android:scheme="https"
+                      android:host="${harkLinkHost}"
+                      android:pathPrefix="/join"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

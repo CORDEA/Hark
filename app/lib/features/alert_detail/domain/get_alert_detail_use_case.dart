@@ -14,9 +14,9 @@ class GetAlertDetailUseCase {
   final AlertRepository _repository;
 
   Future<AlertDetailDto> execute({
-    required String orgId,
+    required String serverUrl,
     required String alertId,
   }) {
-    return _repository.findById(orgId: orgId, alertId: alertId);
+    return _repository.findById(serverUrl: serverUrl, alertId: alertId);
   }
 }

@@ -16,7 +16,12 @@ final class ActiveAlertViewModelProvider
     extends $NotifierProvider<ActiveAlertViewModel, ActiveAlertViewState> {
   ActiveAlertViewModelProvider._({
     required ActiveAlertViewModelFamily super.from,
-    required ({String alertId, String orgId, String type, DateTime triggeredAt})
+    required ({
+      String alertId,
+      String serverUrl,
+      String type,
+      DateTime triggeredAt,
+    })
     super.argument,
   }) : super(
          retry: null,
@@ -60,7 +65,7 @@ final class ActiveAlertViewModelProvider
 }
 
 String _$activeAlertViewModelHash() =>
-    r'36c40b3abe85452a3a6125013be824be6eeaf86f';
+    r'a9bed67cd7467f96faa8a11d5c3f7f581b94544e';
 
 final class ActiveAlertViewModelFamily extends $Family
     with
@@ -69,7 +74,12 @@ final class ActiveAlertViewModelFamily extends $Family
           ActiveAlertViewState,
           ActiveAlertViewState,
           ActiveAlertViewState,
-          ({String alertId, String orgId, String type, DateTime triggeredAt})
+          ({
+            String alertId,
+            String serverUrl,
+            String type,
+            DateTime triggeredAt,
+          })
         > {
   ActiveAlertViewModelFamily._()
     : super(
@@ -82,13 +92,13 @@ final class ActiveAlertViewModelFamily extends $Family
 
   ActiveAlertViewModelProvider call({
     required String alertId,
-    required String orgId,
+    required String serverUrl,
     required String type,
     required DateTime triggeredAt,
   }) => ActiveAlertViewModelProvider._(
     argument: (
       alertId: alertId,
-      orgId: orgId,
+      serverUrl: serverUrl,
       type: type,
       triggeredAt: triggeredAt,
     ),
@@ -104,18 +114,18 @@ abstract class _$ActiveAlertViewModel extends $Notifier<ActiveAlertViewState> {
       ref.$arg
           as ({
             String alertId,
-            String orgId,
+            String serverUrl,
             String type,
             DateTime triggeredAt,
           });
   String get alertId => _$args.alertId;
-  String get orgId => _$args.orgId;
+  String get serverUrl => _$args.serverUrl;
   String get type => _$args.type;
   DateTime get triggeredAt => _$args.triggeredAt;
 
   ActiveAlertViewState build({
     required String alertId,
-    required String orgId,
+    required String serverUrl,
     required String type,
     required DateTime triggeredAt,
   });
@@ -135,7 +145,7 @@ abstract class _$ActiveAlertViewModel extends $Notifier<ActiveAlertViewState> {
       ref,
       () => build(
         alertId: _$args.alertId,
-        orgId: _$args.orgId,
+        serverUrl: _$args.serverUrl,
         type: _$args.type,
         triggeredAt: _$args.triggeredAt,
       ),

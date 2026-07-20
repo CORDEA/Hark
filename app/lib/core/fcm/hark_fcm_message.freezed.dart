@@ -122,10 +122,10 @@ return test(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String alertId,  String orgId,  String type)?  alert,TResult Function( String alertId)?  resolve,TResult Function()?  test,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String alertId,  String serverUrl,  String type)?  alert,TResult Function( String alertId)?  resolve,TResult Function()?  test,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case HarkAlert() when alert != null:
-return alert(_that.alertId,_that.orgId,_that.type);case HarkResolve() when resolve != null:
+return alert(_that.alertId,_that.serverUrl,_that.type);case HarkResolve() when resolve != null:
 return resolve(_that.alertId);case HarkTest() when test != null:
 return test();case _:
   return orElse();
@@ -145,10 +145,10 @@ return test();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String alertId,  String orgId,  String type)  alert,required TResult Function( String alertId)  resolve,required TResult Function()  test,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String alertId,  String serverUrl,  String type)  alert,required TResult Function( String alertId)  resolve,required TResult Function()  test,}) {final _that = this;
 switch (_that) {
 case HarkAlert():
-return alert(_that.alertId,_that.orgId,_that.type);case HarkResolve():
+return alert(_that.alertId,_that.serverUrl,_that.type);case HarkResolve():
 return resolve(_that.alertId);case HarkTest():
 return test();}
 }
@@ -164,10 +164,10 @@ return test();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String alertId,  String orgId,  String type)?  alert,TResult? Function( String alertId)?  resolve,TResult? Function()?  test,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String alertId,  String serverUrl,  String type)?  alert,TResult? Function( String alertId)?  resolve,TResult? Function()?  test,}) {final _that = this;
 switch (_that) {
 case HarkAlert() when alert != null:
-return alert(_that.alertId,_that.orgId,_that.type);case HarkResolve() when resolve != null:
+return alert(_that.alertId,_that.serverUrl,_that.type);case HarkResolve() when resolve != null:
 return resolve(_that.alertId);case HarkTest() when test != null:
 return test();case _:
   return null;
@@ -181,11 +181,11 @@ return test();case _:
 
 
 class HarkAlert implements HarkFcmMessage {
-  const HarkAlert({required this.alertId, required this.orgId, required this.type});
+  const HarkAlert({required this.alertId, required this.serverUrl, required this.type});
   
 
  final  String alertId;
- final  String orgId;
+ final  String serverUrl;
  final  String type;
 
 /// Create a copy of HarkFcmMessage
@@ -198,16 +198,16 @@ $HarkAlertCopyWith<HarkAlert> get copyWith => _$HarkAlertCopyWithImpl<HarkAlert>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HarkAlert&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HarkAlert&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.type, type) || other.type == type));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,orgId,type);
+int get hashCode => Object.hash(runtimeType,alertId,serverUrl,type);
 
 @override
 String toString() {
-  return 'HarkFcmMessage.alert(alertId: $alertId, orgId: $orgId, type: $type)';
+  return 'HarkFcmMessage.alert(alertId: $alertId, serverUrl: $serverUrl, type: $type)';
 }
 
 
@@ -218,7 +218,7 @@ abstract mixin class $HarkAlertCopyWith<$Res> implements $HarkFcmMessageCopyWith
   factory $HarkAlertCopyWith(HarkAlert value, $Res Function(HarkAlert) _then) = _$HarkAlertCopyWithImpl;
 @useResult
 $Res call({
- String alertId, String orgId, String type
+ String alertId, String serverUrl, String type
 });
 
 
@@ -235,10 +235,10 @@ class _$HarkAlertCopyWithImpl<$Res>
 
 /// Create a copy of HarkFcmMessage
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? orgId = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? serverUrl = null,Object? type = null,}) {
   return _then(HarkAlert(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
-as String,orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
+as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));

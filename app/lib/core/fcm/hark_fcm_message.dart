@@ -3,12 +3,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'hark_fcm_message.freezed.dart';
 
 /// Sealed union over the three payload shapes the backend produces. Every
-/// message carries a `kind` field on the data map — see backend/fcm.go.
+/// message carries a `kind` field on the data map — see backend/fcm.go. The
+/// `org_id` payload field is the source server's PUBLIC_URL, which matches
+/// [OrgProfile.serverUrl] on the client so the app can route the alert to the
+/// right stored profile before any authenticated call.
 @freezed
 sealed class HarkFcmMessage with _$HarkFcmMessage {
   const factory HarkFcmMessage.alert({
     required String alertId,
-    required String orgId,
+    required String serverUrl,
     required String type,
   }) = HarkAlert;
 
@@ -23,10 +26,14 @@ sealed class HarkFcmMessage with _$HarkFcmMessage {
     switch (kind) {
       case 'alert':
         final id = data['alert_id'];
-        final org = data['org_id'];
+        final server = data['org_id'];
         final type = data['type'];
-        if (id is String && org is String && type is String) {
-          return HarkFcmMessage.alert(alertId: id, orgId: org, type: type);
+        if (id is String && server is String && type is String) {
+          return HarkFcmMessage.alert(
+            alertId: id,
+            serverUrl: server,
+            type: type,
+          );
         }
         return null;
       case 'resolve':

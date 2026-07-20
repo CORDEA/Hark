@@ -160,6 +160,54 @@ abstract class AppLocalizations {
   /// **'Enter a server URL and an invitation code'**
   String get connectOrgMissingFields;
 
+  /// No description provided for @connectOrgLookup.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get connectOrgLookup;
+
+  /// No description provided for @connectOrgConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join {org}?'**
+  String connectOrgConfirmTitle(String org);
+
+  /// No description provided for @connectOrgConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will create a passkey on this device that lets you receive alerts from {org}.'**
+  String connectOrgConfirmBody(String org);
+
+  /// No description provided for @connectOrgConfirmCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Create passkey'**
+  String get connectOrgConfirmCta;
+
+  /// No description provided for @connectOrgConfirmCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get connectOrgConfirmCancel;
+
+  /// No description provided for @connectOrgFinishing.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalizing…'**
+  String get connectOrgFinishing;
+
+  /// No description provided for @connectOrgPasskeyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passkey creation was cancelled or failed'**
+  String get connectOrgPasskeyFailed;
+
+  /// No description provided for @connectOrgDeviceFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered, but could not enable notifications. You can retry from the org list.'**
+  String get connectOrgDeviceFailed;
+
   /// No description provided for @commonError.
   ///
   /// In en, this message translates to:

@@ -38,7 +38,7 @@ final class ListOrganizationViewModelProvider
 }
 
 String _$listOrganizationViewModelHash() =>
-    r'f53b63cf5ead0dda64a96b22abb0f6b28cb93640';
+    r'ef065b6b42c443afed5c63cc6db381989752c94a';
 
 abstract class _$ListOrganizationViewModel
     extends $AsyncNotifier<List<OrganizationRowViewState>> {

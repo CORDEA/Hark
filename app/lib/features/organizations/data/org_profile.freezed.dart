@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrgProfile {
 
- String get orgId; String get orgName; String get serverUrl; String get userId; String get token;
+@JsonKey(name: 'server_url') String get serverUrl;@JsonKey(name: 'user_id') String get userId;@JsonKey(name: 'auth_token') String get authToken;
 /// Create a copy of OrgProfile
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrgProfileCopyWith<OrgProfile> get copyWith => _$OrgProfileCopyWithImpl<OrgProf
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrgProfile&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrgProfile&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.authToken, authToken) || other.authToken == authToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,orgId,orgName,serverUrl,userId,token);
+int get hashCode => Object.hash(runtimeType,serverUrl,userId,authToken);
 
 @override
 String toString() {
-  return 'OrgProfile(orgId: $orgId, orgName: $orgName, serverUrl: $serverUrl, userId: $userId, token: $token)';
+  return 'OrgProfile(serverUrl: $serverUrl, userId: $userId, authToken: $authToken)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrgProfileCopyWith<$Res>  {
   factory $OrgProfileCopyWith(OrgProfile value, $Res Function(OrgProfile) _then) = _$OrgProfileCopyWithImpl;
 @useResult
 $Res call({
- String orgId, String orgName, String serverUrl, String userId, String token
+@JsonKey(name: 'server_url') String serverUrl,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'auth_token') String authToken
 });
 
 
@@ -65,13 +65,11 @@ class _$OrgProfileCopyWithImpl<$Res>
 
 /// Create a copy of OrgProfile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orgId = null,Object? orgName = null,Object? serverUrl = null,Object? userId = null,Object? token = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? serverUrl = null,Object? userId = null,Object? authToken = null,}) {
   return _then(_self.copyWith(
-orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
-as String,orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
+serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,authToken: null == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -157,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgId,  String orgName,  String serverUrl,  String userId,  String token)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'server_url')  String serverUrl, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrgProfile() when $default != null:
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.token);case _:
+return $default(_that.serverUrl,_that.userId,_that.authToken);case _:
   return orElse();
 
 }
@@ -178,10 +176,10 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.tok
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgId,  String orgName,  String serverUrl,  String userId,  String token)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'server_url')  String serverUrl, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken)  $default,) {final _that = this;
 switch (_that) {
 case _OrgProfile():
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.token);case _:
+return $default(_that.serverUrl,_that.userId,_that.authToken);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +196,10 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.tok
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgId,  String orgName,  String serverUrl,  String userId,  String token)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'server_url')  String serverUrl, @JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken)?  $default,) {final _that = this;
 switch (_that) {
 case _OrgProfile() when $default != null:
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.token);case _:
+return $default(_that.serverUrl,_that.userId,_that.authToken);case _:
   return null;
 
 }
@@ -213,14 +211,12 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.userId,_that.tok
 @JsonSerializable()
 
 class _OrgProfile implements OrgProfile {
-  const _OrgProfile({required this.orgId, required this.orgName, required this.serverUrl, required this.userId, required this.token});
+  const _OrgProfile({@JsonKey(name: 'server_url') required this.serverUrl, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'auth_token') required this.authToken});
   factory _OrgProfile.fromJson(Map<String, dynamic> json) => _$OrgProfileFromJson(json);
 
-@override final  String orgId;
-@override final  String orgName;
-@override final  String serverUrl;
-@override final  String userId;
-@override final  String token;
+@override@JsonKey(name: 'server_url') final  String serverUrl;
+@override@JsonKey(name: 'user_id') final  String userId;
+@override@JsonKey(name: 'auth_token') final  String authToken;
 
 /// Create a copy of OrgProfile
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrgProfile&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrgProfile&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.authToken, authToken) || other.authToken == authToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,orgId,orgName,serverUrl,userId,token);
+int get hashCode => Object.hash(runtimeType,serverUrl,userId,authToken);
 
 @override
 String toString() {
-  return 'OrgProfile(orgId: $orgId, orgName: $orgName, serverUrl: $serverUrl, userId: $userId, token: $token)';
+  return 'OrgProfile(serverUrl: $serverUrl, userId: $userId, authToken: $authToken)';
 }
 
 
@@ -255,7 +251,7 @@ abstract mixin class _$OrgProfileCopyWith<$Res> implements $OrgProfileCopyWith<$
   factory _$OrgProfileCopyWith(_OrgProfile value, $Res Function(_OrgProfile) _then) = __$OrgProfileCopyWithImpl;
 @override @useResult
 $Res call({
- String orgId, String orgName, String serverUrl, String userId, String token
+@JsonKey(name: 'server_url') String serverUrl,@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'auth_token') String authToken
 });
 
 
@@ -272,13 +268,11 @@ class __$OrgProfileCopyWithImpl<$Res>
 
 /// Create a copy of OrgProfile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orgId = null,Object? orgName = null,Object? serverUrl = null,Object? userId = null,Object? token = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? serverUrl = null,Object? userId = null,Object? authToken = null,}) {
   return _then(_OrgProfile(
-orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
-as String,orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
+serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,authToken: null == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrganizationRowViewState {
 
- String get orgId; String get orgName; String get serverUrl; String get initials;
+ String get serverUrl; String get orgName; String get initials;
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $OrganizationRowViewStateCopyWith<OrganizationRowViewState> get copyWith => _$Or
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrganizationRowViewState&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.initials, initials) || other.initials == initials));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.initials, initials) || other.initials == initials));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgId,orgName,serverUrl,initials);
+int get hashCode => Object.hash(runtimeType,serverUrl,orgName,initials);
 
 @override
 String toString() {
-  return 'OrganizationRowViewState(orgId: $orgId, orgName: $orgName, serverUrl: $serverUrl, initials: $initials)';
+  return 'OrganizationRowViewState(serverUrl: $serverUrl, orgName: $orgName, initials: $initials)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $OrganizationRowViewStateCopyWith<$Res>  {
   factory $OrganizationRowViewStateCopyWith(OrganizationRowViewState value, $Res Function(OrganizationRowViewState) _then) = _$OrganizationRowViewStateCopyWithImpl;
 @useResult
 $Res call({
- String orgId, String orgName, String serverUrl, String initials
+ String serverUrl, String orgName, String initials
 });
 
 
@@ -62,11 +62,10 @@ class _$OrganizationRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orgId = null,Object? orgName = null,Object? serverUrl = null,Object? initials = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? serverUrl = null,Object? orgName = null,Object? initials = null,}) {
   return _then(_self.copyWith(
-orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
+serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,initials: null == initials ? _self.initials : initials // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -153,10 +152,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgId,  String orgName,  String serverUrl,  String initials)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String serverUrl,  String orgName,  String initials)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState() when $default != null:
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _:
+return $default(_that.serverUrl,_that.orgName,_that.initials);case _:
   return orElse();
 
 }
@@ -174,10 +173,10 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgId,  String orgName,  String serverUrl,  String initials)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String serverUrl,  String orgName,  String initials)  $default,) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState():
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _:
+return $default(_that.serverUrl,_that.orgName,_that.initials);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +193,10 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgId,  String orgName,  String serverUrl,  String initials)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String serverUrl,  String orgName,  String initials)?  $default,) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState() when $default != null:
-return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _:
+return $default(_that.serverUrl,_that.orgName,_that.initials);case _:
   return null;
 
 }
@@ -209,12 +208,11 @@ return $default(_that.orgId,_that.orgName,_that.serverUrl,_that.initials);case _
 
 
 class _OrganizationRowViewState implements OrganizationRowViewState {
-  const _OrganizationRowViewState({required this.orgId, required this.orgName, required this.serverUrl, required this.initials});
+  const _OrganizationRowViewState({required this.serverUrl, required this.orgName, required this.initials});
   
 
-@override final  String orgId;
-@override final  String orgName;
 @override final  String serverUrl;
+@override final  String orgName;
 @override final  String initials;
 
 /// Create a copy of OrganizationRowViewState
@@ -227,16 +225,16 @@ _$OrganizationRowViewStateCopyWith<_OrganizationRowViewState> get copyWith => __
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrganizationRowViewState&&(identical(other.orgId, orgId) || other.orgId == orgId)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.initials, initials) || other.initials == initials));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.initials, initials) || other.initials == initials));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgId,orgName,serverUrl,initials);
+int get hashCode => Object.hash(runtimeType,serverUrl,orgName,initials);
 
 @override
 String toString() {
-  return 'OrganizationRowViewState(orgId: $orgId, orgName: $orgName, serverUrl: $serverUrl, initials: $initials)';
+  return 'OrganizationRowViewState(serverUrl: $serverUrl, orgName: $orgName, initials: $initials)';
 }
 
 
@@ -247,7 +245,7 @@ abstract mixin class _$OrganizationRowViewStateCopyWith<$Res> implements $Organi
   factory _$OrganizationRowViewStateCopyWith(_OrganizationRowViewState value, $Res Function(_OrganizationRowViewState) _then) = __$OrganizationRowViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String orgId, String orgName, String serverUrl, String initials
+ String serverUrl, String orgName, String initials
 });
 
 
@@ -264,11 +262,10 @@ class __$OrganizationRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orgId = null,Object? orgName = null,Object? serverUrl = null,Object? initials = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? serverUrl = null,Object? orgName = null,Object? initials = null,}) {
   return _then(_OrganizationRowViewState(
-orgId: null == orgId ? _self.orgId : orgId // ignore: cast_nullable_to_non_nullable
+serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,initials: null == initials ? _self.initials : initials // ignore: cast_nullable_to_non_nullable
 as String,
   ));

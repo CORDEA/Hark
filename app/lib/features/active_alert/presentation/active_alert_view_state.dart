@@ -27,7 +27,7 @@ sealed class ActiveAlertViewEvent with _$ActiveAlertViewEvent {
 abstract class ActiveAlertViewState with _$ActiveAlertViewState {
   const factory ActiveAlertViewState({
     required String alertId,
-    required String orgId,
+    required String serverUrl,
     required String type,
     required DateTime triggeredAt,
     @Default(false) bool isSending,

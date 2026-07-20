@@ -1,27 +1,17 @@
 import 'package:dio/dio.dart';
 
-import '../../onboarding/data/register_dto.dart';
-
-/// Talks to a specific Hark server. Constructed with the server URL and a
-/// pre-configured Dio instance from [ApiClientFactory].
+/// Talks to a specific Hark server. Constructed with a pre-configured Dio
+/// instance from [ApiClientFactory] — the Bearer JWT (if any) is baked into
+/// that instance's headers.
 class OrgRemoteDataSource {
   OrgRemoteDataSource(this._dio);
 
   final Dio _dio;
 
-  Future<RegisterResponseDto> register(RegisterRequestDto req) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      '/api/register',
-      data: req.toJson(),
-    );
-    final data = _unwrapData(res.data);
-    return RegisterResponseDto.fromJson(data);
-  }
-
-  Future<void> leave({required String userId, required String token}) async {
+  Future<void> leave({required String userId, required String fcmToken}) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/api/users/leave',
-      data: {'user_id': userId, 'fcm_token': token},
+      data: {'user_id': userId, 'fcm_token': fcmToken},
     );
     _unwrapData(res.data);
   }

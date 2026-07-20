@@ -48,4 +48,4 @@ final class AppLoggerProvider
   }
 }
 
-String _$appLoggerHash() => r'a391377031abe36b49eb97fd026e73bf88a2c8c6';
+String _$appLoggerHash() => r'08e056bdb76d379120cc94a04bb09fc2ecb81141';

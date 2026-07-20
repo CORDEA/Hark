@@ -40,10 +40,10 @@ class ObserveFcmEventUseCase extends _$ObserveFcmEventUseCase {
 
   void _handle(HarkFcmMessage msg) {
     switch (msg) {
-      case HarkAlert(:final alertId, :final orgId, :final type):
+      case HarkAlert(:final alertId, :final serverUrl, :final type):
         state = FcmEvent.alertArrived(
           Uri(
-            path: '/orgs/$orgId/alert/$alertId',
+            path: '/orgs/${Uri.encodeComponent(serverUrl)}/alert/$alertId',
             queryParameters: {'type': type},
           ).toString(),
         );

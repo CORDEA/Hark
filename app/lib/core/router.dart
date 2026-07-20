@@ -52,27 +52,37 @@ GoRouter router(Ref ref) {
             },
           ),
           GoRoute(
-            path: 'orgs/:orgId/history',
+            path: 'orgs/:serverUrl/history',
             builder: (context, state) {
-              final org = state.pathParameters['orgId'] ?? '';
-              return ListAlertHistoryPage(orgId: org);
+              final url = Uri.decodeComponent(
+                state.pathParameters['serverUrl'] ?? '',
+              );
+              return ListAlertHistoryPage(serverUrl: url);
             },
           ),
           GoRoute(
-            path: 'orgs/:orgId/alert/:id',
+            path: 'orgs/:serverUrl/alert/:id',
             builder: (context, state) {
               final id = state.pathParameters['id'] ?? '';
-              final org = state.pathParameters['orgId'] ?? '';
+              final url = Uri.decodeComponent(
+                state.pathParameters['serverUrl'] ?? '',
+              );
               final type = state.uri.queryParameters['type'] ?? 'critical';
-              return ShowActiveAlertPage(alertId: id, orgId: org, type: type);
+              return ShowActiveAlertPage(
+                alertId: id,
+                serverUrl: url,
+                type: type,
+              );
             },
             routes: [
               GoRoute(
                 path: 'detail',
                 builder: (context, state) {
                   final id = state.pathParameters['id'] ?? '';
-                  final org = state.pathParameters['orgId'] ?? '';
-                  return ViewAlertDetailPage(orgId: org, alertId: id);
+                  final url = Uri.decodeComponent(
+                    state.pathParameters['serverUrl'] ?? '',
+                  );
+                  return ViewAlertDetailPage(serverUrl: url, alertId: id);
                 },
               ),
             ],

@@ -116,10 +116,10 @@ class _OrgList extends ConsumerWidget {
               isCurrent: i == 0,
               onLeave: () => ref
                   .read(listOrganizationViewModelProvider.notifier)
-                  .onLeaveTapped(row.orgId),
+                  .onLeaveTapped(row.serverUrl),
               onOpen: () => context.push(
                 Uri(
-                  path: '/orgs/${Uri.encodeComponent(row.orgId)}/history',
+                  path: '/orgs/${Uri.encodeComponent(row.serverUrl)}/history',
                 ).toString(),
               ),
             );

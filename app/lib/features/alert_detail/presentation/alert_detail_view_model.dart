@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../alerts/data/alert_dto.dart';
-import '../../organizations/data/org_repository.dart';
 import '../domain/get_alert_detail_use_case.dart';
 import 'alert_detail_view_state.dart';
 
@@ -11,14 +10,13 @@ part 'alert_detail_view_model.g.dart';
 class AlertDetailViewModel extends _$AlertDetailViewModel {
   @override
   Future<AlertDetailViewState> build({
-    required String orgId,
+    required String serverUrl,
     required String alertId,
   }) async {
     final detail = await ref
         .watch(getAlertDetailUseCaseProvider)
-        .execute(orgId: orgId, alertId: alertId);
-    final profile = await ref.read(orgRepositoryProvider).findById(orgId);
-    return _map(detail, profile?.orgName ?? _hostOf(orgId));
+        .execute(serverUrl: serverUrl, alertId: alertId);
+    return _map(detail, _hostOf(serverUrl));
   }
 
   Future<void> onRetryTapped() async {

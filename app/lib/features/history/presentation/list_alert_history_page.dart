@@ -14,13 +14,13 @@ import 'history_view_state.dart';
 /// "Disconnect" action (per plan, the settings feature is fulfilled by this
 /// bottom button).
 class ListAlertHistoryPage extends ConsumerWidget {
-  const ListAlertHistoryPage({super.key, required this.orgId});
+  const ListAlertHistoryPage({super.key, required this.serverUrl});
 
-  final String orgId;
+  final String serverUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = historyViewModelProvider(orgId: orgId);
+    final provider = historyViewModelProvider(serverUrl: serverUrl);
     final async = ref.watch(provider);
     final l10n = AppLocalizations.of(context);
 

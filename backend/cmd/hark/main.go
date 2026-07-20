@@ -62,7 +62,7 @@ func main() {
 	}
 
 	localizer := i18n.New()
-	alertService := &alertsvc.Service{DB: gdb, Sender: sender, Localizer: localizer}
+	alertService := &alertsvc.Service{DB: gdb, Sender: sender, Localizer: localizer, PublicURL: cfg.PublicURL}
 
 	handler := handlers.NewRouter(handlers.Deps{
 		DB:     gdb,

@@ -17,13 +17,13 @@ class ShowActiveAlertPage extends HookConsumerWidget {
   const ShowActiveAlertPage({
     super.key,
     required this.alertId,
-    required this.orgId,
+    required this.serverUrl,
     required this.type,
     this.triggeredAt,
   });
 
   final String alertId;
-  final String orgId;
+  final String serverUrl;
   final String type;
   final DateTime? triggeredAt;
 
@@ -35,7 +35,7 @@ class ShowActiveAlertPage extends HookConsumerWidget {
     );
     final provider = activeAlertViewModelProvider(
       alertId: alertId,
-      orgId: orgId,
+      serverUrl: serverUrl,
       type: type,
       triggeredAt: resolvedTriggeredAt,
     );
@@ -110,7 +110,7 @@ class _Content extends ConsumerWidget {
     return Column(
       children: [
         Text(
-          l10n.activeAlertHeader(_shortOrg(state.orgId)),
+          l10n.activeAlertHeader(_shortOrg(state.serverUrl)),
           style: theme.textTheme.labelSmall?.copyWith(
             color: colors.criticalTextMuted,
           ),
@@ -427,9 +427,9 @@ class _ActionButtons extends ConsumerWidget {
   }
 }
 
-String _shortOrg(String orgId) {
-  final u = Uri.tryParse(orgId);
-  if (u == null || u.host.isEmpty) return orgId;
+String _shortOrg(String serverUrl) {
+  final u = Uri.tryParse(serverUrl);
+  if (u == null || u.host.isEmpty) return serverUrl;
   return u.host;
 }
 
