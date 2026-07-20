@@ -11,8 +11,8 @@ services:
       PUBLIC_URL: "http://localhost:8080"
       ORG_NAME: "Hark"
     volumes:
-      # Persistent SQLite database + FCM key.
+      # Persistent SQLite database. If not using Application Default
+      # Credentials, drop a Firebase service-account JSON key (with the
+      # Firebase Cloud Messaging API Admin role) at ./data/firebase.json;
+      # the container reads it from /data/firebase.json by default.
       - ./data:/data
-      # Drop your Firebase service-account JSON next to this file; the
-      # container reads it from /data/firebase.json by default.
-      - ./firebase.json:/data/firebase.json:ro

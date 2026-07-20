@@ -41,7 +41,7 @@ mise.toml  Pinned toolchain (Go 1.23, Flutter 3.44.6)
   ```
 - A Firebase project with Cloud Messaging enabled. The backend accepts two credential sources, tried in this order:
   1. **Application Default Credentials** — preferred. Works with Workload Identity Federation, the GCE/GKE metadata server, `gcloud auth application-default login`, or `GOOGLE_APPLICATION_CREDENTIALS`. Avoids shipping a long-lived key.
-  2. **Service-account JSON file** — fallback. Download the key and save it as `backend/firebase.json` (or set `FCM_CREDENTIALS` to another path).
+  2. **Service-account JSON file** — fallback. Download a key with the Firebase Cloud Messaging API Admin role and save it as `backend/data/firebase.json` (or set `FCM_CREDENTIALS` to another path).
 
 ### Backend — Docker (recommended)
 
@@ -58,7 +58,7 @@ The service listens on `:8080`. Override the reverse-proxy address by editing `P
 
 ```sh
 cd backend
-FCM_CREDENTIALS=./firebase.json \
+FCM_CREDENTIALS=./data/firebase.json \
 PUBLIC_URL=http://localhost:8080 \
   go run ./cmd/hark
 ```
