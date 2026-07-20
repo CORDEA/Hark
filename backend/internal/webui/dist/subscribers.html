@@ -67,25 +67,45 @@
 
       <div id="invite-card" class="hidden mb-4 rounded-xl p-6"
            style="background:var(--n-2);border:1px solid var(--n-5)">
-        <div class="grid gap-7 items-center" style="grid-template-columns:1fr 140px">
-          <div class="flex flex-col gap-3.5 min-w-0">
-            <div class="text-sm font-bold" style="color:var(--text-1)" data-i18n="invite.cardTitle">Temporary join link</div>
+        <div class="grid gap-7 items-start" style="grid-template-columns:1fr 160px">
+          <div class="flex flex-col gap-4 min-w-0">
+            <div class="text-sm font-bold" style="color:var(--text-1)" data-i18n="invite.cardTitle">Temporary join details</div>
             <div>
-              <div class="text-xs font-semibold mb-1.5" style="color:var(--text-5)" data-i18n="invite.urlLabel">Invite URL</div>
-              <div id="invite-url" class="mono text-sm p-3 rounded-md break-all"
-                   style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">…</div>
+              <div class="text-xs font-semibold mb-1.5" style="color:var(--text-5)" data-i18n="invite.serverUrlLabel">Server URL</div>
+              <div class="flex gap-2 items-stretch">
+                <div id="invite-server-url" class="mono text-sm p-3 rounded-md break-all flex-1"
+                     style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">…</div>
+                <button id="btn-copy-server" type="button"
+                        class="rounded-md font-bold text-xs px-4 flex-shrink-0"
+                        style="background:var(--n-4);border:1px solid var(--n-6);color:var(--text-2)"
+                        data-i18n="invite.copy">Copy</button>
+              </div>
             </div>
-            <div class="flex gap-2.5">
-              <button id="btn-copy" type="button"
-                      class="h-10 px-4 rounded-md font-bold text-xs"
-                      style="background:var(--red-6);color:#fff" data-i18n="invite.copy">Copy link</button>
+            <div>
+              <div class="text-xs font-semibold mb-1.5" style="color:var(--text-5)" data-i18n="invite.invitationCodeLabel">Invitation code</div>
+              <div class="flex gap-2 items-stretch">
+                <div id="invite-code" class="mono text-sm p-3 rounded-md break-all flex-1"
+                     style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)">…</div>
+                <button id="btn-copy-code" type="button"
+                        class="rounded-md font-bold text-xs px-4 flex-shrink-0"
+                        style="background:var(--n-4);border:1px solid var(--n-6);color:var(--text-2)"
+                        data-i18n="invite.copy">Copy</button>
+              </div>
+            </div>
+            <div class="flex gap-2.5 pt-1">
               <button id="btn-invite-close" type="button"
                       class="h-10 px-4 rounded-md font-semibold text-xs"
                       style="background:transparent;border:1px solid var(--n-6);color:var(--text-4)" data-i18n="invite.done">Done</button>
             </div>
           </div>
-          <img id="invite-qr" alt="Invite QR code" data-i18n-attr="alt:invite.qrAlt" width="140" height="140"
-               class="rounded-md" style="background:#fff">
+          <div class="flex flex-col items-center gap-2">
+            <img id="invite-qr" alt="Invite QR code" data-i18n-attr="alt:invite.qrAlt" width="160" height="160"
+                 class="rounded-md" style="background:#fff">
+            <button id="btn-download-qr" type="button"
+                    class="w-full h-9 px-3 rounded-md font-semibold text-xs"
+                    style="background:var(--n-4);border:1px solid var(--n-6);color:var(--text-2)"
+                    data-i18n="invite.downloadQr">Download QR</button>
+          </div>
         </div>
       </div>
 

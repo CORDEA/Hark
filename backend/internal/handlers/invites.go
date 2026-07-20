@@ -22,6 +22,7 @@ type inviteResponse struct {
 	UserID         string `json:"user_id"`
 	DisplayName    string `json:"display_name"`
 	InvitationCode string `json:"invitation_code"`
+	ServerURL      string `json:"server_url"`
 	DeepLink       string `json:"deep_link"`
 	QRPayload      string `json:"qr_payload"`
 	QRImage        string `json:"qr_image"`
@@ -79,6 +80,7 @@ func (h *API) Invite(w http.ResponseWriter, r *http.Request) {
 		UserID:         user.ID,
 		DisplayName:    user.DisplayName,
 		InvitationCode: user.InvitationCode,
+		ServerURL:      h.Config.PublicURL,
 		DeepLink:       deepLink,
 		QRPayload:      deepLink,
 		QRImage:        qrImage,

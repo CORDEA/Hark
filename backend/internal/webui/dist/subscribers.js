@@ -1,6 +1,6 @@
 // Hark admin — subscribers page. Shared helpers come from common.js.
 
-const substate = { users: [] };
+const substate = { users: [], invite: null };
 
 function statusBadge(status) {
   if (status === 'active') return `<span class="badge badge-active">${escapeHtml(t('subscribers.status.active'))}</span>`;
@@ -64,10 +64,39 @@ async function refresh() {
 }
 
 function showInviteCard(data) {
+  substate.invite = data;
   q('#invite-card').classList.remove('hidden');
-  q('#invite-url').textContent = data.deep_link;
-  q('#invite-url').dataset.deepLink = data.deep_link;
+  q('#invite-server-url').textContent = data.server_url;
+  q('#invite-code').textContent = data.invitation_code;
   q('#invite-qr').src = data.qr_image;
+}
+
+function flashCopied(btn) {
+  const original = btn.textContent;
+  btn.textContent = t('invite.copied');
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.disabled = false;
+  }, 1200);
+}
+
+async function copyText(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+    flashCopied(btn);
+  } catch (_) {}
+}
+
+function downloadQr() {
+  const data = substate.invite;
+  if (!data?.qr_image) return;
+  const a = document.createElement('a');
+  a.href = data.qr_image;
+  a.download = `hark-invite-${data.invitation_code || 'qr'}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function openInviteDialog() {
@@ -141,11 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   q('#btn-invite-close').addEventListener('click', () => {
     q('#invite-card').classList.add('hidden');
+    substate.invite = null;
   });
-  q('#btn-copy').addEventListener('click', () => {
-    const url = q('#invite-url').dataset.deepLink || q('#invite-url').textContent;
-    navigator.clipboard.writeText(url).catch(() => {});
+  q('#btn-copy-server').addEventListener('click', (e) => {
+    if (substate.invite) copyText(substate.invite.server_url, e.currentTarget);
   });
+  q('#btn-copy-code').addEventListener('click', (e) => {
+    if (substate.invite) copyText(substate.invite.invitation_code, e.currentTarget);
+  });
+  q('#btn-download-qr').addEventListener('click', downloadQr);
   document.body.addEventListener('click', (e) => {
     const pingId = e.target.closest('[data-test-ping]')?.dataset.testPing;
     const reinviteId = e.target.closest('[data-reinvite]')?.dataset.reinvite;
