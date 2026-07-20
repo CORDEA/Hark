@@ -55,4 +55,4 @@ final class ObserveFcmMessagesUseCaseProvider
 }
 
 String _$observeFcmMessagesUseCaseHash() =>
-    r'45a97c068979295baccdbe3e5c10e3c910446337';
+    r'c8fa66a1223a1bd056d42ead506fd2812870005a';

@@ -2,9 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'app.dart';
 import 'core/fcm/fcm_background_handler.dart';
+import 'core/logger/app_logger.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ Future<void> main() async {
     }
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   } catch (e) {
-    debugPrint('firebase startup skipped: $e');
+    buildAppLogger().w('firebase startup skipped', error: e);
   }
   runApp(ProviderScope(child: const HarkApp()));
 }

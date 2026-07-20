@@ -12,17 +12,11 @@ part of 'observe_deep_link_use_case.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$PendingDeepLink implements DiagnosticableTreeMixin {
+mixin _$PendingDeepLink {
 
 
 
 
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'PendingDeepLink'))
-    ;
-}
 
 @override
 bool operator ==(Object other) {
@@ -34,7 +28,7 @@ bool operator ==(Object other) {
 int get hashCode => runtimeType.hashCode;
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+String toString() {
   return 'PendingDeepLink()';
 }
 
@@ -180,7 +174,7 @@ return consumed();case _:
 /// @nodoc
 
 
-class PendingDeepLinkWaiting extends PendingDeepLink with DiagnosticableTreeMixin {
+class PendingDeepLinkWaiting extends PendingDeepLink {
   const PendingDeepLinkWaiting(this.route): super._();
   
 
@@ -193,12 +187,6 @@ class PendingDeepLinkWaiting extends PendingDeepLink with DiagnosticableTreeMixi
 $PendingDeepLinkWaitingCopyWith<PendingDeepLinkWaiting> get copyWith => _$PendingDeepLinkWaitingCopyWithImpl<PendingDeepLinkWaiting>(this, _$identity);
 
 
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'PendingDeepLink.waiting'))
-    ..add(DiagnosticsProperty('route', route));
-}
 
 @override
 bool operator ==(Object other) {
@@ -210,7 +198,7 @@ bool operator ==(Object other) {
 int get hashCode => Object.hash(runtimeType,route);
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+String toString() {
   return 'PendingDeepLink.waiting(route: $route)';
 }
 
@@ -252,7 +240,7 @@ as String,
 /// @nodoc
 
 
-class PendingDeepLinkConsumed extends PendingDeepLink with DiagnosticableTreeMixin {
+class PendingDeepLinkConsumed extends PendingDeepLink {
   const PendingDeepLinkConsumed(): super._();
   
 
@@ -260,12 +248,6 @@ class PendingDeepLinkConsumed extends PendingDeepLink with DiagnosticableTreeMix
 
 
 
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'PendingDeepLink.consumed'))
-    ;
-}
 
 @override
 bool operator ==(Object other) {
@@ -277,7 +259,7 @@ bool operator ==(Object other) {
 int get hashCode => runtimeType.hashCode;
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+String toString() {
   return 'PendingDeepLink.consumed()';
 }
 

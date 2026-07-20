@@ -1,15 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../logger/app_logger.dart';
 
 part 'fcm_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-FcmRepository fcmRepository(Ref ref) => FcmRepository();
+FcmRepository fcmRepository(Ref ref) =>
+    FcmRepository(ref.watch(appLoggerProvider));
 
 class FcmRepository {
-  /// Initializes the Firebase SDK. Returns false and prints in local-dev
+  FcmRepository(this._logger);
+
+  final Logger _logger;
+
+  /// Initializes the Firebase SDK. Returns false and logs a warning in local-dev
   /// environments where google-services.json / GoogleService-Info.plist are
   /// absent — the rest of the app still functions with a placeholder token.
   Future<bool> initialize() async {
@@ -19,7 +25,7 @@ class FcmRepository {
       }
       return true;
     } catch (e) {
-      debugPrint('firebase init skipped: $e');
+      _logger.w('firebase init skipped', error: e);
       return false;
     }
   }
@@ -32,7 +38,7 @@ class FcmRepository {
         sound: true,
       );
     } catch (e) {
-      debugPrint('fcm permission: $e');
+      _logger.e('fcm permission', error: e);
     }
   }
 
@@ -40,7 +46,7 @@ class FcmRepository {
     try {
       return await FirebaseMessaging.instance.getToken();
     } catch (e) {
-      debugPrint('fcm token: $e');
+      _logger.e('fcm token', error: e);
       return null;
     }
   }
@@ -49,7 +55,7 @@ class FcmRepository {
     try {
       return await FirebaseMessaging.instance.getInitialMessage();
     } catch (e) {
-      debugPrint('fcm initial: $e');
+      _logger.e('fcm initial', error: e);
       return null;
     }
   }

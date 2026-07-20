@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../logger/app_logger.dart';
 
 part 'observe_deep_link_use_case.freezed.dart';
 part 'observe_deep_link_use_case.g.dart';
@@ -25,9 +26,11 @@ AppLinks appLinks(Ref ref) {
 @Riverpod(keepAlive: true)
 class ObserveDeepLinkUseCase extends _$ObserveDeepLinkUseCase {
   final List<StreamSubscription> _subscriptions = [];
+  late Logger _logger;
 
   @override
   PendingDeepLink build() {
+    _logger = ref.watch(appLoggerProvider);
     ref.onDispose(() {
       for (final subscription in _subscriptions) {
         subscription.cancel();
@@ -37,13 +40,13 @@ class ObserveDeepLinkUseCase extends _$ObserveDeepLinkUseCase {
     _subscriptions.add(
       appLinks.uriLinkStream.listen(
         _handle,
-        onError: (Object e) => debugPrint('deep-link stream: $e'),
+        onError: (Object e) => _logger.e('deep-link stream', error: e),
       ),
     );
     _subscriptions.add(
       appLinks.getInitialLink().asStream().listen(
         _handle,
-        onError: (Object e) => debugPrint('deep-link stream: $e'),
+        onError: (Object e) => _logger.e('deep-link initial', error: e),
       ),
     );
     return const PendingDeepLink.consumed();

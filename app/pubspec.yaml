@@ -28,6 +28,7 @@ dependencies:
   app_links: ^7.2.1
   flutter_local_notifications: ^22.0.1
   google_fonts: ^8.2.0
+  logger: ^2.7.0
 
 dev_dependencies:
   flutter_test:

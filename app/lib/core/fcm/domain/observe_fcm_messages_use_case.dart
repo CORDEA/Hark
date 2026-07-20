@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../logger/app_logger.dart';
 import '../data/fcm_repository.dart';
 import '../hark_fcm_message.dart';
 import 'initialize_firebase_use_case.dart';
@@ -17,6 +17,7 @@ ObserveFcmMessagesUseCase observeFcmMessagesUseCase(Ref ref) {
     ref.watch(initializeFirebaseUseCaseProvider),
     ref.watch(requestNotificationPermissionUseCaseProvider),
     ref.watch(fcmRepositoryProvider),
+    ref.watch(appLoggerProvider),
   );
   ref.onDispose(useCase.dispose);
   useCase.start();
@@ -24,11 +25,17 @@ ObserveFcmMessagesUseCase observeFcmMessagesUseCase(Ref ref) {
 }
 
 class ObserveFcmMessagesUseCase {
-  ObserveFcmMessagesUseCase(this._init, this._permission, this._repository);
+  ObserveFcmMessagesUseCase(
+    this._init,
+    this._permission,
+    this._repository,
+    this._logger,
+  );
 
   final InitializeFirebaseUseCase _init;
   final RequestNotificationPermissionUseCase _permission;
   final FcmRepository _repository;
+  final Logger _logger;
 
   final _controller = StreamController<HarkFcmMessage>.broadcast();
   final _subscriptions = <StreamSubscription<void>>[];
@@ -47,13 +54,13 @@ class ObserveFcmMessagesUseCase {
       ..add(
         _repository.onMessage.listen(
           _emit,
-          onError: (Object e) => debugPrint('fcm foreground: $e'),
+          onError: (Object e) => _logger.e('fcm foreground', error: e),
         ),
       )
       ..add(
         _repository.onMessageOpenedApp.listen(
           _emit,
-          onError: (Object e) => debugPrint('fcm openApp: $e'),
+          onError: (Object e) => _logger.e('fcm openApp', error: e),
         ),
       );
   }
@@ -61,7 +68,7 @@ class ObserveFcmMessagesUseCase {
   void _emit(RemoteMessage m) {
     final parsed = HarkFcmMessage.tryParse(m.data);
     if (parsed == null) {
-      debugPrint('fcm unknown payload: ${m.data}');
+      _logger.w('fcm unknown payload: ${m.data}');
       return;
     }
     _controller.add(parsed);
