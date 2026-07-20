@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'fcm_service.dart';
+import 'domain/get_fcm_token_use_case.dart';
 
 part 'fcm_token_provider.g.dart';
 
@@ -10,7 +10,6 @@ part 'fcm_token_provider.g.dart';
 /// project first.
 @Riverpod(keepAlive: true)
 Future<String> fcmToken(Ref ref) async {
-  final service = ref.watch(fcmServiceProvider);
-  final real = await service.currentToken();
-  return real ?? 'placeholder-fcm-token';
+  final token = await ref.watch(getFcmTokenUseCaseProvider).execute();
+  return token ?? 'placeholder-fcm-token';
 }

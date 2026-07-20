@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/alarm/alarm_service.dart';
-import '../../../core/fcm/fcm_router_bridge.dart';
-import '../../../core/fcm/hark_fcm_message.dart';
+import '../../../core/fcm/domain/observe_fcm_event_use_case.dart';
 import '../../alerts/data/alert_dto.dart';
 import '../domain/respond_alert_use_case.dart';
 import 'active_alert_view_state.dart';
@@ -13,8 +9,6 @@ part 'active_alert_view_model.g.dart';
 
 @riverpod
 class ActiveAlertViewModel extends _$ActiveAlertViewModel {
-  StreamSubscription<HarkResolve>? _resolveSub;
-
   @override
   ActiveAlertViewState build({
     required String alertId,
@@ -22,27 +16,16 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
     required String type,
     required DateTime triggeredAt,
   }) {
-    // Subscribe to silent-resolve events; if a teammate acks before we do
-    // the backend fans out kind=resolve → auto-close the local alarm.
-    final bridge = ref.watch(fcmRouterBridgeProvider);
-    _resolveSub?.cancel();
-    _resolveSub = bridge.resolveEvents.listen((r) {
-      if (r.alertId == alertId) _handleRemoteResolve();
+    // Subscribe to silent-resolve events so a teammate's ack auto-closes this screen.
+    ref.listen(observeFcmEventUseCaseProvider, (_, event) {
+      if (event is FcmEventAlertResolved && event.alertId == alertId) {
+        _handleRemoteResolve();
+      }
+      // Consume any resolve event regardless of alertId — no other handler will.
+      if (event is FcmEventAlertResolved) {
+        ref.read(observeFcmEventUseCaseProvider.notifier).consume();
+      }
     });
-    ref.onDispose(() {
-      _resolveSub?.cancel();
-      // Stop the alarm on any teardown path (nav back, alt route, etc.).
-      ref.read(alarmServiceProvider).stop();
-    });
-
-    // Fire and forget: raise the alarm for critical alerts as soon as this
-    // screen mounts. Non-critical (warning) still shows the emergency UI but
-    // without the audio loop.
-    if (type == AlertType.critical) {
-      Future.microtask(() async {
-        await ref.read(alarmServiceProvider).start();
-      });
-    }
 
     return ActiveAlertViewState(
       alertId: alertId,
@@ -65,10 +48,6 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
       isSending: true,
       event: const ActiveAlertViewEvent.none(),
     );
-    // Silence the local alarm the instant the user commits — waiting for the
-    // network round-trip feels awful when a siren is blaring.
-    await ref.read(alarmServiceProvider).stop();
-
     try {
       await ref
           .read(respondAlertUseCaseProvider)
@@ -89,8 +68,6 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
 
   void _handleRemoteResolve() {
     if (state.isResolved) return;
-    // Fire and forget alarm stop.
-    unawaited(ref.read(alarmServiceProvider).stop());
     state = state.copyWith(outcome: ActiveAlertOutcome.resolvedByOther);
   }
 

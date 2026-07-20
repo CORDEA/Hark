@@ -60,7 +60,7 @@ final class ActiveAlertViewModelProvider
 }
 
 String _$activeAlertViewModelHash() =>
-    r'aba002573410be1f0e3b837302ca5414eca97be4';
+    r'36c40b3abe85452a3a6125013be824be6eeaf86f';
 
 final class ActiveAlertViewModelFamily extends $Family
     with
