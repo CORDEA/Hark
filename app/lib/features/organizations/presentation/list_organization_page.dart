@@ -21,9 +21,7 @@ class ListOrganizationPage extends ConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            title: Text(l10n.orgListTitle),
-          ),
+          SliverAppBar(title: Text(l10n.orgListTitle)),
           SliverFillRemaining(
             hasScrollBody: false,
             child: SafeArea(

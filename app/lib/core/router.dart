@@ -1,6 +1,5 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../features/active_alert/presentation/show_active_alert_page.dart';
@@ -8,23 +7,34 @@ import '../features/alert_detail/presentation/view_alert_detail_page.dart';
 import '../features/history/presentation/list_alert_history_page.dart';
 import '../features/onboarding/presentation/connect_org_page.dart';
 import '../features/organizations/presentation/list_organization_page.dart';
+import 'deep_link/observe_deep_link_use_case.dart';
 
 part 'router.g.dart';
 
-// Overridden in main() when the app cold-starts from a hark://join deep link
-// so the router never flashes ListOrganizationPage before ConnectOrgPage.
-final initialRouteProvider = Provider<String>((ref) => '/');
-
-/// A [GlobalKey] on the root [Navigator] so background code (an FCM handler
-/// firing from a background isolate, for example) can push the active-alert
-/// route without needing a [BuildContext].
 final navigatorKey = GlobalKey<NavigatorState>();
+
+class _RouterRefreshNotifier extends ChangeNotifier {
+  _RouterRefreshNotifier(Ref ref) {
+    ref.listen<PendingDeepLink>(observeDeepLinkUseCaseProvider, (_, next) {
+      // Only notify for 'waiting' so that consume() called inside redirect
+      // doesn't trigger GoRouter's listener synchronously during its own build.
+      if (next is PendingDeepLinkWaiting) notifyListeners();
+    }, fireImmediately: true);
+  }
+}
 
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) {
   return GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: ref.read(initialRouteProvider),
+    refreshListenable: _RouterRefreshNotifier(ref),
+    redirect: (context, state) {
+      final deepLink = ref.read(observeDeepLinkUseCaseProvider);
+      if (deepLink is PendingDeepLinkWaiting) {
+        return deepLink.route;
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hark/core/deep_link/observe_deep_link_use_case.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/error/error_localizer.dart';
@@ -33,34 +34,31 @@ class ConnectOrgPage extends HookConsumerWidget {
     final l10n = AppLocalizations.of(context);
 
     ref.listen(provider.select((s) => s.event), (_, event) {
+      if (!context.mounted) return;
       switch (event) {
         case ConnectOrgViewEventMissingFields():
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.connectOrgMissingFields)),
-            );
-            ref.read(provider.notifier).onEventConsumed();
-          }
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.connectOrgMissingFields)));
         case ConnectOrgViewEventRegisterFailed(:final error):
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
-            );
-            ref.read(provider.notifier).onEventConsumed();
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
+          );
         case ConnectOrgViewEventNavigateToOrgs():
-          if (context.mounted) context.go('/');
+          ref.read(observeDeepLinkUseCaseProvider.notifier).consume();
+          context.go('/');
         case ConnectOrgViewEventNone():
           break;
+      }
+      if (context.mounted && event is! ConnectOrgViewEventNone) {
+        ref.read(provider.notifier).onEventConsumed();
       }
     });
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            title: Text(l10n.connectOrgTitle),
-          ),
+          SliverAppBar(title: Text(l10n.connectOrgTitle)),
           SliverFillRemaining(
             hasScrollBody: false,
             child: SafeArea(
@@ -96,8 +94,9 @@ class ConnectOrgPage extends HookConsumerWidget {
                       hint: l10n.connectOrgInvitationCodeHint,
                       colors: colors,
                       textCapitalization: TextCapitalization.characters,
-                      onChanged: (v) =>
-                          ref.read(provider.notifier).onInvitationCodeChanged(v),
+                      onChanged: (v) => ref
+                          .read(provider.notifier)
+                          .onInvitationCodeChanged(v),
                     ),
                     const Spacer(),
                     Consumer(
@@ -110,8 +109,9 @@ class ConnectOrgPage extends HookConsumerWidget {
                           child: FilledButton(
                             onPressed: isSubmitting
                                 ? null
-                                : () =>
-                                    ref.read(provider.notifier).onSubmitTapped(),
+                                : () => ref
+                                      .read(provider.notifier)
+                                      .onSubmitTapped(),
                             style: FilledButton.styleFrom(
                               backgroundColor: colors.critical,
                               foregroundColor: Colors.white,
@@ -142,7 +142,7 @@ class ConnectOrgPage extends HookConsumerWidget {
                     const SizedBox(height: AppSpacing.md),
                     Center(
                       child: GestureDetector(
-                        onTap: () => context.go('/'),
+                        onTap: ref.read(provider.notifier).onOrgsTapped,
                         child: Text.rich(
                           TextSpan(
                             text: l10n.connectOrgAlreadyHaveOrgs,
@@ -177,8 +177,10 @@ class ConnectOrgPage extends HookConsumerWidget {
 
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel({required this.text, required this.colors});
+
   final String text;
   final AppColorSchemeExtension colors;
+
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -200,6 +202,7 @@ class _MonoInput extends StatelessWidget {
     required this.onChanged,
     this.textCapitalization = TextCapitalization.none,
   });
+
   final TextEditingController controller;
   final String hint;
   final AppColorSchemeExtension colors;

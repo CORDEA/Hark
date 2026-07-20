@@ -64,6 +64,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
     }
   }
 
+  void onOrgsTapped() {
+    state = state.copyWith(event: const ConnectOrgViewEvent.navigateToOrgs());
+  }
+
   void onEventConsumed() =>
       state = state.copyWith(event: const ConnectOrgViewEvent.none());
 
