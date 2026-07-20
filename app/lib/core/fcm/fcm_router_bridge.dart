@@ -9,7 +9,7 @@ import 'hark_fcm_message.dart';
 
 part 'fcm_router_bridge.g.dart';
 
-/// Listens on [FcmService.messages] and routes to /alert/:id whenever an
+/// Listens on [FcmService.messages] and routes to /orgs/:orgId/alert/:id whenever an
 /// alert lands. Resolve/test payloads are broadcast on [resolveEvents] /
 /// [testEvents] for the active-alert screen and any future subscribers.
 @Riverpod(keepAlive: true)
@@ -41,8 +41,8 @@ class FcmRouterBridge {
       case HarkAlert(:final alertId, :final orgId, :final type):
         navigatorKey.currentContext?.push(
           Uri(
-            path: '/alert/$alertId',
-            queryParameters: {'org': orgId, 'type': type},
+            path: '/orgs/$orgId/alert/$alertId',
+            queryParameters: {'type': type},
           ).toString(),
         );
       case HarkResolve():

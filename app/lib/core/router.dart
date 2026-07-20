@@ -58,24 +58,24 @@ GoRouter router(Ref ref) {
               return ListAlertHistoryPage(orgId: org);
             },
           ),
-        ],
-      ),
-      GoRoute(
-        path: '/alert/:id',
-        builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          final org = state.uri.queryParameters['org'] ?? '';
-          final type = state.uri.queryParameters['type'] ?? 'critical';
-          return ShowActiveAlertPage(alertId: id, orgId: org, type: type);
-        },
-        routes: [
           GoRoute(
-            path: 'detail',
+            path: 'orgs/:orgId/alert/:id',
             builder: (context, state) {
               final id = state.pathParameters['id'] ?? '';
-              final org = state.uri.queryParameters['org'] ?? '';
-              return ViewAlertDetailPage(orgId: org, alertId: id);
+              final org = state.pathParameters['orgId'] ?? '';
+              final type = state.uri.queryParameters['type'] ?? 'critical';
+              return ShowActiveAlertPage(alertId: id, orgId: org, type: type);
             },
+            routes: [
+              GoRoute(
+                path: 'detail',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'] ?? '';
+                  final org = state.pathParameters['orgId'] ?? '';
+                  return ViewAlertDetailPage(orgId: org, alertId: id);
+                },
+              ),
+            ],
           ),
         ],
       ),
