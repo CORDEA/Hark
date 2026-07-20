@@ -13,6 +13,7 @@ import (
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )
 
@@ -51,25 +52,40 @@ type Sender interface {
 	Send(ctx context.Context, msgs []Message) SendResult
 }
 
-// New returns a Sender: a real Firebase client when a readable credentials
-// file is provided, otherwise a no-op that logs the outbound payload. The
-// no-op path is intentional — the container image ships with a default
-// FCM_CREDENTIALS path that only exists once the operator drops in the
-// service-account JSON, so the server has to start cleanly without it.
+// New returns a Sender using the first credential source available, in order:
+//
+//  1. Application Default Credentials — resolves Workload Identity Federation
+//     external accounts, GCE/GKE metadata server, `gcloud auth
+//     application-default login`, and any file pointed at by
+//     GOOGLE_APPLICATION_CREDENTIALS. Preferred: WIF avoids shipping a
+//     long-lived service-account key.
+//  2. The service-account JSON at credentialsPath (typically FCM_CREDENTIALS).
+//  3. A no-op sender that logs payloads — kept so the container image can
+//     start cleanly before the operator drops in either credential source.
 func New(ctx context.Context, credentialsPath string) (Sender, error) {
+	if _, err := google.FindDefaultCredentials(ctx); err == nil {
+		slog.Info("fcm: using Application Default Credentials")
+		return newFirebaseSender(ctx)
+	}
+
 	if credentialsPath == "" {
-		slog.Warn("fcm: FCM_CREDENTIALS is empty — using no-op sender (payloads will be logged)")
+		slog.Warn("fcm: no ADC and FCM_CREDENTIALS is empty — using no-op sender (payloads will be logged)")
 		return &noopSender{}, nil
 	}
 	if _, err := os.Stat(credentialsPath); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			slog.Warn("fcm: credentials file not found — using no-op sender",
+			slog.Warn("fcm: no ADC and credentials file not found — using no-op sender",
 				"path", credentialsPath)
 			return &noopSender{}, nil
 		}
 		return nil, err
 	}
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(credentialsPath))
+	slog.Info("fcm: using service-account credentials file", "path", credentialsPath)
+	return newFirebaseSender(ctx, option.WithCredentialsFile(credentialsPath))
+}
+
+func newFirebaseSender(ctx context.Context, opts ...option.ClientOption) (Sender, error) {
+	app, err := firebase.NewApp(ctx, nil, opts...)
 	if err != nil {
 		slog.Warn("fcm: firebase init failed — using no-op sender", "err", err)
 		return &noopSender{}, nil

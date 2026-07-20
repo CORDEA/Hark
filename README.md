@@ -39,7 +39,9 @@ mise.toml  Pinned toolchain (Go 1.23, Flutter 3.44.6)
   ```sh
   mise install
   ```
-- A Firebase project with Cloud Messaging enabled. Download the service-account JSON and save it as `backend/firebase.json`.
+- A Firebase project with Cloud Messaging enabled. The backend accepts two credential sources, tried in this order:
+  1. **Application Default Credentials** — preferred. Works with Workload Identity Federation, the GCE/GKE metadata server, `gcloud auth application-default login`, or `GOOGLE_APPLICATION_CREDENTIALS`. Avoids shipping a long-lived key.
+  2. **Service-account JSON file** — fallback. Download the key and save it as `backend/firebase.json` (or set `FCM_CREDENTIALS` to another path).
 
 ### Backend — Docker (recommended)
 
@@ -68,7 +70,7 @@ Configuration is read entirely from the environment:
 | `PORT`            | `8080`                                                                 | HTTP listener port                 |
 | `DB_DRIVER`       | `sqlite`                                                               | Database driver                    |
 | `DB_DSN`          | `file:hark.db?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)`       | Database connection string         |
-| `FCM_CREDENTIALS` | *(empty — FCM disabled)*                                               | Path to Firebase service-account   |
+| `FCM_CREDENTIALS` | *(empty — FCM disabled unless ADC is present)*                         | Path to Firebase service-account (fallback when ADC is unavailable) |
 | `PUBLIC_URL`      | `http://localhost:8080`                                                | Base URL embedded in invite QR     |
 | `ORG_NAME`        | `Hark`                                                                 | Organisation name shown in the UI  |
 
