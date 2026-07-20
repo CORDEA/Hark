@@ -200,11 +200,7 @@ func (h *API) RegisterFinish(w http.ResponseWriter, r *http.Request) {
 		userRow := models.User{
 			ID:          userID,
 			DisplayName: displayName,
-			// Status/InvitationCode remain in the schema until the M2
-			// cleanup commit trims them; write UserStatusActive so the
-			// current alerts-service filter still selects this user.
-			Status:    models.UserStatusActive,
-			CreatedAt: now,
+			CreatedAt:   now,
 		}
 		if err := tx.Create(&userRow).Error; err != nil {
 			return err

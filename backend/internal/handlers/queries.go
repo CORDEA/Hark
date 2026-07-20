@@ -25,7 +25,13 @@ func (h *API) Stats(w http.ResponseWriter, r *http.Request) {
 		fail(w, http.StatusInternalServerError, "db", err.Error())
 		return
 	}
-	if err := h.DB.Model(&models.User{}).Where("status = ?", models.UserStatusActive).Count(&s.ActiveSubscribers).Error; err != nil {
+	// A user is "active" when they have at least one registered device —
+	// i.e. a device we could actually push to. With passkeys, a user row
+	// only exists after a successful register ceremony, so the "invited"
+	// pre-registration state no longer applies.
+	if err := h.DB.Model(&models.User{}).
+		Where("id IN (?)", h.DB.Model(&models.Device{}).Select("DISTINCT user_id")).
+		Count(&s.ActiveSubscribers).Error; err != nil {
 		fail(w, http.StatusInternalServerError, "db", err.Error())
 		return
 	}

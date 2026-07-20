@@ -3,9 +3,6 @@ package models
 import "time"
 
 const (
-	UserStatusActive  = "active"
-	UserStatusInvited = "invited"
-
 	AlertTypeCritical = "critical"
 	AlertTypeWarning  = "warning"
 
@@ -30,11 +27,9 @@ const (
 )
 
 type User struct {
-	ID             string    `gorm:"primaryKey;size:64" json:"id"`
-	DisplayName    string    `gorm:"size:120" json:"display_name"`
-	InvitationCode string    `gorm:"uniqueIndex;size:32" json:"invitation_code"`
-	Status         string    `gorm:"size:16;index" json:"status"`
-	CreatedAt      time.Time `json:"created_at"`
+	ID          string    `gorm:"primaryKey;size:64" json:"id"`
+	DisplayName string    `gorm:"size:120" json:"display_name"`
+	CreatedAt   time.Time `json:"created_at"`
 
 	Devices     []Device     `gorm:"constraint:OnDelete:CASCADE" json:"devices,omitempty"`
 	Credentials []Credential `gorm:"constraint:OnDelete:CASCADE" json:"credentials,omitempty"`

@@ -42,7 +42,7 @@ func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs [
 	var devices []models.Device
 	err := s.DB.Transaction(func(tx *gorm.DB) error {
 		var users []models.User
-		q := tx.Where("status = ?", models.UserStatusActive)
+		q := tx
 		if len(targetUserIDs) > 0 {
 			q = q.Where("id IN ?", targetUserIDs)
 		}

@@ -54,16 +54,8 @@ func NewRouter(d Deps) http.Handler {
 		r.Post("/webauthn/register/begin", api.RegisterBegin)
 		r.Post("/webauthn/register/finish", api.RegisterFinish)
 
-		// Legacy invite/register endpoints. Retained during the migration
-		// window until the mobile client switches over to the passkey
-		// ceremony; removed alongside the User.InvitationCode/Status
-		// trim.
-		r.Post("/invite", api.Invite)
-		r.Post("/register", api.Register)
-
 		r.Post("/users/leave", api.Leave)
 		r.Post("/users/{id}/test-ping", api.TestPing)
-		r.Post("/users/{id}/reinvite", api.Reinvite)
 		r.Delete("/users/{id}", api.KickUser)
 
 		r.Get("/alerts", api.ListAlerts)

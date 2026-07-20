@@ -13,13 +13,13 @@ import (
 )
 
 type userView struct {
-	ID             string       `json:"id"`
-	DisplayName    string       `json:"display_name"`
-	InvitationCode string       `json:"invitation_code"`
-	Status         string       `json:"status"`
-	CreatedAt      time.Time    `json:"created_at"`
-	Devices        []deviceView `json:"devices"`
-	LastActivityAt *time.Time   `json:"last_activity_at,omitempty"`
+	ID               string       `json:"id"`
+	DisplayName      string       `json:"display_name"`
+	CreatedAt        time.Time    `json:"created_at"`
+	Devices          []deviceView `json:"devices"`
+	DevicesCount     int          `json:"devices_count"`
+	CredentialsCount int          `json:"credentials_count"`
+	LastActivityAt   *time.Time   `json:"last_activity_at,omitempty"`
 }
 
 type deviceView struct {
@@ -30,7 +30,7 @@ type deviceView struct {
 
 func (h *API) ListUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
-	if err := h.DB.Preload("Devices").Order("created_at desc").Find(&users).Error; err != nil {
+	if err := h.DB.Preload("Devices").Preload("Credentials").Order("created_at desc").Find(&users).Error; err != nil {
 		slog.Error("list users", "err", err)
 		fail(w, http.StatusInternalServerError, "db", "could not list users")
 		return
@@ -48,13 +48,13 @@ func (h *API) ListUsers(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		views = append(views, userView{
-			ID:             u.ID,
-			DisplayName:    u.DisplayName,
-			InvitationCode: u.InvitationCode,
-			Status:         u.Status,
-			CreatedAt:      u.CreatedAt,
-			Devices:        devs,
-			LastActivityAt: lastAt,
+			ID:               u.ID,
+			DisplayName:      u.DisplayName,
+			CreatedAt:        u.CreatedAt,
+			Devices:          devs,
+			DevicesCount:     len(u.Devices),
+			CredentialsCount: len(u.Credentials),
+			LastActivityAt:   lastAt,
 		})
 	}
 	ok(w, views)
@@ -65,6 +65,8 @@ type leaveRequest struct {
 	FCMToken string `json:"fcm_token"`
 }
 
+// Leave removes the caller's device. Still auth-less during the migration
+// window; M4 flips it to a JWT-guarded DELETE /api/devices/self.
 func (h *API) Leave(w http.ResponseWriter, r *http.Request) {
 	var req leaveRequest
 	if err := decodeJSON(r, &req); err != nil {

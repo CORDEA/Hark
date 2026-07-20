@@ -23,19 +23,6 @@ func NewCode() (string, error) {
 	return raw[:4] + "-" + raw[4:], nil
 }
 
-// DeepLink returns the legacy hark:// invitation URL. Retained during the
-// passkey migration so the current invite → register handlers keep working
-// until they are removed alongside the invitation-code auth model.
-//
-// Deprecated: use [UniversalLink]; scheduled for removal once the legacy
-// register endpoint is deleted.
-func DeepLink(publicURL, code string) string {
-	q := url.Values{}
-	q.Set("server", publicURL)
-	q.Set("code", code)
-	return "hark://join?" + q.Encode()
-}
-
 // UniversalLink returns https://<PUBLIC_HOST>/join?code=<code>.
 // Universal links replace the pre-passkey hark:// scheme so the same host
 // binding used for passkeys does double duty for invitations (per spec §0).

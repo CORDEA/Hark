@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/cordea/hark/internal/models"
-	"github.com/cordea/hark/internal/services/invites"
 )
 
 type testPingResponse struct {
@@ -48,81 +47,11 @@ func (h *API) TestPing(w http.ResponseWriter, r *http.Request) {
 	ok(w, testPingResponse{UserID: userID, Sent: int(deviceCount)})
 }
 
-type reinviteResponse struct {
-	UserID         string `json:"user_id"`
-	InvitationCode string `json:"invitation_code"`
-	ServerURL      string `json:"server_url"`
-	DeepLink       string `json:"deep_link"`
-	QRPayload      string `json:"qr_payload"`
-	QRImage        string `json:"qr_image"`
-}
-
-// Reinvite regenerates the user's invitation code and flips them back to
-// invited status. Existing devices are kept — the new code is for
-// re-onboarding a lost device or handing off to a coworker.
-func (h *API) Reinvite(w http.ResponseWriter, r *http.Request) {
-	userID := chi.URLParam(r, "id")
-	if userID == "" {
-		fail(w, http.StatusBadRequest, "missing_id", "user id required")
-		return
-	}
-
-	var user models.User
-	if err := h.DB.First(&user, "id = ?", userID).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			fail(w, http.StatusNotFound, "not_found", "user not found")
-			return
-		}
-		fail(w, http.StatusInternalServerError, "db", err.Error())
-		return
-	}
-
-	// Retry loop mirrors Invite() — code collisions are astronomically rare
-	// but we don't want to 500 on the off chance.
-	for attempt := 0; attempt < 5; attempt++ {
-		code, err := invites.NewCode()
-		if err != nil {
-			fail(w, http.StatusInternalServerError, "code_gen", err.Error())
-			return
-		}
-		err = h.DB.Model(&models.User{}).
-			Where("id = ?", userID).
-			Updates(map[string]any{
-				"invitation_code": code,
-				"status":          models.UserStatusInvited,
-			}).Error
-		if err == nil {
-			user.InvitationCode = code
-			user.Status = models.UserStatusInvited
-			break
-		}
-		if !isUniqueViolation(err) {
-			slog.Error("reinvite", "err", err)
-			fail(w, http.StatusInternalServerError, "db", "could not update user")
-			return
-		}
-	}
-
-	deepLink := invites.DeepLink(h.Config.PublicURL, user.InvitationCode)
-	qrImage, err := invites.QRDataURL(deepLink)
-	if err != nil {
-		slog.Error("qr encode", "err", err)
-		fail(w, http.StatusInternalServerError, "qr_encode", err.Error())
-		return
-	}
-
-	ok(w, reinviteResponse{
-		UserID:         userID,
-		InvitationCode: user.InvitationCode,
-		ServerURL:      h.Config.PublicURL,
-		DeepLink:       deepLink,
-		QRPayload:      deepLink,
-		QRImage:        qrImage,
-	})
-}
-
-// KickUser hard-deletes the user record (cascade removes their devices and
-// alert_recipients rows). Used by the Subscribers dashboard.
+// KickUser hard-deletes the user record (cascade removes their devices,
+// credentials, and alert_recipients rows). This is the spec's Instant
+// Session Invalidation mechanism: once the user row is gone, the JWT
+// middleware's user-existence check fails for every subsequent request
+// carrying an old token.
 func (h *API) KickUser(w http.ResponseWriter, r *http.Request) {
 	userID := chi.URLParam(r, "id")
 	if userID == "" {
