@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import 'connect_org_view_model.dart';
 import 'connect_org_view_state.dart';
@@ -30,7 +31,6 @@ class ConnectOrgPage extends HookConsumerWidget {
     final serverController = useTextEditingController(text: prefillServerUrl);
     final codeController = useTextEditingController(text: prefillCode);
     final theme = Theme.of(context);
-    final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
 
     ref.listen(provider.select((s) => s.event), (_, event) {
@@ -58,7 +58,7 @@ class ConnectOrgPage extends HookConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(title: Text(l10n.connectOrgTitle)),
+          SliverAppBar(pinned: true, title: Text(l10n.connectOrgTitle)),
           SliverFillRemaining(
             hasScrollBody: false,
             child: SafeArea(
@@ -71,28 +71,20 @@ class ConnectOrgPage extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _FieldLabel(
-                      text: l10n.connectOrgServerUrlLabel,
-                      colors: colors,
-                    ),
+                    _FieldLabel(text: l10n.connectOrgServerUrlLabel),
                     const SizedBox(height: AppSpacing.xs),
                     _MonoInput(
                       controller: serverController,
                       hint: l10n.connectOrgServerUrlHint,
-                      colors: colors,
                       onChanged: (v) =>
                           ref.read(provider.notifier).onServerUrlChanged(v),
                     ),
                     const SizedBox(height: AppSpacing.md),
-                    _FieldLabel(
-                      text: l10n.connectOrgInvitationCodeLabel,
-                      colors: colors,
-                    ),
+                    _FieldLabel(text: l10n.connectOrgInvitationCodeLabel),
                     const SizedBox(height: AppSpacing.xs),
                     _MonoInput(
                       controller: codeController,
                       hint: l10n.connectOrgInvitationCodeHint,
-                      colors: colors,
                       textCapitalization: TextCapitalization.characters,
                       onChanged: (v) => ref
                           .read(provider.notifier)
@@ -104,6 +96,7 @@ class ConnectOrgPage extends HookConsumerWidget {
                         final isSubmitting = ref.watch(
                           provider.select((s) => s.isSubmitting),
                         );
+                        final colors = context.harkColors;
                         return SizedBox(
                           height: 56,
                           child: FilledButton(
@@ -114,27 +107,25 @@ class ConnectOrgPage extends HookConsumerWidget {
                                       .onSubmitTapped(),
                             style: FilledButton.styleFrom(
                               backgroundColor: colors.critical,
-                              foregroundColor: Colors.white,
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
                             child: isSubmitting
-                                ? const SizedBox(
+                                ? SizedBox(
                                     width: 20,
                                     height: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      color: Colors.white,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary,
                                     ),
                                   )
-                                : Text(
-                                    l10n.connectOrgSubmit,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                                : Text(l10n.connectOrgSubmit),
                           ),
                         );
                       },
@@ -154,9 +145,8 @@ class ConnectOrgPage extends HookConsumerWidget {
                             children: [
                               TextSpan(
                                 text: l10n.connectOrgViewList,
-                                style: theme.textTheme.bodyMedium?.copyWith(
+                                style: theme.textTheme.titleSmall?.copyWith(
                                   color: theme.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -176,10 +166,9 @@ class ConnectOrgPage extends HookConsumerWidget {
 }
 
 class _FieldLabel extends StatelessWidget {
-  const _FieldLabel({required this.text, required this.colors});
+  const _FieldLabel({required this.text});
 
   final String text;
-  final AppColorSchemeExtension colors;
 
   @override
   Widget build(BuildContext context) {
@@ -187,8 +176,6 @@ class _FieldLabel extends StatelessWidget {
       text,
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.02,
       ),
     );
   }
@@ -198,33 +185,34 @@ class _MonoInput extends StatelessWidget {
   const _MonoInput({
     required this.controller,
     required this.hint,
-    required this.colors,
     required this.onChanged,
     this.textCapitalization = TextCapitalization.none,
   });
 
   final TextEditingController controller;
   final String hint;
-  final AppColorSchemeExtension colors;
   final ValueChanged<String> onChanged;
   final TextCapitalization textCapitalization;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
     return TextField(
       controller: controller,
       onChanged: onChanged,
       textCapitalization: textCapitalization,
-      style: const TextStyle(
-        fontFamily: 'Menlo',
-        fontSize: 15,
-        color: Color(0xFFE4E4E7),
+      style: AppTheme.monoStyle(
+        theme.textTheme.bodyLarge?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(
-          fontFamily: 'Menlo',
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+        hintStyle: AppTheme.monoStyle(
+          theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+          ),
         ),
         filled: true,
         fillColor: colors.surfaceInput,

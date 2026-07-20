@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import 'active_alert_view_model.dart';
 import 'active_alert_view_state.dart';
@@ -112,23 +113,25 @@ class _Content extends ConsumerWidget {
           l10n.activeAlertHeader(_shortOrg(state.orgId)),
           style: theme.textTheme.labelSmall?.copyWith(
             color: colors.criticalTextMuted,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.02,
           ),
         ),
         const SizedBox(height: AppSpacing.md),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
           decoration: BoxDecoration(
             color: state.isCritical ? colors.critical : colors.warning,
             borderRadius: BorderRadius.circular(100),
           ),
           child: Text(
             state.type.toUpperCase(),
-            style: TextStyle(
-              color: state.isCritical ? Colors.white : const Color(0xFF241A04),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: state.isCritical
+                  ? theme.colorScheme.onPrimary
+                  : theme.colorScheme.onSecondary,
               fontWeight: FontWeight.w800,
-              fontSize: 13,
               letterSpacing: 0.08,
             ),
           ),
@@ -140,7 +143,7 @@ class _Content extends ConsumerWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: colors.criticalBorder),
           ),
-          padding: const EdgeInsets.all(22),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -175,10 +178,8 @@ class _Content extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
         Text(
           _elapsed(l10n, state.triggeredAt),
-          style: TextStyle(
-            fontFamily: 'Menlo',
-            color: colors.criticalTextDim,
-            fontSize: 13,
+          style: AppTheme.monoStyle(
+            theme.textTheme.bodySmall?.copyWith(color: colors.criticalTextDim),
           ),
         ),
       ],
@@ -199,17 +200,19 @@ class _ResolvedContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
           decoration: BoxDecoration(
             color: colors.borderSubtle,
             borderRadius: BorderRadius.circular(100),
           ),
           child: Text(
             state.type.toUpperCase(),
-            style: TextStyle(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               fontWeight: FontWeight.w800,
-              fontSize: 13,
               letterSpacing: 0.08,
             ),
           ),
@@ -227,10 +230,9 @@ class _ResolvedContent extends StatelessWidget {
             children: [
               Text(
                 _resolutionHeadline(l10n, state.outcome!),
-                style: TextStyle(
-                  color: colors.resolvedText,
+                style: theme.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  fontSize: 15,
+                  color: colors.resolvedText,
                 ),
               ),
               const SizedBox(height: AppSpacing.xs),
@@ -289,6 +291,8 @@ class _KeyValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final effectiveValueColor = valueColor ?? theme.colorScheme.onPrimary;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -296,17 +300,26 @@ class _KeyValue extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(color: colors.criticalTextDim, fontSize: 13),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            color: valueColor ?? Colors.white,
-            fontWeight: valueBold ? FontWeight.w700 : FontWeight.w600,
-            fontSize: 15,
-            fontFamily: monoValue ? 'Menlo' : null,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: colors.criticalTextDim,
           ),
         ),
+        monoValue
+            ? Text(
+                value,
+                style: AppTheme.monoStyle(
+                  theme.textTheme.bodySmall?.copyWith(
+                    color: effectiveValueColor,
+                  ),
+                ),
+              )
+            : Text(
+                value,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: valueBold ? FontWeight.w700 : FontWeight.w600,
+                  color: effectiveValueColor,
+                ),
+              ),
       ],
     );
   }
@@ -318,7 +331,7 @@ class _CriticalDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 1,
-      margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm + 6),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       color: context.harkColors.criticalBorder,
     );
   }
@@ -332,6 +345,7 @@ class _ActionButtons extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(provider);
     final colors = context.harkColors;
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     if (state.isResolved) {
@@ -346,15 +360,9 @@ class _ActionButtons extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             backgroundColor: colors.surfaceInput,
+            foregroundColor: theme.colorScheme.onSurfaceVariant,
           ),
-          child: Text(
-            l10n.activeAlertDismiss,
-            style: const TextStyle(
-              color: Color(0xFFC8C8CE),
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
-          ),
+          child: Text(l10n.activeAlertDismiss),
         ),
       );
     }
@@ -370,30 +378,29 @@ class _ActionButtons extends ConsumerWidget {
                 : () => ref.read(provider.notifier).onAckTapped(),
             style: FilledButton.styleFrom(
               backgroundColor: colors.critical,
-              foregroundColor: Colors.white,
+              foregroundColor: theme.colorScheme.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
             child: state.isSending
-                ? const SizedBox(
+                ? SizedBox(
                     height: 22,
                     width: 22,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: Colors.white,
+                      color: theme.colorScheme.onPrimary,
                     ),
                   )
                 : Text(
                     l10n.activeAlertAck,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 17,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
           ),
         ),
-        const SizedBox(height: AppSpacing.sm + 4),
+        const SizedBox(height: 12),
         SizedBox(
           height: 56,
           width: double.infinity,
@@ -409,10 +416,8 @@ class _ActionButtons extends ConsumerWidget {
             ),
             child: Text(
               l10n.activeAlertDecline,
-              style: TextStyle(
+              style: theme.textTheme.labelLarge?.copyWith(
                 color: colors.criticalTextMuted,
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
               ),
             ),
           ),

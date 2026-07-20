@@ -39,14 +39,26 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/',
         builder: (context, state) => const ListOrganizationPage(),
-      ),
-      GoRoute(
-        path: '/connect',
-        builder: (context, state) {
-          final server = state.uri.queryParameters['server'] ?? '';
-          final code = state.uri.queryParameters['code'] ?? '';
-          return ConnectOrgPage(prefillServerUrl: server, prefillCode: code);
-        },
+        routes: [
+          GoRoute(
+            path: 'connect',
+            builder: (context, state) {
+              final server = state.uri.queryParameters['server'] ?? '';
+              final code = state.uri.queryParameters['code'] ?? '';
+              return ConnectOrgPage(
+                prefillServerUrl: server,
+                prefillCode: code,
+              );
+            },
+          ),
+          GoRoute(
+            path: 'orgs/:orgId/history',
+            builder: (context, state) {
+              final org = state.pathParameters['orgId'] ?? '';
+              return ListAlertHistoryPage(orgId: org);
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/alert/:id',
@@ -56,21 +68,16 @@ GoRouter router(Ref ref) {
           final type = state.uri.queryParameters['type'] ?? 'critical';
           return ShowActiveAlertPage(alertId: id, orgId: org, type: type);
         },
-      ),
-      GoRoute(
-        path: '/alert/:id/detail',
-        builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          final org = state.uri.queryParameters['org'] ?? '';
-          return ViewAlertDetailPage(orgId: org, alertId: id);
-        },
-      ),
-      GoRoute(
-        path: '/orgs/:orgId/history',
-        builder: (context, state) {
-          final org = state.pathParameters['orgId'] ?? '';
-          return ListAlertHistoryPage(orgId: org);
-        },
+        routes: [
+          GoRoute(
+            path: 'detail',
+            builder: (context, state) {
+              final id = state.pathParameters['id'] ?? '';
+              final org = state.uri.queryParameters['org'] ?? '';
+              return ViewAlertDetailPage(orgId: org, alertId: id);
+            },
+          ),
+        ],
       ),
     ],
   );

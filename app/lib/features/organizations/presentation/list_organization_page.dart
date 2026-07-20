@@ -47,7 +47,7 @@ class ListOrganizationPage extends ConsumerWidget {
                       onTap: () => context.go('/connect'),
                       borderRadius: BorderRadius.circular(14),
                       child: Container(
-                        height: 52,
+                        height: 48,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
@@ -59,17 +59,16 @@ class ListOrganizationPage extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.add,
                               size: 20,
-                              color: Color(0xFF8A8A90),
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: AppSpacing.sm),
                             Text(
                               l10n.orgListAdd,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: const Color(0xFFC8C8CE),
-                                fontWeight: FontWeight.w600,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -109,7 +108,7 @@ class _OrgList extends ConsumerWidget {
         }
         return ListView.separated(
           itemCount: rows.length,
-          separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm + 4),
+          separatorBuilder: (_, _) => const SizedBox(height: 12),
           itemBuilder: (context, i) {
             final row = rows[i];
             return OrganizationCard(
@@ -149,13 +148,7 @@ class _EmptyState extends StatelessWidget {
             color: colors.borderSubtle,
           ),
           const SizedBox(height: AppSpacing.md),
-          Text(
-            l10n.orgListEmptyHeadline,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          Text(l10n.orgListEmptyHeadline, style: theme.textTheme.titleMedium),
           const SizedBox(height: AppSpacing.xs),
           Text(
             l10n.orgListEmptyBody,

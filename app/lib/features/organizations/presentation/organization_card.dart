@@ -29,7 +29,7 @@ class OrganizationCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF151517),
+          color: theme.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isCurrent
@@ -53,25 +53,17 @@ class OrganizationCard extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     row.initials,
-                    style: const TextStyle(
-                      color: Color(0xFFE4E4E7),
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.sm + 2),
+                const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        row.orgName,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onSurface,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text(row.orgName, style: theme.textTheme.titleMedium),
                       Text(
                         row.serverUrl,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -87,8 +79,8 @@ class OrganizationCard extends StatelessWidget {
                 ),
                 if (isCurrent)
                   Container(
-                    width: 9,
-                    height: 9,
+                    width: 8,
+                    height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: colors.critical,
@@ -110,13 +102,8 @@ class OrganizationCard extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: onLeave,
-                  child: Text(
-                    l10n.orgCardDisconnect,
-                    style: TextStyle(
-                      color: colors.critical,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  style: TextButton.styleFrom(foregroundColor: colors.critical),
+                  child: Text(l10n.orgCardDisconnect),
                 ),
               ],
             ),

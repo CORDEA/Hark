@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import 'alert_detail_view_model.dart';
 import 'alert_detail_view_state.dart';
@@ -27,18 +27,37 @@ class ViewAlertDetailPage extends ConsumerWidget {
       orgId: orgId,
       alertId: alertId,
     );
+    final orgName = ref.watch(
+      provider.select((s) => s.value?.orgName ?? orgId),
+    );
     final async = ref.watch(provider);
 
     return Scaffold(
-      body: SafeArea(
-        child: async.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => _ErrorView(
-            error: e,
-            onRetry: () => ref.read(provider.notifier).onRetryTapped(),
-          ),
-          data: (state) => _Body(state: state),
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(pinned: true, title: Text(orgName)),
+          if (async.isLoading)
+            const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (async.hasError)
+            SliverFillRemaining(
+              child: _ErrorView(
+                error: async.error!,
+                onRetry: () => ref.read(provider.notifier).onRetryTapped(),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.xl,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: _Body(state: async.requireValue),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -86,106 +105,79 @@ class _Body extends StatelessWidget {
     final colors = context.harkColors;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.xl,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.go('/');
-                  }
-                },
-                child: Text(
-                  l10n.alertDetailBack(state.orgName),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatusPills(state: state),
+        const SizedBox(height: AppSpacing.md),
+        _MetaCard(state: state),
+        const SizedBox(height: AppSpacing.lg),
+        if (state.acknowledged.isNotEmpty) ...[
+          _SectionLabel(
+            l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
           ),
-          const SizedBox(height: AppSpacing.lg),
-          _StatusPills(state: state),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.acknowledged.map(_ackRow),
           const SizedBox(height: AppSpacing.md),
-          _MetaCard(state: state),
-          const SizedBox(height: AppSpacing.lg),
-          if (state.acknowledged.isNotEmpty) ...[
-            _SectionLabel(
-              l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            ...state.acknowledged.map(_ackRow),
-            const SizedBox(height: AppSpacing.md),
-          ],
-          if (state.pending.isNotEmpty) ...[
-            _SectionLabel(l10n.alertDetailSectionPending(state.pending.length)),
-            const SizedBox(height: AppSpacing.sm),
-            ...state.pending.map(
-              (r) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  r.name,
-                  style: TextStyle(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-          ],
-          if (state.declined.isNotEmpty) ...[
-            _SectionLabel(
-              l10n.alertDetailSectionDeclined(state.declined.length),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            ...state.declined.map(
-              (r) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  r.name,
-                  style: TextStyle(color: colors.declineText),
-                ),
-              ),
-            ),
-          ],
         ],
-      ),
+        if (state.pending.isNotEmpty) ...[
+          _SectionLabel(l10n.alertDetailSectionPending(state.pending.length)),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.pending.map(
+            (r) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+              child: Text(
+                r.name,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+        ],
+        if (state.declined.isNotEmpty) ...[
+          _SectionLabel(l10n.alertDetailSectionDeclined(state.declined.length)),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.declined.map(
+            (r) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+              child: Text(
+                r.name,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.declineText,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 
   Widget _ackRow(AlertDetailRecipientViewState r) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Builder(
         builder: (context) => Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               r.name,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
               ),
             ),
             Text(
               r.respondedAt != null
                   ? _fmtTime(r.respondedAt!)
                   : AppLocalizations.of(context).alertDetailValueEmpty,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontFamily: 'Menlo',
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.5),
+              style: AppTheme.monoStyle(
+                Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
               ),
             ),
           ],
@@ -252,7 +244,10 @@ class _Pill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(100),
@@ -260,12 +255,9 @@ class _Pill extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: foreground,
-          fontWeight: FontWeight.w800,
-          fontSize: 12,
-          letterSpacing: 0.06,
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(color: foreground),
       ),
     );
   }
@@ -277,10 +269,11 @@ class _MetaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.harkColors;
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF151517),
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: colors.borderSubtle),
       ),
@@ -340,8 +333,25 @@ class _MetaCard extends StatelessWidget {
     bool bold = false,
   }) {
     final theme = Theme.of(context);
+    final TextStyle? valueStyle;
+    if (mono) {
+      valueStyle = AppTheme.monoStyle(
+        theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      );
+    } else if (bold) {
+      valueStyle = theme.textTheme.titleSmall?.copyWith(
+        fontWeight: FontWeight.w700,
+        color: theme.colorScheme.onSurfaceVariant,
+      );
+    } else {
+      valueStyle = theme.textTheme.titleSmall?.copyWith(
+        color: theme.colorScheme.onSurfaceVariant,
+      );
+    }
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -355,12 +365,7 @@ class _MetaCard extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: TextStyle(
-                fontFamily: mono ? 'Menlo' : null,
-                fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
-                color: const Color(0xFFE4E4E7),
-                fontSize: mono ? 13 : 14,
-              ),
+              style: valueStyle,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
@@ -381,7 +386,6 @@ class _SectionLabel extends StatelessWidget {
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
         fontWeight: FontWeight.w700,
-        letterSpacing: 0.02,
       ),
     );
   }
