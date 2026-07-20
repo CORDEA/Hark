@@ -29,7 +29,7 @@ class SecureOrgStore {
 
   Future<List<OrgProfile>> readAll() async {
     final raw = await _storage.read(key: _key);
-    if (raw == null || raw.isEmpty) return const [];
+    if (raw == null || raw.isEmpty) return [];
     final decoded = jsonDecode(raw) as List<dynamic>;
     return decoded
         .map((e) => OrgProfile.fromJson(e as Map<String, dynamic>))
