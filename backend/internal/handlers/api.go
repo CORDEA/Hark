@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"gorm.io/gorm"
 
+	"github.com/cordea/hark/internal/auth"
 	"github.com/cordea/hark/internal/config"
 	"github.com/cordea/hark/internal/services/alerts"
 )
@@ -13,4 +15,6 @@ type API struct {
 	DB     *gorm.DB
 	Config config.Config
 	Alerts *alerts.Service
+	RP     *gowebauthn.WebAuthn
+	Signer *auth.Signer
 }

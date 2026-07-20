@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"gorm.io/gorm"
 
+	"github.com/cordea/hark/internal/auth"
 	"github.com/cordea/hark/internal/config"
 	appmw "github.com/cordea/hark/internal/middleware"
 	"github.com/cordea/hark/internal/services/alerts"
@@ -17,10 +19,18 @@ type Deps struct {
 	Config config.Config
 	Web    fs.FS
 	Alerts *alerts.Service
+	RP     *gowebauthn.WebAuthn
+	Signer *auth.Signer
 }
 
 func NewRouter(d Deps) http.Handler {
-	api := &API{DB: d.DB, Config: d.Config, Alerts: d.Alerts}
+	api := &API{
+		DB:     d.DB,
+		Config: d.Config,
+		Alerts: d.Alerts,
+		RP:     d.RP,
+		Signer: d.Signer,
+	}
 
 	r := chi.NewRouter()
 	for _, mw := range appmw.Chain() {
@@ -31,8 +41,26 @@ func NewRouter(d Deps) http.Handler {
 		r.Get("/health", Health)
 		r.Get("/stats", api.Stats)
 		r.Get("/users", api.ListUsers)
+
+		// Passkey-era invitation endpoints. Admin-only enforcement is
+		// delegated to the reverse proxy, matching the existing model.
+		r.Post("/invitations", api.CreateInvitation)
+		r.Get("/invitations", api.ListInvitations)
+		r.Get("/invitations/{code}", api.GetInvitation)
+		r.Delete("/invitations/{code}", api.DeleteInvitation)
+
+		// WebAuthn ceremony endpoints. Both /begin and /finish are
+		// unauthenticated — the invitation code carries the authorization.
+		r.Post("/webauthn/register/begin", api.RegisterBegin)
+		r.Post("/webauthn/register/finish", api.RegisterFinish)
+
+		// Legacy invite/register endpoints. Retained during the migration
+		// window until the mobile client switches over to the passkey
+		// ceremony; removed alongside the User.InvitationCode/Status
+		// trim.
 		r.Post("/invite", api.Invite)
 		r.Post("/register", api.Register)
+
 		r.Post("/users/leave", api.Leave)
 		r.Post("/users/{id}/test-ping", api.TestPing)
 		r.Post("/users/{id}/reinvite", api.Reinvite)
@@ -44,6 +72,11 @@ func NewRouter(d Deps) http.Handler {
 		r.Post("/alerts/{id}/respond", api.RespondAlert)
 		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)
 	})
+
+	// Well-known + universal-link landing page. Public, no auth.
+	r.Get("/.well-known/apple-app-site-association", api.AppleAppSiteAssociation)
+	r.Get("/.well-known/assetlinks.json", api.AndroidAssetLinks)
+	r.Get("/join", api.JoinFallback)
 
 	r.Handle("/*", http.FileServer(http.FS(d.Web)))
 

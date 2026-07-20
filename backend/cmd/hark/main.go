@@ -10,12 +10,14 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/cordea/hark/internal/auth"
 	"github.com/cordea/hark/internal/config"
 	"github.com/cordea/hark/internal/db"
 	"github.com/cordea/hark/internal/handlers"
 	alertsvc "github.com/cordea/hark/internal/services/alerts"
 	"github.com/cordea/hark/internal/services/fcm"
 	"github.com/cordea/hark/internal/services/i18n"
+	wapkg "github.com/cordea/hark/internal/webauthn"
 	"github.com/cordea/hark/internal/webui"
 )
 
@@ -32,6 +34,20 @@ func main() {
 		slog.Error("db open", "err", err)
 		os.Exit(1)
 	}
+
+	meta, err := db.EnsureServerMeta(gdb, cfg)
+	if err != nil {
+		slog.Error("server meta", "err", err)
+		os.Exit(1)
+	}
+
+	rp, err := wapkg.BuildRP(cfg, meta)
+	if err != nil {
+		slog.Error("webauthn init", "err", err)
+		os.Exit(1)
+	}
+
+	signer := auth.NewSigner(meta.JWTSigningKey, cfg.PublicURL)
 
 	sender, err := fcm.New(ctx, cfg.FCMCredentials)
 	if err != nil {
@@ -53,6 +69,8 @@ func main() {
 		Config: cfg,
 		Web:    webSub,
 		Alerts: alertService,
+		RP:     rp,
+		Signer: signer,
 	})
 
 	srv := &http.Server{

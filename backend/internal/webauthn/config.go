@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/go-webauthn/webauthn/protocol"
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 
 	"github.com/cordea/hark/internal/config"
@@ -13,14 +14,25 @@ import (
 )
 
 // BuildRP constructs the go-webauthn RP handle from static config and the
-// per-server ServerMeta row.
+// per-server ServerMeta row. Defaults follow plan §3.4: attestation=none,
+// user verification required, resident key required.
 func BuildRP(cfg config.Config, meta models.ServerMeta) (*gowebauthn.WebAuthn, error) {
 	origins := []string{cfg.PublicURL}
 	// TODO(passkey): honor EXTRA_ORIGINS env once we introduce it in config.
 	wcfg := &gowebauthn.Config{
-		RPID:          meta.RPID,
-		RPDisplayName: cfg.OrgName,
-		RPOrigins:     origins,
+		RPID:                  meta.RPID,
+		RPDisplayName:         cfg.OrgName,
+		RPOrigins:             origins,
+		AttestationPreference: protocol.PreferNoAttestation,
+		AuthenticatorSelection: protocol.AuthenticatorSelection{
+			ResidentKey:      protocol.ResidentKeyRequirementRequired,
+			UserVerification: protocol.VerificationRequired,
+		},
+		// EncodeUserIDAsString keeps the WebAuthn user handle as a raw
+		// UTF-8 UUID string on the wire, matching what the Corbado
+		// `passkeys` Flutter plugin (and the ASAuthorization / Credential
+		// Manager platform APIs it wraps) expect.
+		EncodeUserIDAsString: true,
 	}
 	w, err := gowebauthn.New(wcfg)
 	if err != nil {

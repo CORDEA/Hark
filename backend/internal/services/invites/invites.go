@@ -1,4 +1,4 @@
-// Package invites generates invitation codes and deep-link payloads.
+// Package invites generates invitation codes and universal-link payloads.
 package invites
 
 import (
@@ -23,7 +23,12 @@ func NewCode() (string, error) {
 	return raw[:4] + "-" + raw[4:], nil
 }
 
-// DeepLink returns hark://join?server=<url>&code=<code>.
+// DeepLink returns the legacy hark:// invitation URL. Retained during the
+// passkey migration so the current invite → register handlers keep working
+// until they are removed alongside the invitation-code auth model.
+//
+// Deprecated: use [UniversalLink]; scheduled for removal once the legacy
+// register endpoint is deleted.
 func DeepLink(publicURL, code string) string {
 	q := url.Values{}
 	q.Set("server", publicURL)
@@ -31,10 +36,22 @@ func DeepLink(publicURL, code string) string {
 	return "hark://join?" + q.Encode()
 }
 
+// UniversalLink returns https://<PUBLIC_HOST>/join?code=<code>.
+// Universal links replace the pre-passkey hark:// scheme so the same host
+// binding used for passkeys does double duty for invitations (per spec §0).
+func UniversalLink(publicURL, code string) string {
+	u, err := url.Parse(publicURL)
+	if err != nil {
+		return publicURL + "/join?code=" + url.QueryEscape(code)
+	}
+	u.Path = "/join"
+	q := u.Query()
+	q.Set("code", code)
+	u.RawQuery = q.Encode()
+	return u.String()
+}
+
 // QRDataURL renders payload as a QR code PNG and returns it as a data URL.
-// Generating server-side removes the admin UI's dependency on a third-party
-// CDN — which was silently failing behind restrictive networks and surfacing
-// as "QRCode is not defined".
 func QRDataURL(payload string) (string, error) {
 	png, err := qrcode.Encode(payload, qrcode.Medium, 280)
 	if err != nil {
