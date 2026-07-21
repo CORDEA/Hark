@@ -58,7 +58,7 @@ class OrgRepository {
         authToken: profile.authToken,
       );
       final ds = OrgRemoteDataSource(dio);
-      await ds.leave(userId: profile.userId, fcmToken: fcmToken);
+      await ds.leave(fcmToken: fcmToken);
     } catch (_) {
       // Swallow — a rotated key or offline network shouldn't trap the user.
     }

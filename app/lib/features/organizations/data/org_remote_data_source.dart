@@ -8,11 +8,13 @@ class OrgRemoteDataSource {
 
   final Dio _dio;
 
-  Future<void> leave({required String userId, required String fcmToken}) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      '/api/users/leave',
-      data: {'user_id': userId, 'fcm_token': fcmToken},
+  Future<void> leave({required String fcmToken}) async {
+    final res = await _dio.delete<Map<String, dynamic>>(
+      '/api/devices/self',
+      data: {'fcm_token': fcmToken},
     );
+    // 204 No Content is the success shape — nothing to unwrap.
+    if (res.statusCode == 204) return;
     _unwrapData(res.data);
   }
 }

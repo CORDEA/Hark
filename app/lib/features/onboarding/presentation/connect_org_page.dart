@@ -156,7 +156,9 @@ class _InputPane extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                child: isBusy ? _spinner(context) : Text(l10n.connectOrgLookup),
+                child: isBusy
+                    ? const _ButtonSpinner()
+                    : Text(l10n.connectOrgLookup),
               ),
             );
           },
@@ -236,12 +238,14 @@ class _ConfirmPane extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _kv(context, l10n.connectOrgServerUrlLabel, state.serverUrl),
+              _KeyValue(
+                label: l10n.connectOrgServerUrlLabel,
+                value: state.serverUrl,
+              ),
               const SizedBox(height: AppSpacing.sm),
-              _kv(
-                context,
-                l10n.connectOrgInvitationCodeLabel,
-                state.invitationCode,
+              _KeyValue(
+                label: l10n.connectOrgInvitationCodeLabel,
+                value: state.invitationCode,
               ),
             ],
           ),
@@ -271,7 +275,9 @@ class _ConfirmPane extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: isBusy ? _spinner(context) : Text(l10n.connectOrgConfirmCta),
+            child: isBusy
+                ? const _ButtonSpinner()
+                : Text(l10n.connectOrgConfirmCta),
           ),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -286,8 +292,16 @@ class _ConfirmPane extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Widget _kv(BuildContext context, String label, String value) {
+class _KeyValue extends StatelessWidget {
+  const _KeyValue({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,11 +398,18 @@ class _MonoInput extends StatelessWidget {
   }
 }
 
-Widget _spinner(BuildContext context) => SizedBox(
-  width: 20,
-  height: 20,
-  child: CircularProgressIndicator(
-    strokeWidth: 2,
-    color: Theme.of(context).colorScheme.onPrimary,
-  ),
-);
+class _ButtonSpinner extends StatelessWidget {
+  const _ButtonSpinner();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
+    );
+  }
+}

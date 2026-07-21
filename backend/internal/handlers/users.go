@@ -1,13 +1,9 @@
 package handlers
 
 import (
-	"errors"
 	"log/slog"
 	"net/http"
-	"strings"
 	"time"
-
-	"gorm.io/gorm"
 
 	"github.com/cordea/hark/internal/models"
 )
@@ -60,57 +56,3 @@ func (h *API) ListUsers(w http.ResponseWriter, r *http.Request) {
 	ok(w, views)
 }
 
-type leaveRequest struct {
-	UserID   string `json:"user_id"`
-	FCMToken string `json:"fcm_token"`
-}
-
-// Leave removes the caller's device. Still auth-less during the migration
-// window; M4 flips it to a JWT-guarded DELETE /api/devices/self.
-func (h *API) Leave(w http.ResponseWriter, r *http.Request) {
-	var req leaveRequest
-	if err := decodeJSON(r, &req); err != nil {
-		fail(w, http.StatusBadRequest, "bad_json", err.Error())
-		return
-	}
-	req.UserID = strings.TrimSpace(req.UserID)
-	req.FCMToken = strings.TrimSpace(req.FCMToken)
-	if req.UserID == "" || req.FCMToken == "" {
-		fail(w, http.StatusBadRequest, "missing_fields", "user_id and fcm_token are required")
-		return
-	}
-
-	err := h.DB.Transaction(func(tx *gorm.DB) error {
-		res := tx.Where("user_id = ? AND fcm_token = ?", req.UserID, req.FCMToken).
-			Delete(&models.Device{})
-		if res.Error != nil {
-			return res.Error
-		}
-		if res.RowsAffected == 0 {
-			return errNotFound
-		}
-
-		var remaining int64
-		if err := tx.Model(&models.Device{}).Where("user_id = ?", req.UserID).Count(&remaining).Error; err != nil {
-			return err
-		}
-		if remaining == 0 {
-			if err := tx.Where("id = ?", req.UserID).Delete(&models.User{}).Error; err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-
-	switch {
-	case err == nil:
-		ok(w, map[string]string{"status": "left"})
-	case errors.Is(err, errNotFound):
-		fail(w, http.StatusNotFound, "not_found", "device not registered")
-	default:
-		slog.Error("leave", "err", err)
-		fail(w, http.StatusInternalServerError, "db", "could not remove device")
-	}
-}
-
-var errNotFound = errors.New("not found")

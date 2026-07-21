@@ -900,7 +900,7 @@ as List<AlertRecipientDto>,
 /// @nodoc
 mixin _$RespondAlertRequestDto {
 
-@JsonKey(name: 'user_id') String get userId; String get action;
+ String get action;
 /// Create a copy of RespondAlertRequestDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -913,16 +913,16 @@ $RespondAlertRequestDtoCopyWith<RespondAlertRequestDto> get copyWith => _$Respon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RespondAlertRequestDto&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RespondAlertRequestDto&&(identical(other.action, action) || other.action == action));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,action);
+int get hashCode => Object.hash(runtimeType,action);
 
 @override
 String toString() {
-  return 'RespondAlertRequestDto(userId: $userId, action: $action)';
+  return 'RespondAlertRequestDto(action: $action)';
 }
 
 
@@ -933,7 +933,7 @@ abstract mixin class $RespondAlertRequestDtoCopyWith<$Res>  {
   factory $RespondAlertRequestDtoCopyWith(RespondAlertRequestDto value, $Res Function(RespondAlertRequestDto) _then) = _$RespondAlertRequestDtoCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'user_id') String userId, String action
+ String action
 });
 
 
@@ -950,10 +950,9 @@ class _$RespondAlertRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of RespondAlertRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? action = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? action = null,}) {
   return _then(_self.copyWith(
-userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
+action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1039,10 +1038,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String userId,  String action)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String action)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RespondAlertRequestDto() when $default != null:
-return $default(_that.userId,_that.action);case _:
+return $default(_that.action);case _:
   return orElse();
 
 }
@@ -1060,10 +1059,10 @@ return $default(_that.userId,_that.action);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String userId,  String action)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String action)  $default,) {final _that = this;
 switch (_that) {
 case _RespondAlertRequestDto():
-return $default(_that.userId,_that.action);case _:
+return $default(_that.action);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1080,10 +1079,10 @@ return $default(_that.userId,_that.action);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'user_id')  String userId,  String action)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String action)?  $default,) {final _that = this;
 switch (_that) {
 case _RespondAlertRequestDto() when $default != null:
-return $default(_that.userId,_that.action);case _:
+return $default(_that.action);case _:
   return null;
 
 }
@@ -1095,10 +1094,9 @@ return $default(_that.userId,_that.action);case _:
 @JsonSerializable()
 
 class _RespondAlertRequestDto implements RespondAlertRequestDto {
-  const _RespondAlertRequestDto({@JsonKey(name: 'user_id') required this.userId, required this.action});
+  const _RespondAlertRequestDto({required this.action});
   factory _RespondAlertRequestDto.fromJson(Map<String, dynamic> json) => _$RespondAlertRequestDtoFromJson(json);
 
-@override@JsonKey(name: 'user_id') final  String userId;
 @override final  String action;
 
 /// Create a copy of RespondAlertRequestDto
@@ -1114,16 +1112,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RespondAlertRequestDto&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.action, action) || other.action == action));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RespondAlertRequestDto&&(identical(other.action, action) || other.action == action));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,action);
+int get hashCode => Object.hash(runtimeType,action);
 
 @override
 String toString() {
-  return 'RespondAlertRequestDto(userId: $userId, action: $action)';
+  return 'RespondAlertRequestDto(action: $action)';
 }
 
 
@@ -1134,7 +1132,7 @@ abstract mixin class _$RespondAlertRequestDtoCopyWith<$Res> implements $RespondA
   factory _$RespondAlertRequestDtoCopyWith(_RespondAlertRequestDto value, $Res Function(_RespondAlertRequestDto) _then) = __$RespondAlertRequestDtoCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'user_id') String userId, String action
+ String action
 });
 
 
@@ -1151,10 +1149,9 @@ class __$RespondAlertRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of RespondAlertRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? action = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? action = null,}) {
   return _then(_RespondAlertRequestDto(
-userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
+action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

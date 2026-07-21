@@ -256,6 +256,30 @@ abstract class AppLocalizations {
   /// **'Disconnect'**
   String get orgCardDisconnect;
 
+  /// No description provided for @orgCardStatusLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get orgCardStatusLoading;
+
+  /// No description provided for @orgCardStatusReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in again to reconnect'**
+  String get orgCardStatusReconnect;
+
+  /// No description provided for @orgCardStatusOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get orgCardStatusOffline;
+
+  /// No description provided for @orgCardCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{devices, plural, one{{devices} device} other{{devices} devices}} · {credentials, plural, one{{credentials} passkey} other{{credentials} passkeys}}'**
+  String orgCardCounts(int devices, int credentials);
+
   /// No description provided for @activeAlertHeader.
   ///
   /// In en, this message translates to:

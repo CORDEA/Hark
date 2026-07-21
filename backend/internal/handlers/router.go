@@ -59,16 +59,17 @@ func NewRouter(d Deps) http.Handler {
 		r.Group(func(r chi.Router) {
 			r.Use(appmw.JWT(d.DB, d.Signer))
 			r.Post("/devices", api.RegisterDevice)
+			r.Delete("/devices/self", api.DeleteSelfDevice)
+			r.Get("/me", api.Me)
+			r.Post("/alerts/{id}/respond", api.RespondAlert)
 		})
 
-		r.Post("/users/leave", api.Leave)
 		r.Post("/users/{id}/test-ping", api.TestPing)
 		r.Delete("/users/{id}", api.KickUser)
 
 		r.Get("/alerts", api.ListAlerts)
 		r.Get("/alerts/{id}", api.GetAlert)
 		r.Post("/alerts/trigger", api.TriggerAlert)
-		r.Post("/alerts/{id}/respond", api.RespondAlert)
 		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)
 	})
 

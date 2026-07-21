@@ -24,6 +24,10 @@ class OrganizationCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
+    final title = switch (row.status) {
+      OrgRowStatusOk(:final orgName) => orgName,
+      _ => row.fallbackName,
+    };
     return InkWell(
       onTap: onOpen,
       borderRadius: BorderRadius.circular(16),
@@ -63,7 +67,7 @@ class OrganizationCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(row.orgName, style: theme.textTheme.titleMedium),
+                      Text(title, style: theme.textTheme.titleMedium),
                       Text(
                         row.serverUrl,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -94,11 +98,8 @@ class OrganizationCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  l10n.orgCardNotificationsOn,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
+                Expanded(
+                  child: _StatusLine(status: row.status, colors: colors),
                 ),
                 TextButton(
                   onPressed: onLeave,
@@ -110,6 +111,40 @@ class OrganizationCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StatusLine extends StatelessWidget {
+  const _StatusLine({required this.status, required this.colors});
+
+  final OrgRowStatus status;
+  final AppColorSchemeExtension colors;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final (text, color) = switch (status) {
+      OrgRowStatusLoading() => (
+        l10n.orgCardStatusLoading,
+        theme.colorScheme.onSurface.withValues(alpha: 0.6),
+      ),
+      OrgRowStatusOk(:final devicesCount, :final credentialsCount) => (
+        l10n.orgCardCounts(devicesCount, credentialsCount),
+        theme.colorScheme.onSurface.withValues(alpha: 0.6),
+      ),
+      OrgRowStatusReconnect() => (l10n.orgCardStatusReconnect, colors.critical),
+      OrgRowStatusOffline() => (
+        l10n.orgCardStatusOffline,
+        theme.colorScheme.onSurface.withValues(alpha: 0.6),
+      ),
+    };
+    return Text(
+      text,
+      style: theme.textTheme.bodySmall?.copyWith(color: color),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

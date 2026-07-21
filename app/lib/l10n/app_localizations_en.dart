@@ -99,6 +99,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orgCardDisconnect => 'Disconnect';
 
   @override
+  String get orgCardStatusLoading => 'Checking…';
+
+  @override
+  String get orgCardStatusReconnect => 'Sign in again to reconnect';
+
+  @override
+  String get orgCardStatusOffline => 'Offline';
+
+  @override
+  String orgCardCounts(int devices, int credentials) {
+    String _temp0 = intl.Intl.pluralLogic(
+      devices,
+      locale: localeName,
+      other: '$devices devices',
+      one: '$devices device',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      credentials,
+      locale: localeName,
+      other: '$credentials passkeys',
+      one: '$credentials passkey',
+    );
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
   String activeAlertHeader(String org) {
     return 'Alert · $org';
   }

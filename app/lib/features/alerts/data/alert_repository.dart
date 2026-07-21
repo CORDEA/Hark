@@ -16,8 +16,8 @@ AlertRepository alertRepository(Ref ref) => AlertRepository(
 
 /// Talks to a specific org's Hark server. Callers pass the [serverUrl] (which
 /// doubles as the org identifier in the FCM payload) and the repository looks
-/// up the [OrgProfile] to build a Dio client and, when responding, to supply
-/// the user_id the server expects.
+/// up the [OrgProfile] to build a Dio client with the profile's Bearer JWT —
+/// the responder identity is derived server-side from that token.
 class AlertRepository {
   const AlertRepository(this._orgs, this._apiClientFactory);
 
@@ -52,7 +52,7 @@ class AlertRepository {
     );
     return ds.respond(
       alertId: alertId,
-      body: RespondAlertRequestDto(userId: profile.userId, action: action),
+      body: RespondAlertRequestDto(action: action),
     );
   }
 

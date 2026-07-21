@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	appmw "github.com/cordea/hark/internal/middleware"
 	"github.com/cordea/hark/internal/services/alerts"
 )
 
@@ -46,7 +47,6 @@ func (h *API) TriggerAlert(w http.ResponseWriter, r *http.Request) {
 }
 
 type respondRequest struct {
-	UserID string `json:"user_id"`
 	Action string `json:"action"`
 }
 
@@ -57,7 +57,15 @@ type respondResponse struct {
 	ResponderID   *string `json:"responder_id,omitempty"`
 }
 
+// RespondAlert records the caller's acknowledgement or decline. The responder
+// is derived from the JWT — never from the request body — so a compromised
+// device can't answer on someone else's behalf.
 func (h *API) RespondAlert(w http.ResponseWriter, r *http.Request) {
+	user, hasUser := appmw.UserFromContext(r.Context())
+	if !hasUser {
+		fail(w, http.StatusUnauthorized, "unauthorized", "missing user context")
+		return
+	}
 	alertID := chi.URLParam(r, "id")
 	if alertID == "" {
 		fail(w, http.StatusBadRequest, "missing_id", "alert id required")
@@ -68,11 +76,7 @@ func (h *API) RespondAlert(w http.ResponseWriter, r *http.Request) {
 		fail(w, http.StatusBadRequest, "bad_json", err.Error())
 		return
 	}
-	if req.UserID == "" {
-		fail(w, http.StatusBadRequest, "missing_user", "user_id required")
-		return
-	}
-	alert, first, err := h.Alerts.Respond(r.Context(), alertID, req.UserID, req.Action)
+	alert, first, err := h.Alerts.Respond(r.Context(), alertID, user.ID, req.Action)
 	switch {
 	case err == nil:
 		ok(w, respondResponse{

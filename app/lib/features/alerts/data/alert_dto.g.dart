@@ -110,14 +110,11 @@ Map<String, dynamic> _$AlertDetailDtoToJson(_AlertDetailDto instance) =>
 
 _RespondAlertRequestDto _$RespondAlertRequestDtoFromJson(
   Map<String, dynamic> json,
-) => _RespondAlertRequestDto(
-  userId: json['user_id'] as String,
-  action: json['action'] as String,
-);
+) => _RespondAlertRequestDto(action: json['action'] as String);
 
 Map<String, dynamic> _$RespondAlertRequestDtoToJson(
   _RespondAlertRequestDto instance,
-) => <String, dynamic>{'user_id': instance.userId, 'action': instance.action};
+) => <String, dynamic>{'action': instance.action};
 
 _RespondAlertResponseDto _$RespondAlertResponseDtoFromJson(
   Map<String, dynamic> json,

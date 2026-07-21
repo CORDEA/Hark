@@ -63,6 +63,19 @@
   "@orgCardNotificationsOn": {},
   "orgCardDisconnect": "Disconnect",
   "@orgCardDisconnect": {},
+  "orgCardStatusLoading": "Checking…",
+  "@orgCardStatusLoading": {},
+  "orgCardStatusReconnect": "Sign in again to reconnect",
+  "@orgCardStatusReconnect": {},
+  "orgCardStatusOffline": "Offline",
+  "@orgCardStatusOffline": {},
+  "orgCardCounts": "{devices, plural, one{{devices} device} other{{devices} devices}} · {credentials, plural, one{{credentials} passkey} other{{credentials} passkeys}}",
+  "@orgCardCounts": {
+    "placeholders": {
+      "devices": { "type": "int" },
+      "credentials": { "type": "int" }
+    }
+  },
 
   "activeAlertHeader": "Alert · {org}",
   "@activeAlertHeader": {

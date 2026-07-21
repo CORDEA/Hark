@@ -77,10 +77,8 @@ abstract class AlertDetailDto with _$AlertDetailDto {
 
 @freezed
 abstract class RespondAlertRequestDto with _$RespondAlertRequestDto {
-  const factory RespondAlertRequestDto({
-    @JsonKey(name: 'user_id') required String userId,
-    required String action,
-  }) = _RespondAlertRequestDto;
+  const factory RespondAlertRequestDto({required String action}) =
+      _RespondAlertRequestDto;
 
   factory RespondAlertRequestDto.fromJson(Map<String, dynamic> json) =>
       _$RespondAlertRequestDtoFromJson(json);

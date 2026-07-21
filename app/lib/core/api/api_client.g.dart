@@ -66,4 +66,4 @@ final class ApiClientFactoryProvider
   }
 }
 
-String _$apiClientFactoryHash() => r'eb2c58fe1ac6394b1cffa3c69f4a179df0f3e391';
+String _$apiClientFactoryHash() => r'98682a316a82bf9a1802183db74f2532109372f4';
