@@ -125,17 +125,13 @@ Both are unauthenticated JSON, cache-friendly, and public.
 
 ### 2. Wire the mobile build to `PUBLIC_URL`
 
-**iOS.** Edit `app/ios/Runner/Runner.entitlements` and set the associated domains to your `PUBLIC_URL` host. The file ships with `hark.example.com` placeholders:
+**iOS.** `Runner.entitlements` reads the host from the `HARK_LINK_HOST` xcconfig variable (default `hark.example.com` in `ios/Flutter/Debug.xcconfig` and `Release.xcconfig`). Override per-machine without touching tracked files by creating `app/ios/Flutter/Local.xcconfig` (gitignored):
 
-```xml
-<key>com.apple.developer.associated-domains</key>
-<array>
-  <string>applinks:your-hark-host.example.com</string>
-  <string>webcredentials:your-hark-host.example.com</string>
-</array>
+```
+HARK_LINK_HOST = your-hark-host.example.com
 ```
 
-Then enable the entitlements file in Xcode (`Runner` target → Signing & Capabilities → + Capability → Associated Domains). The mapping is not pre-wired into `project.pbxproj` because that file is fragile to hand-edit.
+The `applinks:` and `webcredentials:` entries in `Runner.entitlements` are substituted at build time. Then enable the entitlements file in Xcode (`Runner` target → Signing & Capabilities → + Capability → Associated Domains). The mapping is not pre-wired into `project.pbxproj` because that file is fragile to hand-edit.
 
 **Android.** The app link intent-filter host is a `manifestPlaceholder` named `harkLinkHost` (default `hark.example.com`). Override it at build time:
 
@@ -152,3 +148,7 @@ The manifest's `android:autoVerify="true"` triggers Play Store / device-side ver
 - On Android: `adb shell pm get-app-links <package>` after installing — every domain should read `verified`. If they read `verified? = false`, the assetlinks.json is missing or the fingerprint disagrees.
 
 If any of this drifts (domain change, resigning with a new key), you'll see registration succeed but assertion silently fail with "no matching credential" — the platform authenticator won't hand your app a passkey whose RP ID it no longer trusts.
+
+## Local mobile testing over HTTPS
+
+For Cloudflare Tunnel setup and mobile passkey debugging, see [the Cloudflare Tunnel guide](backend/cloudflared/README.md).

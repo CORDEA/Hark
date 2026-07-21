@@ -1,0 +1,25 @@
+# Named Cloudflare Tunnel config for local mobile testing.
+#
+# Copy to config.yml (gitignored) and fill in the values printed by
+# `cloudflared tunnel create <name>` and `cloudflared tunnel route dns`.
+#
+# One-time setup:
+#   cloudflared tunnel login
+#   cloudflared tunnel create hark-dev
+#   cloudflared tunnel route dns hark-dev <your-host>
+#
+# Run:
+#   backend/scripts/dev-tunnel.sh
+#
+# The tunnel terminates TLS at Cloudflare's edge and forwards plaintext
+# HTTP to the local backend on :8080. Backend must be started separately
+# (docker compose up, or `go run ./cmd/hark`) with PUBLIC_URL set to the
+# https://<hostname> below.
+
+tunnel: <TUNNEL_NAME_OR_UUID>
+credentials-file: <ABSOLUTE_PATH_TO_TUNNEL_CREDENTIALS_JSON>
+
+ingress:
+  - hostname: <YOUR_HOST>
+    service: http://localhost:8080
+  - service: http_status:404

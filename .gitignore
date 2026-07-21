@@ -14,3 +14,8 @@
 /app/.flutter-plugins-dependencies
 /app/build/
 /app/.idea/
+/app/ios/Flutter/Local.xcconfig
+
+# Cloudflare tunnel
+/backend/cloudflared/config.yml
+/backend/cloudflared/*.json

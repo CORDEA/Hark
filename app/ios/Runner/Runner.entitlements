@@ -4,11 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<!-- Replace hark.example.com with your PUBLIC_URL host so both the
-		     Universal Link (/join?code=...) and WebAuthn ceremony resolve
-		     against the same origin. -->
-		<string>applinks:hark.example.com</string>
-		<string>webcredentials:hark.example.com</string>
+		<string>applinks:$(HARK_LINK_HOST)</string>
+		<string>webcredentials:$(HARK_LINK_HOST)</string>
 	</array>
 	<key>aps-environment</key>
 	<string>development</string>
