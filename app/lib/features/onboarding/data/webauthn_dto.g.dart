@@ -29,3 +29,19 @@ _RegisterDeviceResponseDto _$RegisterDeviceResponseDtoFromJson(
 Map<String, dynamic> _$RegisterDeviceResponseDtoToJson(
   _RegisterDeviceResponseDto instance,
 ) => <String, dynamic>{'device_id': instance.deviceId};
+
+_AssertionFinishResponseDto _$AssertionFinishResponseDtoFromJson(
+  Map<String, dynamic> json,
+) => _AssertionFinishResponseDto(
+  userId: json['user_id'] as String,
+  authToken: json['auth_token'] as String,
+  tokenExpiresAt: DateTime.parse(json['token_expires_at'] as String),
+);
+
+Map<String, dynamic> _$AssertionFinishResponseDtoToJson(
+  _AssertionFinishResponseDto instance,
+) => <String, dynamic>{
+  'user_id': instance.userId,
+  'auth_token': instance.authToken,
+  'token_expires_at': instance.tokenExpiresAt.toIso8601String(),
+};

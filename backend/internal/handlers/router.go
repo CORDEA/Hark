@@ -50,9 +50,13 @@ func NewRouter(d Deps) http.Handler {
 		r.Delete("/invitations/{code}", api.DeleteInvitation)
 
 		// WebAuthn ceremony endpoints. Both /begin and /finish are
-		// unauthenticated — the invitation code carries the authorization.
+		// unauthenticated — register uses the invitation code as its
+		// authorization; assertion is a discoverable-credential ceremony
+		// that resolves the user from the signed assertion itself.
 		r.Post("/webauthn/register/begin", api.RegisterBegin)
 		r.Post("/webauthn/register/finish", api.RegisterFinish)
+		r.Post("/webauthn/assertion/begin", api.AssertionBegin)
+		r.Post("/webauthn/assertion/finish", api.AssertionFinish)
 
 		// JWT-guarded endpoints: caller identity is resolved from the token,
 		// never from the body.
@@ -65,6 +69,7 @@ func NewRouter(d Deps) http.Handler {
 		})
 
 		r.Post("/users/{id}/test-ping", api.TestPing)
+		r.Post("/users/{id}/add-device-invitations", api.CreateAddDeviceInvitation)
 		r.Delete("/users/{id}", api.KickUser)
 
 		r.Get("/alerts", api.ListAlerts)

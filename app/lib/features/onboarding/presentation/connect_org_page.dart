@@ -88,9 +88,20 @@ class ConnectOrgPage extends HookConsumerWidget {
                           codeController: codeController,
                         );
                       case ConnectOrgStep.confirm:
+                        return _ConfirmPane(provider: provider);
                       case ConnectOrgStep.registering:
                       case ConnectOrgStep.registeringDevice:
-                        return _ConfirmPane(provider: provider);
+                        // Path A (synced passkey) hits registering/-Device
+                        // without an invitation resolved. Fall back to a
+                        // bare progress pane in that case; the invitation
+                        // flow keeps the confirm chrome for continuity.
+                        final hasInvitation = ref.watch(
+                          provider.select((s) => s.invitation != null),
+                        );
+                        if (hasInvitation) {
+                          return _ConfirmPane(provider: provider);
+                        }
+                        return _ProgressPane(provider: provider);
                     }
                   },
                 ),
@@ -163,6 +174,22 @@ class _InputPane extends ConsumerWidget {
             );
           },
         ),
+        const SizedBox(height: AppSpacing.sm),
+        Consumer(
+          builder: (context, ref, _) {
+            final isBusy = ref.watch(provider.select((s) => s.isBusy));
+            return Center(
+              child: TextButton(
+                onPressed: isBusy
+                    ? null
+                    : () => ref
+                          .read(provider.notifier)
+                          .onUseExistingPasskeyTapped(),
+                child: Text(l10n.connectOrgUseExistingPasskey),
+              ),
+            );
+          },
+        ),
         const SizedBox(height: AppSpacing.md),
         Center(
           child: GestureDetector(
@@ -183,6 +210,35 @@ class _InputPane extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProgressPane extends ConsumerWidget {
+  const _ProgressPane({required this.provider});
+
+  final ConnectOrgViewModelProvider provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final step = ref.watch(provider.select((s) => s.step));
+    final label = step == ConnectOrgStep.registeringDevice
+        ? l10n.connectOrgFinishing
+        : l10n.connectOrgAssertionProgress;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const CircularProgressIndicator(),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          label,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -211,18 +267,26 @@ class _ConfirmPane extends ConsumerWidget {
       _ => null,
     };
 
+    final isAddDevice = invitation.kind == 'add_device';
+    final title = isAddDevice
+        ? l10n.connectOrgConfirmTitleAddDevice(invitation.orgName)
+        : l10n.connectOrgConfirmTitle(invitation.orgName);
+    final body = isAddDevice
+        ? l10n.connectOrgConfirmBodyAddDevice(invitation.orgName)
+        : l10n.connectOrgConfirmBody(invitation.orgName);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          l10n.connectOrgConfirmTitle(invitation.orgName),
+          title,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
-          l10n.connectOrgConfirmBody(invitation.orgName),
+          body,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),

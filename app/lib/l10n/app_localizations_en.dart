@@ -57,6 +57,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String connectOrgConfirmTitleAddDevice(String org) {
+    return 'Add this device to $org?';
+  }
+
+  @override
+  String connectOrgConfirmBodyAddDevice(String org) {
+    return 'You will create an additional passkey on this device that lets you receive alerts from $org.';
+  }
+
+  @override
   String get connectOrgConfirmCta => 'Create passkey';
 
   @override
@@ -72,6 +82,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get connectOrgDeviceFailed =>
       'Registered, but could not enable notifications. You can retry from the org list.';
+
+  @override
+  String get connectOrgUseExistingPasskey =>
+      'I already have a passkey for this server';
+
+  @override
+  String get connectOrgAssertionProgress => 'Signing in with your passkey…';
 
   @override
   String get commonError => 'Something went wrong. Please try again.';
@@ -294,4 +311,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyDisconnectDialogConfirm => 'Disconnect';
+
+  @override
+  String get credentialsTitle => 'Devices & passkeys';
+
+  @override
+  String get credentialsSectionCredentials => 'Passkeys';
+
+  @override
+  String get credentialsSectionDevices => 'Devices';
+
+  @override
+  String get credentialsEmptyCredentials => 'No passkeys registered';
+
+  @override
+  String get credentialsEmptyDevices => 'No devices receiving alerts';
+
+  @override
+  String get credentialsUnnamed => 'Passkey';
+
+  @override
+  String credentialsCreatedAt(String date) {
+    return 'Added $date';
+  }
+
+  @override
+  String credentialsLastUsedAt(String date) {
+    return 'Last used $date';
+  }
+
+  @override
+  String get credentialsNeverUsed => 'Not used yet';
 }

@@ -47,6 +47,39 @@ func (h *API) TestPing(w http.ResponseWriter, r *http.Request) {
 	ok(w, testPingResponse{UserID: userID, Sent: int(deviceCount)})
 }
 
+// CreateAddDeviceInvitation mints an invitation whose target_user_id is the
+// path user. The register ceremony started with this code attaches a fresh
+// credential to that user's row instead of creating a new user (see
+// webauthn.go). Response shape matches CreateInvitation so the admin UI can
+// reuse the same invite card renderer.
+func (h *API) CreateAddDeviceInvitation(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "id")
+	if userID == "" {
+		fail(w, http.StatusBadRequest, "missing_id", "user id required")
+		return
+	}
+
+	var user models.User
+	if err := h.DB.First(&user, "id = ?", userID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fail(w, http.StatusNotFound, "not_found", "user not found")
+			return
+		}
+		slog.Error("load user for add-device", "err", err)
+		fail(w, http.StatusInternalServerError, "db", err.Error())
+		return
+	}
+
+	target := user.ID
+	inv, err := h.mintInvitation(user.DisplayName, &target)
+	if err != nil {
+		slog.Error("mint add-device invitation", "err", err)
+		fail(w, http.StatusInternalServerError, "db", "could not create invitation")
+		return
+	}
+	created(w, h.buildInvitationResponse(inv))
+}
+
 // KickUser hard-deletes the user record (cascade removes their devices,
 // credentials, and alert_recipients rows). This is the spec's Instant
 // Session Invalidation mechanism: once the user row is gone, the JWT

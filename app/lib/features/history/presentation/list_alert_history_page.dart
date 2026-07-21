@@ -44,7 +44,21 @@ class ListAlertHistoryPage extends ConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(pinned: true, title: Text(l10n.historyTitle)),
+          SliverAppBar(
+            pinned: true,
+            title: Text(l10n.historyTitle),
+            actions: [
+              IconButton(
+                tooltip: l10n.credentialsTitle,
+                icon: const Icon(Icons.tune),
+                onPressed: () => context.push(
+                  Uri(
+                    path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
+                  ).toString(),
+                ),
+              ),
+            ],
+          ),
           SliverFillRemaining(
             hasScrollBody: false,
             child: SafeArea(

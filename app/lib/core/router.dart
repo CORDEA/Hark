@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../features/active_alert/presentation/show_active_alert_page.dart';
 import '../features/alert_detail/presentation/view_alert_detail_page.dart';
+import '../features/current_user/presentation/list_credentials_page.dart';
 import '../features/history/presentation/list_alert_history_page.dart';
 import '../features/onboarding/presentation/connect_org_page.dart';
 import '../features/organizations/presentation/list_organization_page.dart';
@@ -58,6 +59,15 @@ GoRouter router(Ref ref) {
                 state.pathParameters['serverUrl'] ?? '',
               );
               return ListAlertHistoryPage(serverUrl: url);
+            },
+          ),
+          GoRoute(
+            path: 'orgs/:serverUrl/credentials',
+            builder: (context, state) {
+              final url = Uri.decodeComponent(
+                state.pathParameters['serverUrl'] ?? '',
+              );
+              return ListCredentialsPage(serverUrl: url);
             },
           ),
           GoRoute(

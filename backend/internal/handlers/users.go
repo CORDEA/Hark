@@ -55,4 +55,3 @@ func (h *API) ListUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	ok(w, views)
 }
-

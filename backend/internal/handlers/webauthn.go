@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
+	"github.com/go-webauthn/webauthn/protocol"
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 
 	"github.com/cordea/hark/internal/models"
@@ -60,17 +61,31 @@ func (h *API) RegisterBegin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var (
+		user      *wapkg.User
+		handle    []byte
+		beginOpts []gowebauthn.RegistrationOption
+	)
 	if inv.TargetUserID != nil {
-		// add_device flow lands in M5.
-		fail(w, http.StatusNotImplemented, "not_implemented", "add-device invitations are not yet supported")
-		return
+		// add_device: reuse the existing user's handle so the credential
+		// attaches to that row on finish. Exclude the user's current
+		// credentials so the platform authenticator doesn't offer them
+		// (would produce a "credential already registered" error).
+		existing, existingCreds, apiErr := h.loadTargetUser(*inv.TargetUserID)
+		if apiErr != nil {
+			apiErr.write(w)
+			return
+		}
+		user = wapkg.NewUser(existing, existingCreds)
+		handle = user.Handle
+		beginOpts = append(beginOpts, gowebauthn.WithExclusions(excludedDescriptors(existingCreds)))
+	} else {
+		displayName := firstNonEmpty(req.DisplayName, inv.DisplayName, "Subscriber")
+		handle = []byte(uuid.NewString())
+		user = wapkg.NewProspectiveUser(handle, displayName)
 	}
 
-	displayName := firstNonEmpty(req.DisplayName, inv.DisplayName, "Subscriber")
-	handle := []byte(uuid.NewString())
-	user := wapkg.NewProspectiveUser(handle, displayName)
-
-	creation, session, err := h.RP.BeginRegistration(user)
+	creation, session, err := h.RP.BeginRegistration(user, beginOpts...)
 	if err != nil {
 		slog.Error("webauthn begin registration", "err", err)
 		fail(w, http.StatusInternalServerError, "webauthn", err.Error())
@@ -138,10 +153,6 @@ func (h *API) RegisterFinish(w http.ResponseWriter, r *http.Request) {
 		apiErr.write(w)
 		return
 	}
-	if inv.TargetUserID != nil {
-		fail(w, http.StatusNotImplemented, "not_implemented", "add-device invitations are not yet supported")
-		return
-	}
 
 	var ch models.WebAuthnChallenge
 	if err := h.DB.
@@ -173,7 +184,24 @@ func (h *API) RegisterFinish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	handle := []byte(*ch.UserID)
-	user := wapkg.NewProspectiveUser(handle, firstNonEmpty(inv.DisplayName, "Subscriber"))
+
+	var user *wapkg.User
+	if inv.TargetUserID != nil {
+		existing, existingCreds, apiErr := h.loadTargetUser(*inv.TargetUserID)
+		if apiErr != nil {
+			apiErr.write(w)
+			return
+		}
+		if string(handle) != existing.ID {
+			// Session handle drifted from the invitation's target — refuse
+			// rather than attach the credential to the wrong user.
+			fail(w, http.StatusBadRequest, "handle_mismatch", "challenge does not match invitation target")
+			return
+		}
+		user = wapkg.NewUser(existing, existingCreds)
+	} else {
+		user = wapkg.NewProspectiveUser(handle, firstNonEmpty(inv.DisplayName, "Subscriber"))
+	}
 
 	// go-webauthn's FinishRegistration expects a *http.Request whose body
 	// is the raw attestation JSON. Reconstruct one from the extracted blob.
@@ -193,17 +221,19 @@ func (h *API) RegisterFinish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := *ch.UserID
-	displayName := firstNonEmpty(inv.DisplayName, "Subscriber")
 	now := time.Now().UTC()
+	isAddDevice := inv.TargetUserID != nil
 
 	err = h.DB.Transaction(func(tx *gorm.DB) error {
-		userRow := models.User{
-			ID:          userID,
-			DisplayName: displayName,
-			CreatedAt:   now,
-		}
-		if err := tx.Create(&userRow).Error; err != nil {
-			return err
+		if !isAddDevice {
+			userRow := models.User{
+				ID:          userID,
+				DisplayName: firstNonEmpty(inv.DisplayName, "Subscriber"),
+				CreatedAt:   now,
+			}
+			if err := tx.Create(&userRow).Error; err != nil {
+				return err
+			}
 		}
 		credRow := models.Credential{
 			UserID:          userID,
@@ -262,6 +292,41 @@ type apiError struct {
 
 func (e *apiError) write(w http.ResponseWriter) {
 	fail(w, e.Status, e.Code, e.Message)
+}
+
+// loadTargetUser fetches the user + credentials referenced by an add_device
+// invitation. Any missing row is a data-integrity issue since invitation
+// creation validates the target — surface it as a 500 rather than swallowing.
+func (h *API) loadTargetUser(userID string) (models.User, []models.Credential, *apiError) {
+	var user models.User
+	if err := h.DB.First(&user, "id = ?", userID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, nil, &apiError{Status: http.StatusGone, Code: "user_gone", Message: "invited user no longer exists"}
+		}
+		slog.Error("load target user", "err", err)
+		return user, nil, &apiError{Status: http.StatusInternalServerError, Code: "db", Message: "lookup failed"}
+	}
+	var creds []models.Credential
+	if err := h.DB.Where("user_id = ?", userID).Find(&creds).Error; err != nil {
+		slog.Error("load target credentials", "err", err)
+		return user, nil, &apiError{Status: http.StatusInternalServerError, Code: "db", Message: "lookup failed"}
+	}
+	return user, creds, nil
+}
+
+// excludedDescriptors converts a user's existing credentials into the
+// PublicKeyCredentialDescriptor list used by BeginRegistration's exclude
+// list — prevents platform authenticators from offering an already-enrolled
+// key during an add-device ceremony.
+func excludedDescriptors(creds []models.Credential) []protocol.CredentialDescriptor {
+	out := make([]protocol.CredentialDescriptor, 0, len(creds))
+	for _, c := range creds {
+		out = append(out, protocol.CredentialDescriptor{
+			Type:         protocol.PublicKeyCredentialType,
+			CredentialID: c.CredentialID,
+		})
+	}
+	return out
 }
 
 func (h *API) loadOpenInvitation(code string) (models.Invitation, *apiError) {

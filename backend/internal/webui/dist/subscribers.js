@@ -38,6 +38,9 @@ function renderRows() {
           <button type="button" title="${escapeHtml(t('subscribers.actions.testPing'))}" data-test-ping="${u.id}"
                   class="w-8 h-8 rounded-md text-sm"
                   style="border:1px solid var(--n-6);color:var(--text-4);background:transparent">↻</button>
+          <button type="button" data-add-device="${u.id}" data-user-name="${escapeHtml(u.display_name)}"
+                  class="h-8 px-3 rounded-md font-semibold text-xs"
+                  style="border:1px solid var(--n-6);color:var(--text-2);background:transparent">${escapeHtml(t('subscribers.actions.addDevice'))}</button>
           <button type="button" data-kick="${u.id}"
                   class="h-8 px-3 rounded-md font-semibold text-xs"
                   style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">${escapeHtml(t('subscribers.actions.kick'))}</button>
@@ -63,6 +66,12 @@ async function refresh() {
 function showInviteCard(data) {
   substate.invite = data;
   q('#invite-card').classList.remove('hidden');
+  const titleEl = q('#invite-card-title');
+  if (titleEl) {
+    titleEl.textContent = data.kind === 'add_device'
+      ? t('invite.cardTitle.addDevice', { name: data.display_name || '' })
+      : t('invite.cardTitle.newUser');
+  }
   q('#invite-server-url').textContent = data.server_url;
   q('#invite-code').textContent = data.code;
   q('#invite-qr').src = data.qr_image;
@@ -139,6 +148,14 @@ async function testPing(id) {
   } catch (e) { alert(t('subscribers.testPing.failed', { error: e.message })); }
 }
 
+async function addDevice(id) {
+  try {
+    const data = await api(`/api/users/${id}/add-device-invitations`, { method: 'POST' });
+    showInviteCard(data);
+    await refresh();
+  } catch (e) { alert(t('subscribers.addDevice.failed', { error: e.message })); }
+}
+
 async function kick(id) {
   if (!confirm(t('subscribers.kick.confirm'))) return;
   try {
@@ -170,8 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
   q('#btn-download-qr').addEventListener('click', downloadQr);
   document.body.addEventListener('click', (e) => {
     const pingId = e.target.closest('[data-test-ping]')?.dataset.testPing;
+    const addId = e.target.closest('[data-add-device]')?.dataset.addDevice;
     const kickId = e.target.closest('[data-kick]')?.dataset.kick;
     if (pingId)     testPing(pingId);
+    else if (addId) addDevice(addId);
     else if (kickId) kick(kickId);
   });
   refresh();

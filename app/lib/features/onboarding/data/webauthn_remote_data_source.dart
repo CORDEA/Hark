@@ -65,6 +65,31 @@ class WebAuthnRemoteDataSource {
     );
     return RegisterDeviceResponseDto.fromJson(_unwrapData(res.data));
   }
+
+  /// Discoverable-credential assertion: no user identifier required — the
+  /// server returns options tied only to the RP ID. Same wrapper stripping
+  /// dance as `registerBegin` since go-webauthn nests options under
+  /// `publicKey`.
+  Future<Map<String, dynamic>> assertionBegin() async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/api/webauthn/assertion/begin',
+    );
+    final data = _unwrapData(res.data);
+    final publicKey = data['publicKey'];
+    if (publicKey is Map<String, dynamic>) return publicKey;
+    return data;
+  }
+
+  Future<AssertionFinishResponseDto> assertionFinish({
+    required String challenge,
+    required Map<String, dynamic> assertion,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/api/webauthn/assertion/finish',
+      data: {'challenge': challenge, 'assertion': assertion},
+    );
+    return AssertionFinishResponseDto.fromJson(_unwrapData(res.data));
+  }
 }
 
 Map<String, dynamic> _unwrapData(Map<String, dynamic>? envelope) {

@@ -178,6 +178,18 @@ abstract class AppLocalizations {
   /// **'You will create a passkey on this device that lets you receive alerts from {org}.'**
   String connectOrgConfirmBody(String org);
 
+  /// No description provided for @connectOrgConfirmTitleAddDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Add this device to {org}?'**
+  String connectOrgConfirmTitleAddDevice(String org);
+
+  /// No description provided for @connectOrgConfirmBodyAddDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'You will create an additional passkey on this device that lets you receive alerts from {org}.'**
+  String connectOrgConfirmBodyAddDevice(String org);
+
   /// No description provided for @connectOrgConfirmCta.
   ///
   /// In en, this message translates to:
@@ -207,6 +219,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registered, but could not enable notifications. You can retry from the org list.'**
   String get connectOrgDeviceFailed;
+
+  /// No description provided for @connectOrgUseExistingPasskey.
+  ///
+  /// In en, this message translates to:
+  /// **'I already have a passkey for this server'**
+  String get connectOrgUseExistingPasskey;
+
+  /// No description provided for @connectOrgAssertionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in with your passkey…'**
+  String get connectOrgAssertionProgress;
 
   /// No description provided for @commonError.
   ///
@@ -573,6 +597,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnect'**
   String get historyDisconnectDialogConfirm;
+
+  /// No description provided for @credentialsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices & passkeys'**
+  String get credentialsTitle;
+
+  /// No description provided for @credentialsSectionCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Passkeys'**
+  String get credentialsSectionCredentials;
+
+  /// No description provided for @credentialsSectionDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices'**
+  String get credentialsSectionDevices;
+
+  /// No description provided for @credentialsEmptyCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'No passkeys registered'**
+  String get credentialsEmptyCredentials;
+
+  /// No description provided for @credentialsEmptyDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No devices receiving alerts'**
+  String get credentialsEmptyDevices;
+
+  /// No description provided for @credentialsUnnamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passkey'**
+  String get credentialsUnnamed;
+
+  /// No description provided for @credentialsCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {date}'**
+  String credentialsCreatedAt(String date);
+
+  /// No description provided for @credentialsLastUsedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {date}'**
+  String credentialsLastUsedAt(String date);
+
+  /// No description provided for @credentialsNeverUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not used yet'**
+  String get credentialsNeverUsed;
 }
 
 class _AppLocalizationsDelegate

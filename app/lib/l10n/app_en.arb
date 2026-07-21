@@ -34,6 +34,14 @@
   "@connectOrgConfirmBody": {
     "placeholders": { "org": { "type": "String" } }
   },
+  "connectOrgConfirmTitleAddDevice": "Add this device to {org}?",
+  "@connectOrgConfirmTitleAddDevice": {
+    "placeholders": { "org": { "type": "String" } }
+  },
+  "connectOrgConfirmBodyAddDevice": "You will create an additional passkey on this device that lets you receive alerts from {org}.",
+  "@connectOrgConfirmBodyAddDevice": {
+    "placeholders": { "org": { "type": "String" } }
+  },
   "connectOrgConfirmCta": "Create passkey",
   "@connectOrgConfirmCta": {},
   "connectOrgConfirmCancel": "Back",
@@ -44,6 +52,10 @@
   "@connectOrgPasskeyFailed": {},
   "connectOrgDeviceFailed": "Registered, but could not enable notifications. You can retry from the org list.",
   "@connectOrgDeviceFailed": {},
+  "connectOrgUseExistingPasskey": "I already have a passkey for this server",
+  "@connectOrgUseExistingPasskey": {},
+  "connectOrgAssertionProgress": "Signing in with your passkey…",
+  "@connectOrgAssertionProgress": {},
 
   "commonError": "Something went wrong. Please try again.",
   "@commonError": {},
@@ -206,5 +218,28 @@
   "historyDisconnectDialogCancel": "Cancel",
   "@historyDisconnectDialogCancel": {},
   "historyDisconnectDialogConfirm": "Disconnect",
-  "@historyDisconnectDialogConfirm": {}
+  "@historyDisconnectDialogConfirm": {},
+
+  "credentialsTitle": "Devices & passkeys",
+  "@credentialsTitle": {},
+  "credentialsSectionCredentials": "Passkeys",
+  "@credentialsSectionCredentials": {},
+  "credentialsSectionDevices": "Devices",
+  "@credentialsSectionDevices": {},
+  "credentialsEmptyCredentials": "No passkeys registered",
+  "@credentialsEmptyCredentials": {},
+  "credentialsEmptyDevices": "No devices receiving alerts",
+  "@credentialsEmptyDevices": {},
+  "credentialsUnnamed": "Passkey",
+  "@credentialsUnnamed": {},
+  "credentialsCreatedAt": "Added {date}",
+  "@credentialsCreatedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "credentialsLastUsedAt": "Last used {date}",
+  "@credentialsLastUsedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "credentialsNeverUsed": "Not used yet",
+  "@credentialsNeverUsed": {}
 }

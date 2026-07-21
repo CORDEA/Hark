@@ -543,4 +543,273 @@ as String,
 
 }
 
+
+/// @nodoc
+mixin _$AssertionFinishResponseDto {
+
+@JsonKey(name: 'user_id') String get userId;@JsonKey(name: 'auth_token') String get authToken;@JsonKey(name: 'token_expires_at') DateTime get tokenExpiresAt;
+/// Create a copy of AssertionFinishResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AssertionFinishResponseDtoCopyWith<AssertionFinishResponseDto> get copyWith => _$AssertionFinishResponseDtoCopyWithImpl<AssertionFinishResponseDto>(this as AssertionFinishResponseDto, _$identity);
+
+  /// Serializes this AssertionFinishResponseDto to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssertionFinishResponseDto&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.authToken, authToken) || other.authToken == authToken)&&(identical(other.tokenExpiresAt, tokenExpiresAt) || other.tokenExpiresAt == tokenExpiresAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,userId,authToken,tokenExpiresAt);
+
+@override
+String toString() {
+  return 'AssertionFinishResponseDto(userId: $userId, authToken: $authToken, tokenExpiresAt: $tokenExpiresAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AssertionFinishResponseDtoCopyWith<$Res>  {
+  factory $AssertionFinishResponseDtoCopyWith(AssertionFinishResponseDto value, $Res Function(AssertionFinishResponseDto) _then) = _$AssertionFinishResponseDtoCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'auth_token') String authToken,@JsonKey(name: 'token_expires_at') DateTime tokenExpiresAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$AssertionFinishResponseDtoCopyWithImpl<$Res>
+    implements $AssertionFinishResponseDtoCopyWith<$Res> {
+  _$AssertionFinishResponseDtoCopyWithImpl(this._self, this._then);
+
+  final AssertionFinishResponseDto _self;
+  final $Res Function(AssertionFinishResponseDto) _then;
+
+/// Create a copy of AssertionFinishResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? authToken = null,Object? tokenExpiresAt = null,}) {
+  return _then(_self.copyWith(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,authToken: null == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
+as String,tokenExpiresAt: null == tokenExpiresAt ? _self.tokenExpiresAt : tokenExpiresAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [AssertionFinishResponseDto].
+extension AssertionFinishResponseDtoPatterns on AssertionFinishResponseDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AssertionFinishResponseDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AssertionFinishResponseDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AssertionFinishResponseDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken, @JsonKey(name: 'token_expires_at')  DateTime tokenExpiresAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto() when $default != null:
+return $default(_that.userId,_that.authToken,_that.tokenExpiresAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken, @JsonKey(name: 'token_expires_at')  DateTime tokenExpiresAt)  $default,) {final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto():
+return $default(_that.userId,_that.authToken,_that.tokenExpiresAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'user_id')  String userId, @JsonKey(name: 'auth_token')  String authToken, @JsonKey(name: 'token_expires_at')  DateTime tokenExpiresAt)?  $default,) {final _that = this;
+switch (_that) {
+case _AssertionFinishResponseDto() when $default != null:
+return $default(_that.userId,_that.authToken,_that.tokenExpiresAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _AssertionFinishResponseDto implements AssertionFinishResponseDto {
+  const _AssertionFinishResponseDto({@JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'auth_token') required this.authToken, @JsonKey(name: 'token_expires_at') required this.tokenExpiresAt});
+  factory _AssertionFinishResponseDto.fromJson(Map<String, dynamic> json) => _$AssertionFinishResponseDtoFromJson(json);
+
+@override@JsonKey(name: 'user_id') final  String userId;
+@override@JsonKey(name: 'auth_token') final  String authToken;
+@override@JsonKey(name: 'token_expires_at') final  DateTime tokenExpiresAt;
+
+/// Create a copy of AssertionFinishResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AssertionFinishResponseDtoCopyWith<_AssertionFinishResponseDto> get copyWith => __$AssertionFinishResponseDtoCopyWithImpl<_AssertionFinishResponseDto>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$AssertionFinishResponseDtoToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssertionFinishResponseDto&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.authToken, authToken) || other.authToken == authToken)&&(identical(other.tokenExpiresAt, tokenExpiresAt) || other.tokenExpiresAt == tokenExpiresAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,userId,authToken,tokenExpiresAt);
+
+@override
+String toString() {
+  return 'AssertionFinishResponseDto(userId: $userId, authToken: $authToken, tokenExpiresAt: $tokenExpiresAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AssertionFinishResponseDtoCopyWith<$Res> implements $AssertionFinishResponseDtoCopyWith<$Res> {
+  factory _$AssertionFinishResponseDtoCopyWith(_AssertionFinishResponseDto value, $Res Function(_AssertionFinishResponseDto) _then) = __$AssertionFinishResponseDtoCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'user_id') String userId,@JsonKey(name: 'auth_token') String authToken,@JsonKey(name: 'token_expires_at') DateTime tokenExpiresAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$AssertionFinishResponseDtoCopyWithImpl<$Res>
+    implements _$AssertionFinishResponseDtoCopyWith<$Res> {
+  __$AssertionFinishResponseDtoCopyWithImpl(this._self, this._then);
+
+  final _AssertionFinishResponseDto _self;
+  final $Res Function(_AssertionFinishResponseDto) _then;
+
+/// Create a copy of AssertionFinishResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? authToken = null,Object? tokenExpiresAt = null,}) {
+  return _then(_AssertionFinishResponseDto(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,authToken: null == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
+as String,tokenExpiresAt: null == tokenExpiresAt ? _self.tokenExpiresAt : tokenExpiresAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+
+}
+
 // dart format on

@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/fcm_token_provider.dart';
+import '../../organizations/data/org_profile.dart';
+import '../domain/add_device_via_synced_passkey_use_case.dart';
 import '../domain/register_device_use_case.dart';
 import '../domain/register_with_passkey_use_case.dart';
 import '../domain/resolve_invitation_use_case.dart';
@@ -92,36 +94,71 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
                 ? null
                 : invitation.displayName,
           );
-
-      // Step 2: device registration. Failure here is non-fatal — profile is
-      // already saved locally so we still navigate to the list; the user can
-      // re-enable notifications from the org row (M4).
-      state = state.copyWith(step: ConnectOrgStep.registeringDevice);
-      try {
-        final fcmToken = await ref.read(fcmTokenProvider.future);
-        await ref
-            .read(registerDeviceUseCaseProvider)
-            .execute(
-              profile: profile,
-              fcmToken: fcmToken,
-              deviceName: _deviceName(),
-              locale: _currentLocaleTag(),
-            );
-        state = state.copyWith(
-          isBusy: false,
-          event: const ConnectOrgViewEvent.navigateToOrgs(),
-        );
-      } catch (e) {
-        state = state.copyWith(
-          isBusy: false,
-          event: ConnectOrgViewEvent.deviceRegisterFailed(e),
-        );
-      }
+      // Step 2: device registration. Failure is non-fatal — profile is
+      // already saved locally so we still navigate; the user can re-enable
+      // notifications from the org row.
+      await _registerDevice(profile);
     } catch (e) {
       state = state.copyWith(
         isBusy: false,
         step: ConnectOrgStep.confirm,
         event: ConnectOrgViewEvent.passkeyFailed(e),
+      );
+    }
+  }
+
+  /// Path A from PASSKEY_PLAN §2.2: no invitation, just a server URL. The
+  /// platform authenticator picks a synced passkey for that RP ID and we
+  /// resolve the user via the assertion.
+  Future<void> onUseExistingPasskeyTapped() async {
+    if (state.isBusy) return;
+    final serverUrl = _normalize(state.serverUrl.trim());
+    if (serverUrl.isEmpty) {
+      state = state.copyWith(event: const ConnectOrgViewEvent.missingFields());
+      return;
+    }
+
+    state = state.copyWith(
+      isBusy: true,
+      step: ConnectOrgStep.registering,
+      serverUrl: serverUrl,
+      event: const ConnectOrgViewEvent.none(),
+    );
+
+    try {
+      final profile = await ref
+          .read(addDeviceViaSyncedPasskeyUseCaseProvider)
+          .execute(serverUrl: serverUrl);
+      await _registerDevice(profile);
+    } catch (e) {
+      state = state.copyWith(
+        isBusy: false,
+        step: ConnectOrgStep.input,
+        event: ConnectOrgViewEvent.passkeyFailed(e),
+      );
+    }
+  }
+
+  Future<void> _registerDevice(OrgProfile profile) async {
+    state = state.copyWith(step: ConnectOrgStep.registeringDevice);
+    try {
+      final fcmToken = await ref.read(fcmTokenProvider.future);
+      await ref
+          .read(registerDeviceUseCaseProvider)
+          .execute(
+            profile: profile,
+            fcmToken: fcmToken,
+            deviceName: _deviceName(),
+            locale: _currentLocaleTag(),
+          );
+      state = state.copyWith(
+        isBusy: false,
+        event: const ConnectOrgViewEvent.navigateToOrgs(),
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isBusy: false,
+        event: ConnectOrgViewEvent.deviceRegisterFailed(e),
       );
     }
   }
