@@ -73,6 +73,9 @@ func main() {
 		Signer: signer,
 	})
 
+	sweeper := &wapkg.ChallengeSweeper{DB: gdb}
+	go sweeper.Run(ctx)
+
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,
 		Handler:           handler,
