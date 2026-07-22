@@ -95,32 +95,47 @@ class _OrgList extends ConsumerWidget {
         ),
       ),
       data: (rows) {
-        if (rows.isEmpty) {
-          return _EmptyState(colors: colors);
-        }
-        return ListView.separated(
-          itemCount: rows.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 12),
-          itemBuilder: (context, i) {
-            final row = rows[i];
-            return OrganizationCard(
-              row: row,
-              isCurrent: i == 0,
-              onLeave: () async {
-                final ok = await _confirmLeave(context, _titleFor(row));
-                if (ok && context.mounted) {
-                  await ref
-                      .read(listOrganizationViewModelProvider.notifier)
-                      .onLeaveTapped(row.serverUrl);
-                }
-              },
-              onOpen: () => context.push(
-                Uri(
-                  path: '/orgs/${Uri.encodeComponent(row.serverUrl)}/history',
-                ).toString(),
-              ),
-            );
-          },
+        return RefreshIndicator(
+          onRefresh: () =>
+              ref.read(listOrganizationViewModelProvider.notifier).onRefresh(),
+          child: rows.isEmpty
+              ? LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: _EmptyState(colors: colors),
+                    ),
+                  ),
+                )
+              : ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: rows.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  itemBuilder: (context, i) {
+                    final row = rows[i];
+                    return OrganizationCard(
+                      row: row,
+                      isCurrent: i == 0,
+                      onLeave: () async {
+                        final ok = await _confirmLeave(context, _titleFor(row));
+                        if (ok && context.mounted) {
+                          await ref
+                              .read(listOrganizationViewModelProvider.notifier)
+                              .onLeaveTapped(row.serverUrl);
+                        }
+                      },
+                      onOpen: () => context.push(
+                        Uri(
+                          path:
+                              '/orgs/${Uri.encodeComponent(row.serverUrl)}/history',
+                        ).toString(),
+                      ),
+                    );
+                  },
+                ),
         );
       },
     );

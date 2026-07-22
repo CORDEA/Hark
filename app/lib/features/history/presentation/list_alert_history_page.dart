@@ -82,7 +82,12 @@ class _Body extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: AppSpacing.md),
-          Expanded(child: _RowList(rows: state.rows)),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => ref.read(provider.notifier).onRefresh(),
+              child: _RowList(rows: state.rows),
+            ),
+          ),
           _DisconnectButton(state: state, provider: provider),
           const SizedBox(height: AppSpacing.xl),
         ],
@@ -97,18 +102,27 @@ class _RowList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context).historyEmpty,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.5),
+      return LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context).historyEmpty,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+              ),
+            ),
           ),
         ),
       );
     }
     return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: rows.length,
       separatorBuilder: (_, _) =>
           Container(height: 1, color: context.harkColors.borderHairline),

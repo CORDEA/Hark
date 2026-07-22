@@ -27,6 +27,11 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     return rows;
   }
 
+  Future<void> onRefresh() async {
+    ref.invalidateSelf();
+    await future;
+  }
+
   Future<void> onLeaveTapped(String serverUrl) async {
     final target = await ref
         .read(orgRepositoryProvider)

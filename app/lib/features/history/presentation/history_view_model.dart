@@ -29,6 +29,11 @@ class HistoryViewModel extends _$HistoryViewModel {
     return HistoryViewState(orgName: _hostOf(serverUrl), rows: rows);
   }
 
+  Future<void> onRefresh() async {
+    ref.invalidateSelf();
+    await future;
+  }
+
   Future<void> onLeaveTapped() async {
     final current = state.value;
     if (current == null || current.isLeaving) return;
