@@ -19,28 +19,20 @@ class ListCredentialsPage extends ConsumerWidget {
     final provider = listCredentialsViewModelProvider(serverUrl: serverUrl);
     final l10n = AppLocalizations.of(context);
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(pinned: true, title: Text(l10n.credentialsTitle)),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: SafeArea(
-              top: false,
-              child: Consumer(
-                builder: (context, ref, _) {
-                  final async = ref.watch(provider);
-                  return async.when(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (e, _) =>
-                        Center(child: Text(ErrorLocalizer.localize(l10n, e))),
-                    data: (state) => _Body(state: state),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+      appBar: AppBar(title: Text(l10n.credentialsTitle)),
+      body: SafeArea(
+        top: false,
+        child: Consumer(
+          builder: (context, ref, _) {
+            final async = ref.watch(provider);
+            return async.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) =>
+                  Center(child: Text(ErrorLocalizer.localize(l10n, e))),
+              data: (state) => _Body(state: state),
+            );
+          },
+        ),
       ),
     );
   }
