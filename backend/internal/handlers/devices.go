@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
@@ -154,4 +155,29 @@ func (h *API) DeleteSelfDevice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// AdminDeleteDevice removes a single device from a user. Unlike
+// DeleteSelfDevice, it never cascades into the user row — an admin who wants
+// to fully remove the subscriber uses DELETE /api/users/{id}. This keeps the
+// nested "kick device" affordance in the admin UI from silently deleting a
+// subscriber when they happen to have only one device left.
+func (h *API) AdminDeleteDevice(w http.ResponseWriter, r *http.Request) {
+	userID := strings.TrimSpace(chi.URLParam(r, "id"))
+	deviceID := strings.TrimSpace(chi.URLParam(r, "deviceId"))
+	if userID == "" || deviceID == "" {
+		fail(w, http.StatusBadRequest, "missing_id", "user id and device id required")
+		return
+	}
+	res := h.DB.Where("id = ? AND user_id = ?", deviceID, userID).Delete(&models.Device{})
+	if res.Error != nil {
+		slog.Error("admin delete device", "err", res.Error)
+		fail(w, http.StatusInternalServerError, "db", "could not delete device")
+		return
+	}
+	if res.RowsAffected == 0 {
+		fail(w, http.StatusNotFound, "not_found", "device not found")
+		return
+	}
+	ok(w, map[string]string{"status": "deleted"})
 }

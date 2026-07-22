@@ -70,6 +70,7 @@ func NewRouter(d Deps) http.Handler {
 
 		r.Post("/users/{id}/test-ping", api.TestPing)
 		r.Post("/users/{id}/add-device-invitations", api.CreateAddDeviceInvitation)
+		r.Delete("/users/{id}/devices/{deviceId}", api.AdminDeleteDevice)
 		r.Delete("/users/{id}", api.KickUser)
 
 		r.Get("/alerts", api.ListAlerts)

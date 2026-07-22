@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/google/uuid"
+
 	"github.com/cordea/hark/internal/models"
 )
 
@@ -106,6 +108,85 @@ func TestDeleteSelfDeviceRemovesUserWhenLast(t *testing.T) {
 	h.DB.Model(&models.User{}).Where("id = ?", user.ID).Count(&count)
 	if count != 0 {
 		t.Fatalf("user row survived last-device delete: count=%d", count)
+	}
+}
+
+func TestAdminDeleteDeviceRemovesOnlyThatDevice(t *testing.T) {
+	h := newTestHarness(t)
+	user, _ := h.seedUserWithDevice("fcm-a")
+
+	// A second device on the same user.
+	second := models.Device{
+		ID: uuid.NewString(), UserID: user.ID, FCMToken: "fcm-b",
+		DeviceName: "iPhone", Locale: "en",
+	}
+	if err := h.DB.Create(&second).Error; err != nil {
+		t.Fatalf("seed second device: %v", err)
+	}
+
+	res := h.do(http.MethodDelete, "/api/users/"+user.ID+"/devices/"+second.ID, "", nil)
+	if res.StatusCode != http.StatusOK {
+		t.Fatalf("delete: got %d, want 200", res.StatusCode)
+	}
+	res.Body.Close()
+
+	var devCount, userCount int64
+	h.DB.Model(&models.Device{}).Where("user_id = ?", user.ID).Count(&devCount)
+	h.DB.Model(&models.User{}).Where("id = ?", user.ID).Count(&userCount)
+	if devCount != 1 {
+		t.Fatalf("device count = %d, want 1 (only the targeted device dropped)", devCount)
+	}
+	if userCount != 1 {
+		t.Fatalf("user removed by admin device delete; user count = %d, want 1", userCount)
+	}
+}
+
+// Admin device delete must never cascade into the owning user row — even when
+// the deleted device was the user's last one. Kicking the user is a separate
+// action (DELETE /api/users/{id}).
+func TestAdminDeleteDeviceKeepsUserWhenLast(t *testing.T) {
+	h := newTestHarness(t)
+	user, _ := h.seedUserWithDevice("fcm-only")
+
+	var device models.Device
+	if err := h.DB.Where("user_id = ?", user.ID).First(&device).Error; err != nil {
+		t.Fatalf("load device: %v", err)
+	}
+
+	res := h.do(http.MethodDelete, "/api/users/"+user.ID+"/devices/"+device.ID, "", nil)
+	if res.StatusCode != http.StatusOK {
+		t.Fatalf("delete: got %d, want 200", res.StatusCode)
+	}
+	res.Body.Close()
+
+	var userCount int64
+	h.DB.Model(&models.User{}).Where("id = ?", user.ID).Count(&userCount)
+	if userCount != 1 {
+		t.Fatalf("user row was cascaded; user count = %d, want 1", userCount)
+	}
+}
+
+func TestAdminDeleteDeviceRejectsCrossUser(t *testing.T) {
+	h := newTestHarness(t)
+	userA, _ := h.seedUserWithDevice("fcm-a")
+	userB, _ := h.seedUserWithDevice("fcm-b")
+
+	var deviceB models.Device
+	if err := h.DB.Where("user_id = ?", userB.ID).First(&deviceB).Error; err != nil {
+		t.Fatalf("load device b: %v", err)
+	}
+
+	// Try to delete userB's device via userA's path — should 404, not delete.
+	res := h.do(http.MethodDelete, "/api/users/"+userA.ID+"/devices/"+deviceB.ID, "", nil)
+	if res.StatusCode != http.StatusNotFound {
+		t.Fatalf("cross-user: got %d, want 404", res.StatusCode)
+	}
+	res.Body.Close()
+
+	var devCount int64
+	h.DB.Model(&models.Device{}).Where("id = ?", deviceB.ID).Count(&devCount)
+	if devCount != 1 {
+		t.Fatalf("device deleted despite mismatched user path; count = %d", devCount)
 	}
 }
 

@@ -64,23 +64,23 @@ const catalogs = {
     'subscribers.countInvited': 'Invited',
     'subscribers.description': 'Devices registered to receive on-call pages',
     'subscribers.inviteButton': 'Invite New User',
-    'subscribers.col.subscriber': 'Subscriber / device',
-    'subscribers.col.status': 'Status',
-    'subscribers.col.lastActivity': 'Last activity',
-    'subscribers.col.actions': 'Actions',
     'subscribers.status.active': 'Active',
     'subscribers.status.invited': 'Invited',
-    'subscribers.device.awaiting': 'Awaiting device',
+    'subscribers.device.unnamed': 'Unnamed device',
     'subscribers.empty': 'No subscribers yet. Tap "Invite New User" to add one.',
     'subscribers.actions.testPing': 'Test Ping',
-    'subscribers.actions.addDevice': 'Add device',
     'subscribers.actions.kick': 'Kick',
-    'subscribers.lastActivity.never': 'Never connected',
+    'subscribers.actions.revoke': 'Revoke',
+    'subscribers.addDevice.link': 'Add a device',
     'subscribers.testPing.sent': 'Test ping sent to {n} device(s).',
     'subscribers.testPing.failed': 'Test ping failed: {error}',
     'subscribers.addDevice.failed': 'Add-device invitation failed: {error}',
     'subscribers.kick.confirm': 'Kick this subscriber? Their devices lose access immediately.',
     'subscribers.kick.failed': 'Kick failed: {error}',
+    'subscribers.kickDevice.confirm': 'Kick this device? It will stop receiving alerts immediately.',
+    'subscribers.kickDevice.failed': 'Kick device failed: {error}',
+    'subscribers.revoke.confirm': 'Revoke this invitation? The code will stop working immediately.',
+    'subscribers.revoke.failed': 'Revoke failed: {error}',
 
     'invite.cardTitle.newUser': 'Temporary join details',
     'invite.cardTitle.addDevice': 'Add-device invitation for {name}',
@@ -196,7 +196,3 @@ function initialsOf(name) {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-function lastActivity(iso) {
-  if (!iso) return t('subscribers.lastActivity.never');
-  return fmtTime(iso);
-}

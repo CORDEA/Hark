@@ -2,52 +2,109 @@
 
 const substate = { users: [], invitations: [], invite: null };
 
+// Add-device invitations share the /api/invitations feed with new-user
+// invitations, but they're modeled as a nested affordance on the owning user
+// row — surfacing them as top-level "Invited" entries would double-count the
+// same person.
+const newUserInvitations = () =>
+  substate.invitations.filter(inv => inv.kind !== 'add_device');
+
 function renderStats() {
-  const active = substate.users.filter(u => (u.devices_count ?? (u.devices?.length || 0)) > 0).length;
-  const pending = substate.invitations.length;
+  const active = substate.users.length;
+  const pending = newUserInvitations().length;
   q('#count-active').textContent = active;
   q('#count-invited').textContent = pending;
 }
 
 function renderRows() {
   const el = q('#rows');
-  if (substate.users.length === 0) {
+  const invited = newUserInvitations();
+  if (substate.users.length === 0 && invited.length === 0) {
     el.innerHTML = `<div class="px-5 py-6 text-sm" style="color:var(--text-5)">${escapeHtml(t('subscribers.empty'))}</div>`;
     return;
   }
-  el.innerHTML = substate.users.map(u => {
-    const device = u.devices && u.devices[0] ? u.devices[0].device_name : t('empty.dash');
-    return `
-      <div class="grid gap-4 px-5 py-4 border-b items-center"
-           style="grid-template-columns:2fr 1fr 1.3fr 1.6fr;border-color:var(--n-4)">
+  el.innerHTML = [
+    ...substate.users.map(renderUserBlock),
+    ...invited.map(renderInvitedRow),
+  ].join('');
+}
+
+function renderUserBlock(u) {
+  const devices = (u.devices || []).map(d => renderDeviceRow(u.id, d)).join('');
+  return `
+    <div class="border-b" style="border-color:var(--n-4)">
+      <div class="grid gap-4 px-5 pt-4 pb-2 items-center" style="grid-template-columns:1fr auto">
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0"
                style="background:var(--n-6);color:var(--text-2);font-weight:800;font-size:12px">
             ${escapeHtml(initialsOf(u.display_name))}
           </div>
-          <div class="min-w-0">
+          <div class="min-w-0 flex items-center gap-3 flex-wrap">
             <div class="text-base font-bold truncate" style="color:var(--text-1)">${escapeHtml(u.display_name)}</div>
-            <div class="text-xs" style="color:var(--text-5)">${escapeHtml(device)}</div>
+            <span class="badge badge-active">${escapeHtml(t('subscribers.status.active'))}</span>
           </div>
         </div>
-        <div class="text-xs mono" style="color:var(--text-4)">
-          ${u.credentials_count ?? 0} passkeys · ${u.devices_count ?? (u.devices?.length || 0)} devices
-        </div>
-        <div class="text-xs mono" style="color:var(--text-4)">${escapeHtml(lastActivity(u.last_activity_at))}</div>
         <div class="flex gap-2 justify-end">
           <button type="button" title="${escapeHtml(t('subscribers.actions.testPing'))}" data-test-ping="${u.id}"
                   class="w-8 h-8 rounded-md text-sm"
                   style="border:1px solid var(--n-6);color:var(--text-4);background:transparent">↻</button>
-          <button type="button" data-add-device="${u.id}" data-user-name="${escapeHtml(u.display_name)}"
-                  class="h-8 px-3 rounded-md font-semibold text-xs"
-                  style="border:1px solid var(--n-6);color:var(--text-2);background:transparent">${escapeHtml(t('subscribers.actions.addDevice'))}</button>
-          <button type="button" data-kick="${u.id}"
+          <button type="button" data-kick-user="${u.id}"
                   class="h-8 px-3 rounded-md font-semibold text-xs"
                   style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">${escapeHtml(t('subscribers.actions.kick'))}</button>
         </div>
       </div>
-    `;
-  }).join('');
+      <div class="pl-[68px] pr-5 pb-3">
+        ${devices}
+        <div class="pt-1">
+          <button type="button" data-add-device="${u.id}"
+                  class="flex items-center gap-1.5 text-xs h-7 px-2 -ml-2 rounded-md"
+                  style="color:var(--text-5);background:transparent;border:0">
+            <span class="text-base leading-none">+</span> ${escapeHtml(t('subscribers.addDevice.link'))}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderDeviceRow(userId, d) {
+  const name = d.device_name && d.device_name.trim() !== ''
+    ? d.device_name
+    : t('subscribers.device.unnamed');
+  return `
+    <div class="grid gap-4 items-center py-1.5" style="grid-template-columns:1fr auto">
+      <div class="flex items-center gap-2 min-w-0" style="color:var(--text-3)">
+        <span style="color:var(--text-6)">•</span>
+        <span class="text-sm truncate">${escapeHtml(name)}</span>
+      </div>
+      <button type="button" data-kick-device="${d.id}" data-kick-device-user="${userId}"
+              class="h-7 px-3 rounded-md font-semibold text-xs"
+              style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">${escapeHtml(t('subscribers.actions.kick'))}</button>
+    </div>
+  `;
+}
+
+function renderInvitedRow(inv) {
+  return `
+    <div class="grid gap-4 px-5 py-4 border-b items-center"
+         style="grid-template-columns:1fr auto;border-color:var(--n-4)">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0"
+             style="background:var(--n-6);color:var(--text-4);font-weight:800;font-size:12px">
+          ${escapeHtml(initialsOf(inv.display_name))}
+        </div>
+        <div class="min-w-0 flex items-center gap-3 flex-wrap">
+          <div class="text-base font-bold truncate" style="color:var(--text-1)">${escapeHtml(inv.display_name)}</div>
+          <span class="badge badge-invited">${escapeHtml(t('subscribers.status.invited'))}</span>
+        </div>
+      </div>
+      <div class="flex gap-2 justify-end">
+        <button type="button" data-revoke="${escapeHtml(inv.code)}"
+                class="h-8 px-3 rounded-md font-semibold text-xs"
+                style="border:1px solid var(--red-border-strong);color:var(--red-text-muted);background:transparent">${escapeHtml(t('subscribers.actions.revoke'))}</button>
+      </div>
+    </div>
+  `;
 }
 
 async function refresh() {
@@ -156,12 +213,28 @@ async function addDevice(id) {
   } catch (e) { alert(t('subscribers.addDevice.failed', { error: e.message })); }
 }
 
-async function kick(id) {
+async function kickUser(id) {
   if (!confirm(t('subscribers.kick.confirm'))) return;
   try {
     await api(`/api/users/${id}`, { method: 'DELETE' });
     await refresh();
   } catch (e) { alert(t('subscribers.kick.failed', { error: e.message })); }
+}
+
+async function kickDevice(userId, deviceId) {
+  if (!confirm(t('subscribers.kickDevice.confirm'))) return;
+  try {
+    await api(`/api/users/${userId}/devices/${deviceId}`, { method: 'DELETE' });
+    await refresh();
+  } catch (e) { alert(t('subscribers.kickDevice.failed', { error: e.message })); }
+}
+
+async function revokeInvitation(code) {
+  if (!confirm(t('subscribers.revoke.confirm'))) return;
+  try {
+    await api(`/api/invitations/${encodeURIComponent(code)}`, { method: 'DELETE' });
+    await refresh();
+  } catch (e) { alert(t('subscribers.revoke.failed', { error: e.message })); }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -186,12 +259,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   q('#btn-download-qr').addEventListener('click', downloadQr);
   document.body.addEventListener('click', (e) => {
-    const pingId = e.target.closest('[data-test-ping]')?.dataset.testPing;
-    const addId = e.target.closest('[data-add-device]')?.dataset.addDevice;
-    const kickId = e.target.closest('[data-kick]')?.dataset.kick;
-    if (pingId)     testPing(pingId);
-    else if (addId) addDevice(addId);
-    else if (kickId) kick(kickId);
+    const pingId       = e.target.closest('[data-test-ping]')?.dataset.testPing;
+    const addId        = e.target.closest('[data-add-device]')?.dataset.addDevice;
+    const kickUserId   = e.target.closest('[data-kick-user]')?.dataset.kickUser;
+    const kickDeviceEl = e.target.closest('[data-kick-device]');
+    const revokeCode   = e.target.closest('[data-revoke]')?.dataset.revoke;
+    if (pingId)            testPing(pingId);
+    else if (addId)        addDevice(addId);
+    else if (kickUserId)   kickUser(kickUserId);
+    else if (kickDeviceEl) kickDevice(kickDeviceEl.dataset.kickDeviceUser, kickDeviceEl.dataset.kickDevice);
+    else if (revokeCode)   revokeInvitation(revokeCode);
   });
   refresh();
   setInterval(refresh, 8000);
