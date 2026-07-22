@@ -34,6 +34,19 @@ android {
             (project.findProperty("harkLinkHost") as String?) ?: "hark.example.com"
     }
 
+    signingConfigs {
+        // Override the default ~/.android/debug.keystore with a committed
+        // one so every contributor's debug builds share the same SHA-256
+        // fingerprint — necessary for Digital Asset Links / Credential
+        // Manager verification against the deployment's assetlinks.json.
+        getByName("debug") {
+            storeFile = rootProject.file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

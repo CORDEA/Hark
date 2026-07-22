@@ -13,3 +13,8 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Exception: commit only the checked-in debug keystore so every contributor
+# builds with the same SHA-256 fingerprint (published in assetlinks.json).
+# Never un-ignore a release keystore.
+!debug.keystore
