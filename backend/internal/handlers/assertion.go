@@ -11,6 +11,7 @@ import (
 
 	"gorm.io/gorm"
 
+	"github.com/go-webauthn/webauthn/protocol"
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 
 	"github.com/cordea/hark/internal/models"
@@ -155,7 +156,12 @@ func (h *API) AssertionFinish(w http.ResponseWriter, r *http.Request) {
 
 	credential, err := h.RP.FinishDiscoverableLogin(handler, session, assReq)
 	if err != nil {
-		slog.Warn("webauthn finish discoverable login", "err", err)
+		var protoErr *protocol.Error
+		if errors.As(err, &protoErr) {
+			slog.Warn("webauthn finish discoverable login", "err", err, "debug", protoErr.DevInfo)
+		} else {
+			slog.Warn("webauthn finish discoverable login", "err", err)
+		}
 		fail(w, http.StatusBadRequest, "verification_failed", err.Error())
 		return
 	}

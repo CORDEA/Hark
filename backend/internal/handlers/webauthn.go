@@ -215,7 +215,15 @@ func (h *API) RegisterFinish(w http.ResponseWriter, r *http.Request) {
 
 	credential, err := h.RP.FinishRegistration(user, session, attReq)
 	if err != nil {
-		slog.Warn("webauthn finish registration", "err", err)
+		// go-webauthn's *protocol.Error hides the expected/received values
+		// behind DevInfo; surface it so origin / RP ID mismatches are
+		// diagnosable without instrumenting the library.
+		var protoErr *protocol.Error
+		if errors.As(err, &protoErr) {
+			slog.Warn("webauthn finish registration", "err", err, "debug", protoErr.DevInfo)
+		} else {
+			slog.Warn("webauthn finish registration", "err", err)
+		}
 		fail(w, http.StatusBadRequest, "verification_failed", err.Error())
 		return
 	}
