@@ -42,36 +42,28 @@ class ListAlertHistoryPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            title: Text(l10n.historyTitle),
-            actions: [
-              IconButton(
-                tooltip: l10n.credentialsTitle,
-                icon: const Icon(Icons.tune),
-                onPressed: () => context.push(
-                  Uri(
-                    path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
-                  ).toString(),
-                ),
-              ),
-            ],
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: SafeArea(
-              top: false,
-              child: async.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) =>
-                    Center(child: Text(ErrorLocalizer.localize(l10n, e))),
-                data: (state) => _Body(state: state, provider: provider),
-              ),
+      appBar: AppBar(
+        title: Text(l10n.historyTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.credentialsTitle,
+            icon: const Icon(Icons.tune),
+            onPressed: () => context.push(
+              Uri(
+                path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
+              ).toString(),
             ),
           ),
         ],
+      ),
+      body: SafeArea(
+        top: false,
+        child: async.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) =>
+              Center(child: Text(ErrorLocalizer.localize(l10n, e))),
+          data: (state) => _Body(state: state, provider: provider),
+        ),
       ),
     );
   }
