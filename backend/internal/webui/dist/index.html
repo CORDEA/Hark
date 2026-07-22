@@ -120,7 +120,7 @@
       <div id="target-list" class="flex flex-col gap-0.5 max-h-[260px] overflow-auto mb-5"></div>
 
       <div class="flex gap-2.5">
-        <button id="trigger-send" type="button"
+        <button id="trigger-confirm" type="button"
                 class="flex-1 rounded-lg font-bold text-base"
                 style="background:var(--red-6);color:#fff;height:52px"></button>
         <button id="trigger-cancel" type="button"
@@ -128,6 +128,31 @@
                 style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:52px"
                 data-i18n="trigger.cancel">
           Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6 modal-backdrop">
+    <div id="confirm-card" class="w-full max-w-[480px] rounded-xl p-7 max-h-[85vh] overflow-auto"
+         style="background:var(--n-2);border:1px solid var(--n-5)">
+      <div class="text-2xl font-extrabold" id="confirm-title" style="color:var(--text-1)" data-i18n="confirm.title.default">Send Alert</div>
+      <div class="text-xs mt-1 mb-5" style="color:var(--text-5)" data-i18n="confirm.subtitle">Review who will receive this page</div>
+
+      <div class="text-[11px] font-bold uppercase tracking-widest mb-2.5" style="color:var(--text-5)" data-i18n="confirm.recipients">Recipients</div>
+      <div id="confirm-recipients" class="rounded-lg p-4 mb-5"
+           style="background:var(--n-3);border:1px solid var(--n-6);color:var(--text-2)"></div>
+
+      <div class="flex gap-2.5">
+        <button id="confirm-send" type="button"
+                class="flex-1 rounded-lg font-bold text-base"
+                style="background:var(--red-6);color:#fff;height:52px"></button>
+        <button id="confirm-back" type="button"
+                class="px-5 rounded-lg font-semibold text-sm"
+                style="background:transparent;border:1px solid var(--n-6);color:var(--text-4);height:52px"
+                data-i18n="confirm.back">
+          Back
         </button>
       </div>
     </div>

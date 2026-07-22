@@ -98,7 +98,6 @@ function renderHistory() {
 function renderTargetList() {
   const el = q('#target-list');
   el.innerHTML = state.users
-    .filter(u => u.status === 'active')
     .map(u => {
       const checked = state.targetAll || state.selected.has(u.id);
       return `
@@ -108,8 +107,11 @@ function renderTargetList() {
         </label>
       `;
     }).join('');
-  const btn = q('#trigger-send');
-  btn.textContent = t('trigger.button', { summary: triggerSummary() });
+  const btn = q('#trigger-confirm');
+  btn.textContent = t('trigger.confirmButton', { summary: triggerSummary() });
+  btn.disabled = !state.targetAll && state.selected.size === 0;
+  btn.style.opacity = btn.disabled ? '0.5' : '1';
+  btn.style.cursor  = btn.disabled ? 'not-allowed' : 'pointer';
   btn.style.background = state.triggerType === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
   btn.style.color      = state.triggerType === 'critical' ? '#fff' : '#241a04';
 }
@@ -117,6 +119,13 @@ function renderTargetList() {
 function triggerSummary() {
   if (state.targetAll) return t('trigger.summary.everyone');
   return t('trigger.summary.selected', { n: state.selected.size });
+}
+
+function selectedUserNames() {
+  const byId = new Map(state.users.map(u => [u.id, u.display_name]));
+  return Array.from(state.selected)
+    .map(id => byId.get(id))
+    .filter(Boolean);
 }
 
 // ---------- detail modal ----------
@@ -190,7 +199,61 @@ function openTrigger(type) {
 function closeTrigger() {
   q('#trigger-modal').classList.add('hidden');
   q('#trigger-modal').classList.remove('flex');
+}
+
+function resetTriggerState() {
   state.triggerType = null;
+  state.targetAll = true;
+  state.selected.clear();
+}
+
+// ---------- confirm modal ----------
+function openConfirm() {
+  if (!state.triggerType) return;
+  if (!state.targetAll && state.selected.size === 0) return;
+
+  q('#confirm-title').textContent = state.triggerType === 'critical'
+    ? t('confirm.title.critical')
+    : t('confirm.title.warning');
+
+  const recipientsEl = q('#confirm-recipients');
+  if (state.targetAll) {
+    recipientsEl.innerHTML = `
+      <div class="text-base font-bold">${escapeHtml(t('trigger.targetAll'))}</div>
+      <div class="text-xs mt-1" style="color:var(--text-5)">${escapeHtml(t('confirm.everyoneHint', { n: state.users.length }))}</div>
+    `;
+  } else {
+    const names = selectedUserNames();
+    recipientsEl.innerHTML = `
+      <div class="text-xs font-semibold mb-2" style="color:var(--text-5)">${escapeHtml(t('confirm.selectedHint', { n: names.length }))}</div>
+      <div class="flex flex-col gap-1.5">
+        ${names.map(n => `<div class="text-sm font-semibold">${escapeHtml(n)}</div>`).join('')}
+      </div>
+    `;
+  }
+
+  const sendBtn = q('#confirm-send');
+  sendBtn.textContent = t('confirm.sendButton');
+  sendBtn.style.background = state.triggerType === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
+  sendBtn.style.color      = state.triggerType === 'critical' ? '#fff' : '#241a04';
+
+  closeTrigger();
+  const modal = q('#confirm-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeConfirm() {
+  q('#confirm-modal').classList.add('hidden');
+  q('#confirm-modal').classList.remove('flex');
+}
+
+function backFromConfirm() {
+  closeConfirm();
+  renderTargetList();
+  const modal = q('#trigger-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
 }
 
 async function sendTrigger() {
@@ -198,7 +261,8 @@ async function sendTrigger() {
   if (!state.targetAll) body.target_user_ids = Array.from(state.selected);
   try {
     await api('/api/alerts/trigger', { method: 'POST', body: JSON.stringify(body) });
-    closeTrigger();
+    closeConfirm();
+    resetTriggerState();
     await refresh();
   } catch (e) { alert(t('trigger.failed', { error: e.message })); }
 }
@@ -236,8 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
   q('#btn-critical').addEventListener('click', () => openTrigger('critical'));
   q('#btn-warning').addEventListener('click',  () => openTrigger('warning'));
 
-  q('#trigger-cancel').addEventListener('click', closeTrigger);
-  q('#trigger-send').addEventListener('click', sendTrigger);
+  const cancelTrigger = () => { closeTrigger(); resetTriggerState(); };
+  const cancelConfirm = () => { closeConfirm(); resetTriggerState(); };
+
+  q('#trigger-cancel').addEventListener('click', cancelTrigger);
+  q('#trigger-confirm').addEventListener('click', openConfirm);
+
+  q('#confirm-back').addEventListener('click', backFromConfirm);
+  q('#confirm-send').addEventListener('click', sendTrigger);
 
   q('#detail-close').addEventListener('click', closeDetail);
   q('#detail-resolve').addEventListener('click', () => {
@@ -245,7 +315,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   q('#trigger-modal').addEventListener('click', (e) => {
-    if (e.target === q('#trigger-modal')) closeTrigger();
+    if (e.target === q('#trigger-modal')) cancelTrigger();
+  });
+  q('#confirm-modal').addEventListener('click', (e) => {
+    if (e.target === q('#confirm-modal')) cancelConfirm();
   });
   q('#detail-modal').addEventListener('click', (e) => {
     if (e.target === q('#detail-modal')) closeDetail();
@@ -264,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.targetAll = false;
     q('#target-all').checked = false;
     if (cb.checked) state.selected.add(cb.dataset.uid); else state.selected.delete(cb.dataset.uid);
-    q('#trigger-send').textContent = t('trigger.button', { summary: triggerSummary() });
+    renderTargetList();
   });
 
   document.body.addEventListener('click', (e) => {
