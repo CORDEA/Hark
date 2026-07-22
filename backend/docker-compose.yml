@@ -6,10 +6,18 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    # Values below are read from backend/.env (auto-loaded by compose) or
+    # the shell. Copy .env.example to .env and fill in the deployment
+    # specifics. Fallbacks keep `docker compose up` working out of the box.
     environment:
-      # Override PUBLIC_URL to the address your reverse-proxy exposes.
-      PUBLIC_URL: "http://localhost:8080"
-      ORG_NAME: "Hark"
+      # PUBLIC_URL is required — compose refuses to start if unset. The
+      # hostname is baked into every registered passkey, so there is no
+      # safe fallback.
+      PUBLIC_URL: "${PUBLIC_URL:?set PUBLIC_URL in backend/.env}"
+      ORG_NAME: "${ORG_NAME:-Hark}"
+      APPLE_APP_IDS: "${APPLE_APP_IDS:-}"
+      ANDROID_APP_LINKS: "${ANDROID_APP_LINKS:-}"
+      RP_ID_OVERRIDE: "${RP_ID_OVERRIDE:-false}"
     volumes:
       # Persistent SQLite database. If not using Application Default
       # Credentials, drop a Firebase service-account JSON key (with the

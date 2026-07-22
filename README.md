@@ -49,10 +49,11 @@ The backend ships a multi-stage Dockerfile and a Compose file that mounts a pers
 
 ```sh
 cd backend
+cp .env.example .env       # then edit PUBLIC_URL / APPLE_APP_IDS / ANDROID_APP_LINKS
 docker compose up -d --build
 ```
 
-The service listens on `:8080`. Override the reverse-proxy address by editing `PUBLIC_URL` in `docker-compose.yml`.
+The service listens on `:8080`. Compose reads `backend/.env` (gitignored) automatically — no need to edit `docker-compose.yml`. Anything unset falls back to the defaults declared in Compose.
 
 ### Backend — local run
 
@@ -71,7 +72,7 @@ Configuration is read entirely from the environment:
 | `DB_DRIVER`         | `sqlite`                                                               | Database driver                    |
 | `DB_DSN`            | `file:hark.db?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)`       | Database connection string         |
 | `FCM_CREDENTIALS`   | *(empty — FCM disabled unless ADC is present)*                         | Path to Firebase service-account (fallback when ADC is unavailable) |
-| `PUBLIC_URL`        | `http://localhost:8080`                                                | Base URL embedded in invite QR; also the WebAuthn origin |
+| `PUBLIC_URL`        | **required** — no default                                              | Base URL embedded in invite QR; also the WebAuthn origin. Process refuses to boot if unset. |
 | `ORG_NAME`          | `Hark`                                                                 | Organisation name shown in the UI  |
 | `APPLE_APP_IDS`     | *(empty)*                                                              | Comma-separated `<TEAMID>.<bundleid>` list published via `/.well-known/apple-app-site-association`. Required for iOS universal links + passkey autofill. |
 | `ANDROID_APP_LINKS` | *(empty)*                                                              | Comma-separated `<package>:<sha256-fingerprint>` list published via `/.well-known/assetlinks.json`. Required for Android app links + Credential Manager. |

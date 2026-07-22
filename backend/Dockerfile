@@ -21,11 +21,14 @@ USER hark
 WORKDIR /home/hark
 COPY --from=build /out/hark /usr/local/bin/hark
 
+# PUBLIC_URL is intentionally not defaulted — the process refuses to boot
+# without it. Every passkey is bound to the URL's hostname, so a silent
+# fallback would let a misconfigured deploy register credentials against
+# the wrong origin.
 ENV PORT=8080 \
     DB_DRIVER=sqlite \
     DB_DSN="file:/data/hark.db?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)" \
     FCM_CREDENTIALS=/data/firebase.json \
-    PUBLIC_URL=http://localhost:8080 \
     ORG_NAME=Hark
 
 VOLUME ["/data"]

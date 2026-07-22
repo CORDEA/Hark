@@ -38,16 +38,16 @@ In one terminal, start the tunnel:
 backend/scripts/dev-tunnel.sh
 ```
 
-In another, start the backend with the tunnel hostname:
+In another, configure and start the backend with the tunnel hostname:
 
 ```sh
 cd backend
-PUBLIC_URL=https://<your-host> \
-APPLE_APP_IDS=<TeamID>.<BundleID> \
-ANDROID_APP_LINKS=<package>:<sha256-fingerprint> \
-FCM_CREDENTIALS=./data/firebase.json \
-  go run ./cmd/hark
+cp .env.example .env
+# Edit .env: set PUBLIC_URL=https://<your-host>, APPLE_APP_IDS, and ANDROID_APP_LINKS.
+docker compose up --build
 ```
+
+For a native run, `.env` is not loaded automatically: export the same variables in your shell before running `go run ./cmd/hark`.
 
 ## 4. Point the mobile builds at the same host
 

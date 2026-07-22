@@ -1,9 +1,16 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"strings"
 )
+
+// ErrPublicURLRequired is returned by Load when PUBLIC_URL is unset. It's
+// required — every registered passkey is bound to the URL's hostname, so a
+// silent fallback would let a misconfigured deploy register credentials
+// against the wrong origin.
+var ErrPublicURLRequired = errors.New("PUBLIC_URL is required")
 
 type Config struct {
 	Port           string
@@ -30,17 +37,21 @@ type AndroidAppLink struct {
 	Fingerprint string
 }
 
-func Load() Config {
+func Load() (Config, error) {
+	publicURL := strings.TrimSpace(os.Getenv("PUBLIC_URL"))
+	if publicURL == "" {
+		return Config{}, ErrPublicURLRequired
+	}
 	return Config{
 		Port:            envOr("PORT", "8080"),
 		DBDriver:        envOr("DB_DRIVER", "sqlite"),
 		DBDSN:           envOr("DB_DSN", "file:hark.db?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"),
 		FCMCredentials:  os.Getenv("FCM_CREDENTIALS"),
-		PublicURL:       envOr("PUBLIC_URL", "http://localhost:8080"),
+		PublicURL:       publicURL,
 		OrgName:         envOr("ORG_NAME", "Hark"),
 		AppleAppIDs:     parseCSV(os.Getenv("APPLE_APP_IDS")),
 		AndroidAppLinks: parseAndroidAppLinks(os.Getenv("ANDROID_APP_LINKS")),
-	}
+	}, nil
 }
 
 func envOr(key, fallback string) string {

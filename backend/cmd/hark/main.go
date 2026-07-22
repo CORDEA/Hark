@@ -27,7 +27,11 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	cfg := config.Load()
+	cfg, err := config.Load()
+	if err != nil {
+		slog.Error("config load", "err", err)
+		os.Exit(1)
+	}
 
 	gdb, err := db.Open(cfg)
 	if err != nil {
