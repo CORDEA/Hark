@@ -74,6 +74,7 @@ class ShowActiveAlertPage extends HookConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
+        title: Text(_shortOrg(serverUrl)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -95,7 +96,7 @@ class ShowActiveAlertPage extends HookConsumerWidget {
             bottom: AppSpacing.xxl,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -132,31 +133,28 @@ class _Content extends ConsumerWidget {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.activeAlertHeader(_shortOrg(state.serverUrl)),
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: colors.criticalTextMuted,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            color: state.isCritical ? colors.critical : colors.warning,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Text(
-            state.type.toUpperCase(),
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: state.isCritical
-                  ? theme.colorScheme.onPrimary
-                  : theme.colorScheme.onSecondary,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.08,
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            decoration: BoxDecoration(
+              color: state.isCritical ? colors.critical : colors.warning,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Text(
+              state.type.toUpperCase(),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: state.isCritical
+                    ? theme.colorScheme.onPrimary
+                    : theme.colorScheme.onSecondary,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.08,
+              ),
             ),
           ),
         ),

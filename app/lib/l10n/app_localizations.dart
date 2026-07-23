@@ -286,12 +286,6 @@ abstract class AppLocalizations {
   /// **'{devices, plural, one{{devices} device} other{{devices} devices}} · {credentials, plural, one{{credentials} passkey} other{{credentials} passkeys}}'**
   String orgCardCounts(int devices, int credentials);
 
-  /// No description provided for @activeAlertHeader.
-  ///
-  /// In en, this message translates to:
-  /// **'Alert · {org}'**
-  String activeAlertHeader(String org);
-
   /// No description provided for @activeAlertRowAction.
   ///
   /// In en, this message translates to:

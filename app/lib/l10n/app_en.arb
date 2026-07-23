@@ -83,10 +83,6 @@
     }
   },
 
-  "activeAlertHeader": "Alert · {org}",
-  "@activeAlertHeader": {
-    "placeholders": { "org": { "type": "String" } }
-  },
   "activeAlertRowAction": "Your action",
   "@activeAlertRowAction": {},
   "activeAlertRowTriggered": "Triggered",

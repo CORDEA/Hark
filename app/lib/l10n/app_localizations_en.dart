@@ -133,11 +133,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String activeAlertHeader(String org) {
-    return 'Alert · $org';
-  }
-
-  @override
   String get activeAlertRowAction => 'Your action';
 
   @override
