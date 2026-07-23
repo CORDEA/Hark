@@ -8,6 +8,8 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_model.dart';
 import 'organization_card.dart';
+import 'passkey_cleanup_notice_controller.dart';
+import 'passkey_cleanup_notice_dialog.dart';
 
 class ListOrganizationPage extends ConsumerWidget {
   const ListOrganizationPage({super.key});
@@ -17,6 +19,22 @@ class ListOrganizationPage extends ConsumerWidget {
     final theme = Theme.of(context);
     final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
+
+    ref.listen(passkeyCleanupNoticeControllerProvider, (_, notice) {
+      if (notice == null || !context.mounted) return;
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => PasskeyCleanupNoticeDialog(
+          reason: notice.reason,
+          orgDisplayName: notice.orgDisplayName,
+          serverUrl: notice.serverUrl,
+        ),
+      ).whenComplete(
+        () =>
+            ref.read(passkeyCleanupNoticeControllerProvider.notifier).dismiss(),
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.orgListTitle)),
@@ -89,6 +107,9 @@ class _OrgList extends ConsumerWidget {
                     final row = rows[i];
                     return OrganizationCard(
                       row: row,
+                      onReconnect: () => ref
+                          .read(listOrganizationViewModelProvider.notifier)
+                          .onReconnectTapped(row.serverUrl),
                       onOpen: () => context.push(
                         Uri(
                           path:

@@ -6,10 +6,16 @@ import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_state.dart';
 
 class OrganizationCard extends StatelessWidget {
-  const OrganizationCard({super.key, required this.row, required this.onOpen});
+  const OrganizationCard({
+    super.key,
+    required this.row,
+    required this.onOpen,
+    this.onReconnect,
+  });
 
   final OrganizationRowViewState row;
   final VoidCallback onOpen;
+  final VoidCallback? onReconnect;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class OrganizationCard extends StatelessWidget {
     };
     final severityColor = _severityColor(row.severity, colors);
     return InkWell(
-      onTap: onOpen,
+      onTap: row.status is OrgRowStatusReconnect ? onReconnect : onOpen,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(

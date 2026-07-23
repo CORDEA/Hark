@@ -65,6 +65,7 @@ func NewRouter(d Deps) http.Handler {
 			r.Use(appmw.JWT(d.DB, d.Signer))
 			r.Post("/devices", api.RegisterDevice)
 			r.Delete("/devices/self", api.DeleteSelfDevice)
+			r.Delete("/self", api.DeleteSelf)
 			r.Get("/me", api.Me)
 			r.Post("/alerts/{id}/respond", api.RespondAlert)
 		})

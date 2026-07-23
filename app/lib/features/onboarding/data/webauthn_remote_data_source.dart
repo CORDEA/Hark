@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/api/api_errors.dart';
 import '../../organizations/data/org_remote_data_source.dart'
     show HarkApiException;
 import 'invitation_lookup_dto.dart';
@@ -84,11 +85,17 @@ class WebAuthnRemoteDataSource {
     required String challenge,
     required Map<String, dynamic> assertion,
   }) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      '/api/webauthn/assertion/finish',
-      data: {'challenge': challenge, 'assertion': assertion},
-    );
-    return AssertionFinishResponseDto.fromJson(_unwrapData(res.data));
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/api/webauthn/assertion/finish',
+        data: {'challenge': challenge, 'assertion': assertion},
+      );
+      return AssertionFinishResponseDto.fromJson(_unwrapData(res.data));
+    } on DioException catch (e) {
+      final apiError = mapDioError(e);
+      if (apiError != null) throw apiError;
+      rethrow;
+    }
   }
 }
 

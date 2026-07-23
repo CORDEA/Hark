@@ -592,6 +592,60 @@ abstract class AppLocalizations {
   /// **'Leave'**
   String get settingsLeaveDialogConfirm;
 
+  /// No description provided for @passkeyCleanupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Passkey no longer usable'**
+  String get passkeyCleanupTitle;
+
+  /// No description provided for @passkeyCleanupBodyLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'You left {org}. The passkey for this organization has been revoked and can no longer sign you in.'**
+  String passkeyCleanupBodyLeft(String org);
+
+  /// No description provided for @passkeyCleanupBodyKicked.
+  ///
+  /// In en, this message translates to:
+  /// **'You were removed from {org}. The passkey for this organization has been revoked and can no longer sign you in.'**
+  String passkeyCleanupBodyKicked(String org);
+
+  /// No description provided for @passkeyCleanupBodyLeftOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'{org} was removed from this device, but we couldn\'t confirm revocation with the server. Ask an admin to remove your account if you need to be sure.'**
+  String passkeyCleanupBodyLeftOffline(String org);
+
+  /// No description provided for @passkeyCleanupInstructionsIOS.
+  ///
+  /// In en, this message translates to:
+  /// **'iPhone and iPad: Settings → Passwords → search for {host} → Delete.'**
+  String passkeyCleanupInstructionsIOS(String host);
+
+  /// No description provided for @passkeyCleanupInstructionsAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Android: Settings → Passwords, passkeys & accounts → your provider → find the entry → Delete.'**
+  String get passkeyCleanupInstructionsAndroid;
+
+  /// No description provided for @passkeyCleanupInstructionsChrome.
+  ///
+  /// In en, this message translates to:
+  /// **'Chrome on desktop: chrome://settings/passkeys → find the entry → Delete.'**
+  String get passkeyCleanupInstructionsChrome;
+
+  /// No description provided for @passkeyCleanupInstructionsGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'In your password manager, search for {host} and delete the passkey.'**
+  String passkeyCleanupInstructionsGeneric(String host);
+
+  /// No description provided for @passkeyCleanupDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get passkeyCleanupDismiss;
+
   /// No description provided for @credentialsTitle.
   ///
   /// In en, this message translates to:

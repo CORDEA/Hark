@@ -308,6 +308,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLeaveDialogConfirm => 'Leave';
 
   @override
+  String get passkeyCleanupTitle => 'Passkey no longer usable';
+
+  @override
+  String passkeyCleanupBodyLeft(String org) {
+    return 'You left $org. The passkey for this organization has been revoked and can no longer sign you in.';
+  }
+
+  @override
+  String passkeyCleanupBodyKicked(String org) {
+    return 'You were removed from $org. The passkey for this organization has been revoked and can no longer sign you in.';
+  }
+
+  @override
+  String passkeyCleanupBodyLeftOffline(String org) {
+    return '$org was removed from this device, but we couldn\'t confirm revocation with the server. Ask an admin to remove your account if you need to be sure.';
+  }
+
+  @override
+  String passkeyCleanupInstructionsIOS(String host) {
+    return 'iPhone and iPad: Settings → Passwords → search for $host → Delete.';
+  }
+
+  @override
+  String get passkeyCleanupInstructionsAndroid =>
+      'Android: Settings → Passwords, passkeys & accounts → your provider → find the entry → Delete.';
+
+  @override
+  String get passkeyCleanupInstructionsChrome =>
+      'Chrome on desktop: chrome://settings/passkeys → find the entry → Delete.';
+
+  @override
+  String passkeyCleanupInstructionsGeneric(String host) {
+    return 'In your password manager, search for $host and delete the passkey.';
+  }
+
+  @override
+  String get passkeyCleanupDismiss => 'OK';
+
+  @override
   String get credentialsTitle => 'Devices & passkeys';
 
   @override

@@ -13,6 +13,6 @@ class LeaveOrganizationUseCase {
   const LeaveOrganizationUseCase(this._repository);
   final OrgRepository _repository;
 
-  Future<void> execute(OrgProfile profile, {required String fcmToken}) =>
-      _repository.leave(profile, fcmToken: fcmToken);
+  Future<LeaveOutcome> execute(OrgProfile profile) =>
+      _repository.leave(profile);
 }

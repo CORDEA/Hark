@@ -59,7 +59,7 @@ final class ShowSettingsViewModelProvider
 }
 
 String _$showSettingsViewModelHash() =>
-    r'2c81545293c7850c634d8581df8b8db97cd401a2';
+    r'5639d88bd58c2bb17d9c28687e9cbf81d11c7e1f';
 
 final class ShowSettingsViewModelFamily extends $Family
     with

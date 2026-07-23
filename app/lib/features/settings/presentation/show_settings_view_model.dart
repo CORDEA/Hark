@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/fcm/fcm_token_provider.dart';
 import '../../organizations/data/org_repository.dart';
 import '../../organizations/domain/leave_organization_use_case.dart';
+import '../../organizations/presentation/passkey_cleanup_notice_dialog.dart';
 import 'show_settings_view_state.dart';
 
 part 'show_settings_view_model.g.dart';
@@ -21,10 +21,20 @@ class ShowSettingsViewModel extends _$ShowSettingsViewModel {
           .read(orgRepositoryProvider)
           .findByServerUrl(serverUrl);
       if (profile != null) {
-        final fcmToken = await ref.read(fcmTokenProvider.future);
-        await ref
+        final outcome = await ref
             .read(leaveOrganizationUseCaseProvider)
-            .execute(profile, fcmToken: fcmToken);
+            .execute(profile);
+        state = state.copyWith(
+          isLeaving: false,
+          event: ShowSettingsViewEvent.showPasskeyCleanupNotice(
+            reason: outcome.revoked
+                ? PasskeyRevocationReason.leftByUser
+                : PasskeyRevocationReason.leftOffline,
+            orgDisplayName: state.orgName,
+            serverUrl: serverUrl,
+          ),
+        );
+        return;
       }
       state = state.copyWith(
         isLeaving: false,
@@ -40,6 +50,10 @@ class ShowSettingsViewModel extends _$ShowSettingsViewModel {
 
   void onEventConsumed() {
     state = state.copyWith(event: const ShowSettingsViewEvent.none());
+  }
+
+  void onPasskeyCleanupNoticeDismissed() {
+    state = state.copyWith(event: const ShowSettingsViewEvent.navigateToOrgs());
   }
 
   String _hostOf(String url) {

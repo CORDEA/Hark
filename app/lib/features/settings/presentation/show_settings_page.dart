@@ -6,6 +6,7 @@ import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../organizations/presentation/passkey_cleanup_notice_dialog.dart';
 import 'show_settings_view_model.dart';
 import 'show_settings_view_state.dart';
 
@@ -30,6 +31,26 @@ class ShowSettingsPage extends ConsumerWidget {
           }
         case ShowSettingsViewEventNavigateToOrgs():
           if (context.mounted) context.go('/');
+        case ShowSettingsViewEventShowPasskeyCleanupNotice(
+          :final reason,
+          :final orgDisplayName,
+          :final serverUrl,
+        ):
+          if (context.mounted) {
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => PasskeyCleanupNoticeDialog(
+                reason: reason,
+                orgDisplayName: orgDisplayName,
+                serverUrl: serverUrl,
+              ),
+            ).whenComplete(
+              () =>
+                  ref.read(provider.notifier).onPasskeyCleanupNoticeDismissed(),
+            );
+            ref.read(provider.notifier).onEventConsumed();
+          }
         case ShowSettingsViewEventNone():
           break;
       }

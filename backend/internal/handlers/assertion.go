@@ -32,6 +32,10 @@ type assertionFinishResponse struct {
 	TokenExpiresAt time.Time `json:"token_expires_at"`
 }
 
+// errCredentialRevoked lets the credential lookup communicate a deliberate
+// server-side removal through go-webauthn without relying on error text.
+var errCredentialRevoked = errors.New("credential revoked")
+
 // AssertionBegin returns the discoverable-credential PublicKeyCredentialRequestOptions.
 // No invitation is required — the client-side authenticator picks the credential
 // that matches the RP ID and hands us its user handle at /finish.
@@ -124,7 +128,7 @@ func (h *API) AssertionFinish(w http.ResponseWriter, r *http.Request) {
 		var cred models.Credential
 		if err := h.DB.Where("credential_id = ?", rawID).First(&cred).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return nil, errors.New("credential not registered")
+				return nil, errCredentialRevoked
 			}
 			return nil, err
 		}
@@ -156,6 +160,10 @@ func (h *API) AssertionFinish(w http.ResponseWriter, r *http.Request) {
 
 	credential, err := h.RP.FinishDiscoverableLogin(handler, session, assReq)
 	if err != nil {
+		if errors.Is(err, errCredentialRevoked) {
+			fail(w, http.StatusGone, "credential_revoked", "credential no longer registered on this server")
+			return
+		}
 		var protoErr *protocol.Error
 		if errors.As(err, &protoErr) {
 			slog.Warn("webauthn finish discoverable login", "err", err, "debug", protoErr.DevInfo)

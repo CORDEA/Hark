@@ -55,13 +55,14 @@ extension ShowSettingsViewEventPatterns on ShowSettingsViewEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ShowSettingsViewEventNone value)?  none,TResult Function( ShowSettingsViewEventLeaveFailed value)?  leaveFailed,TResult Function( ShowSettingsViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ShowSettingsViewEventNone value)?  none,TResult Function( ShowSettingsViewEventLeaveFailed value)?  leaveFailed,TResult Function( ShowSettingsViewEventNavigateToOrgs value)?  navigateToOrgs,TResult Function( ShowSettingsViewEventShowPasskeyCleanupNotice value)?  showPasskeyCleanupNotice,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone() when none != null:
 return none(_that);case ShowSettingsViewEventLeaveFailed() when leaveFailed != null:
 return leaveFailed(_that);case ShowSettingsViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs(_that);case _:
+return navigateToOrgs(_that);case ShowSettingsViewEventShowPasskeyCleanupNotice() when showPasskeyCleanupNotice != null:
+return showPasskeyCleanupNotice(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ShowSettingsViewEventNone value)  none,required TResult Function( ShowSettingsViewEventLeaveFailed value)  leaveFailed,required TResult Function( ShowSettingsViewEventNavigateToOrgs value)  navigateToOrgs,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ShowSettingsViewEventNone value)  none,required TResult Function( ShowSettingsViewEventLeaveFailed value)  leaveFailed,required TResult Function( ShowSettingsViewEventNavigateToOrgs value)  navigateToOrgs,required TResult Function( ShowSettingsViewEventShowPasskeyCleanupNotice value)  showPasskeyCleanupNotice,}){
 final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone():
 return none(_that);case ShowSettingsViewEventLeaveFailed():
 return leaveFailed(_that);case ShowSettingsViewEventNavigateToOrgs():
-return navigateToOrgs(_that);}
+return navigateToOrgs(_that);case ShowSettingsViewEventShowPasskeyCleanupNotice():
+return showPasskeyCleanupNotice(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -99,13 +101,14 @@ return navigateToOrgs(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ShowSettingsViewEventNone value)?  none,TResult? Function( ShowSettingsViewEventLeaveFailed value)?  leaveFailed,TResult? Function( ShowSettingsViewEventNavigateToOrgs value)?  navigateToOrgs,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ShowSettingsViewEventNone value)?  none,TResult? Function( ShowSettingsViewEventLeaveFailed value)?  leaveFailed,TResult? Function( ShowSettingsViewEventNavigateToOrgs value)?  navigateToOrgs,TResult? Function( ShowSettingsViewEventShowPasskeyCleanupNotice value)?  showPasskeyCleanupNotice,}){
 final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone() when none != null:
 return none(_that);case ShowSettingsViewEventLeaveFailed() when leaveFailed != null:
 return leaveFailed(_that);case ShowSettingsViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs(_that);case _:
+return navigateToOrgs(_that);case ShowSettingsViewEventShowPasskeyCleanupNotice() when showPasskeyCleanupNotice != null:
+return showPasskeyCleanupNotice(_that);case _:
   return null;
 
 }
@@ -122,12 +125,13 @@ return navigateToOrgs(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( Object error)?  leaveFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( Object error)?  leaveFailed,TResult Function()?  navigateToOrgs,TResult Function( PasskeyRevocationReason reason,  String orgDisplayName,  String serverUrl)?  showPasskeyCleanupNotice,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone() when none != null:
 return none();case ShowSettingsViewEventLeaveFailed() when leaveFailed != null:
 return leaveFailed(_that.error);case ShowSettingsViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs();case _:
+return navigateToOrgs();case ShowSettingsViewEventShowPasskeyCleanupNotice() when showPasskeyCleanupNotice != null:
+return showPasskeyCleanupNotice(_that.reason,_that.orgDisplayName,_that.serverUrl);case _:
   return orElse();
 
 }
@@ -145,12 +149,13 @@ return navigateToOrgs();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( Object error)  leaveFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( Object error)  leaveFailed,required TResult Function()  navigateToOrgs,required TResult Function( PasskeyRevocationReason reason,  String orgDisplayName,  String serverUrl)  showPasskeyCleanupNotice,}) {final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone():
 return none();case ShowSettingsViewEventLeaveFailed():
 return leaveFailed(_that.error);case ShowSettingsViewEventNavigateToOrgs():
-return navigateToOrgs();}
+return navigateToOrgs();case ShowSettingsViewEventShowPasskeyCleanupNotice():
+return showPasskeyCleanupNotice(_that.reason,_that.orgDisplayName,_that.serverUrl);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -164,12 +169,13 @@ return navigateToOrgs();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( Object error)?  leaveFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( Object error)?  leaveFailed,TResult? Function()?  navigateToOrgs,TResult? Function( PasskeyRevocationReason reason,  String orgDisplayName,  String serverUrl)?  showPasskeyCleanupNotice,}) {final _that = this;
 switch (_that) {
 case ShowSettingsViewEventNone() when none != null:
 return none();case ShowSettingsViewEventLeaveFailed() when leaveFailed != null:
 return leaveFailed(_that.error);case ShowSettingsViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs();case _:
+return navigateToOrgs();case ShowSettingsViewEventShowPasskeyCleanupNotice() when showPasskeyCleanupNotice != null:
+return showPasskeyCleanupNotice(_that.reason,_that.orgDisplayName,_that.serverUrl);case _:
   return null;
 
 }
@@ -305,6 +311,76 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class ShowSettingsViewEventShowPasskeyCleanupNotice implements ShowSettingsViewEvent {
+  const ShowSettingsViewEventShowPasskeyCleanupNotice({required this.reason, required this.orgDisplayName, required this.serverUrl});
+
+
+ final  PasskeyRevocationReason reason;
+ final  String orgDisplayName;
+ final  String serverUrl;
+
+/// Create a copy of ShowSettingsViewEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWith<ShowSettingsViewEventShowPasskeyCleanupNotice> get copyWith => _$ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWithImpl<ShowSettingsViewEventShowPasskeyCleanupNotice>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ShowSettingsViewEventShowPasskeyCleanupNotice&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.orgDisplayName, orgDisplayName) || other.orgDisplayName == orgDisplayName)&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason,orgDisplayName,serverUrl);
+
+@override
+String toString() {
+  return 'ShowSettingsViewEvent.showPasskeyCleanupNotice(reason: $reason, orgDisplayName: $orgDisplayName, serverUrl: $serverUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWith<$Res> implements $ShowSettingsViewEventCopyWith<$Res> {
+  factory $ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWith(ShowSettingsViewEventShowPasskeyCleanupNotice value, $Res Function(ShowSettingsViewEventShowPasskeyCleanupNotice) _then) = _$ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWithImpl;
+@useResult
+$Res call({
+ PasskeyRevocationReason reason, String orgDisplayName, String serverUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWithImpl<$Res>
+    implements $ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWith<$Res> {
+  _$ShowSettingsViewEventShowPasskeyCleanupNoticeCopyWithImpl(this._self, this._then);
+
+  final ShowSettingsViewEventShowPasskeyCleanupNotice _self;
+  final $Res Function(ShowSettingsViewEventShowPasskeyCleanupNotice) _then;
+
+/// Create a copy of ShowSettingsViewEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,Object? orgDisplayName = null,Object? serverUrl = null,}) {
+  return _then(ShowSettingsViewEventShowPasskeyCleanupNotice(
+reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as PasskeyRevocationReason,orgDisplayName: null == orgDisplayName ? _self.orgDisplayName : orgDisplayName // ignore: cast_nullable_to_non_nullable
+as String,serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$ShowSettingsViewState {

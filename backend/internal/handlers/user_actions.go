@@ -8,12 +8,35 @@ import (
 	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 
+	appmw "github.com/cordea/hark/internal/middleware"
 	"github.com/cordea/hark/internal/models"
 )
 
 type testPingResponse struct {
 	UserID string `json:"user_id"`
 	Sent   int    `json:"sent"`
+}
+
+// DeleteSelf hard-deletes the authenticated caller and all cascaded
+// credentials, devices, and alert recipients. It is the explicit leave-org
+// operation, ensuring a locally removed account cannot still sign in.
+func (h *API) DeleteSelf(w http.ResponseWriter, r *http.Request) {
+	user, found := appmw.UserFromContext(r.Context())
+	if !found {
+		fail(w, http.StatusUnauthorized, "unauthorized", "missing user context")
+		return
+	}
+
+	res := h.DB.Where("id = ?", user.ID).Delete(&models.User{})
+	if res.Error != nil {
+		fail(w, http.StatusInternalServerError, "db", res.Error.Error())
+		return
+	}
+	if res.RowsAffected == 0 {
+		fail(w, http.StatusNotFound, "not_found", "user not found")
+		return
+	}
+	ok(w, map[string]string{"status": "left"})
 }
 
 // TestPing fires a data-only test payload to every device belonging to the

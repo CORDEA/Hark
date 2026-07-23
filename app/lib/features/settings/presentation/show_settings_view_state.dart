@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../organizations/presentation/passkey_cleanup_notice_dialog.dart';
+
 part 'show_settings_view_state.freezed.dart';
 
 @freezed
@@ -9,6 +11,11 @@ sealed class ShowSettingsViewEvent with _$ShowSettingsViewEvent {
       ShowSettingsViewEventLeaveFailed;
   const factory ShowSettingsViewEvent.navigateToOrgs() =
       ShowSettingsViewEventNavigateToOrgs;
+  const factory ShowSettingsViewEvent.showPasskeyCleanupNotice({
+    required PasskeyRevocationReason reason,
+    required String orgDisplayName,
+    required String serverUrl,
+  }) = ShowSettingsViewEventShowPasskeyCleanupNotice;
 }
 
 @freezed
