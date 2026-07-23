@@ -138,9 +138,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get activeAlertRowType => 'Type';
-
-  @override
   String get activeAlertRowAction => 'Your action';
 
   @override
@@ -151,12 +148,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeAlertActionPending => 'Pending';
-
-  @override
-  String get activeAlertTypeCritical => 'Service outage';
-
-  @override
-  String get activeAlertTypeWarning => 'Warning';
 
   @override
   String get activeAlertAck => 'Acknowledge — I\'m on it';
@@ -224,9 +215,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alertDetailStatusAcknowledged => 'ACKNOWLEDGED';
-
-  @override
-  String get alertDetailRowType => 'Type';
 
   @override
   String get alertDetailRowTarget => 'Target';

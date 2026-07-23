@@ -87,8 +87,6 @@
   "@activeAlertHeader": {
     "placeholders": { "org": { "type": "String" } }
   },
-  "activeAlertRowType": "Type",
-  "@activeAlertRowType": {},
   "activeAlertRowAction": "Your action",
   "@activeAlertRowAction": {},
   "activeAlertRowTriggered": "Triggered",
@@ -97,10 +95,6 @@
   "@activeAlertActionSending": {},
   "activeAlertActionPending": "Pending",
   "@activeAlertActionPending": {},
-  "activeAlertTypeCritical": "Service outage",
-  "@activeAlertTypeCritical": {},
-  "activeAlertTypeWarning": "Warning",
-  "@activeAlertTypeWarning": {},
   "activeAlertAck": "Acknowledge — I'm on it",
   "@activeAlertAck": {},
   "activeAlertDecline": "Decline — Can't respond",
@@ -153,8 +147,6 @@
   "@alertDetailStatusResolved": {},
   "alertDetailStatusAcknowledged": "ACKNOWLEDGED",
   "@alertDetailStatusAcknowledged": {},
-  "alertDetailRowType": "Type",
-  "@alertDetailRowType": {},
   "alertDetailRowTarget": "Target",
   "@alertDetailRowTarget": {},
   "alertDetailRowTriggered": "Triggered",

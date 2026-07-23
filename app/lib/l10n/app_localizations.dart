@@ -292,12 +292,6 @@ abstract class AppLocalizations {
   /// **'Alert · {org}'**
   String activeAlertHeader(String org);
 
-  /// No description provided for @activeAlertRowType.
-  ///
-  /// In en, this message translates to:
-  /// **'Type'**
-  String get activeAlertRowType;
-
   /// No description provided for @activeAlertRowAction.
   ///
   /// In en, this message translates to:
@@ -321,18 +315,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending'**
   String get activeAlertActionPending;
-
-  /// No description provided for @activeAlertTypeCritical.
-  ///
-  /// In en, this message translates to:
-  /// **'Service outage'**
-  String get activeAlertTypeCritical;
-
-  /// No description provided for @activeAlertTypeWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning'**
-  String get activeAlertTypeWarning;
 
   /// No description provided for @activeAlertAck.
   ///
@@ -447,12 +429,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ACKNOWLEDGED'**
   String get alertDetailStatusAcknowledged;
-
-  /// No description provided for @alertDetailRowType.
-  ///
-  /// In en, this message translates to:
-  /// **'Type'**
-  String get alertDetailRowType;
 
   /// No description provided for @alertDetailRowTarget.
   ///

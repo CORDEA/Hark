@@ -276,8 +276,6 @@ class _MetaCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _row(l10n.alertDetailRowType, _typeLabel(l10n, state), context),
-          _divider(colors),
           _row(
             l10n.alertDetailRowTarget,
             state.isBroadcast
@@ -320,12 +318,6 @@ class _MetaCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  static String _typeLabel(AppLocalizations l10n, AlertDetailViewState s) {
-    return s.isCritical
-        ? l10n.activeAlertTypeCritical
-        : l10n.activeAlertTypeWarning;
   }
 
   static String _myActionLabel(AppLocalizations l10n, AlertDetailMyResponse r) {

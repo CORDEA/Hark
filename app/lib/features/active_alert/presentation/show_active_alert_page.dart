@@ -172,15 +172,6 @@ class _Content extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _KeyValue(
-                label: l10n.activeAlertRowType,
-                value: state.isCritical
-                    ? l10n.activeAlertTypeCritical
-                    : l10n.activeAlertTypeWarning,
-                colors: colors,
-                valueBold: true,
-              ),
-              const _CriticalDivider(),
-              _KeyValue(
                 label: l10n.activeAlertRowAction,
                 value: state.isSending
                     ? l10n.activeAlertActionSending
