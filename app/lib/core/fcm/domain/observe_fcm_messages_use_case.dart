@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../logger/app_logger.dart';
 import '../data/fcm_repository.dart';
 import '../hark_fcm_message.dart';
+import 'create_notification_channels_use_case.dart';
 import 'initialize_firebase_use_case.dart';
 import 'request_notification_permission_use_case.dart';
 
@@ -16,6 +17,7 @@ ObserveFcmMessagesUseCase observeFcmMessagesUseCase(Ref ref) {
   final useCase = ObserveFcmMessagesUseCase(
     ref.watch(initializeFirebaseUseCaseProvider),
     ref.watch(requestNotificationPermissionUseCaseProvider),
+    ref.watch(createNotificationChannelsUseCaseProvider),
     ref.watch(fcmRepositoryProvider),
     ref.watch(appLoggerProvider),
   );
@@ -28,12 +30,14 @@ class ObserveFcmMessagesUseCase {
   ObserveFcmMessagesUseCase(
     this._init,
     this._permission,
+    this._channels,
     this._repository,
     this._logger,
   );
 
   final InitializeFirebaseUseCase _init;
   final RequestNotificationPermissionUseCase _permission;
+  final CreateNotificationChannelsUseCase _channels;
   final FcmRepository _repository;
   final Logger _logger;
 
@@ -46,6 +50,7 @@ class ObserveFcmMessagesUseCase {
     final available = await _init.execute();
     if (!available) return;
     await _permission.execute();
+    await _channels.execute();
 
     final initial = await _repository.getInitialMessage();
     if (initial != null) _emit(initial);

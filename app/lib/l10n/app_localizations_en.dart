@@ -345,4 +345,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get credentialsNeverUsed => 'Not used yet';
+
+  @override
+  String get notificationChannelWarningName => 'Warning alerts';
+
+  @override
+  String get notificationChannelWarningDescription =>
+      'On-call warnings that need your attention.';
+
+  @override
+  String get notificationChannelCriticalName => 'Critical alerts';
+
+  @override
+  String get notificationChannelCriticalDescription =>
+      'Service-outage alerts. Ring even when the device is silent.';
 }

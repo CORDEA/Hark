@@ -24,6 +24,14 @@ const (
 	KindTest    = "test"
 )
 
+// Android notification channel IDs. The mobile client registers these on
+// launch; the backend stamps the matching id so the OS routes each push to
+// the channel with the right importance/sound.
+const (
+	AndroidChannelWarning  = "hark_alert_warning"
+	AndroidChannelCritical = "hark_alert_critical"
+)
+
 // Message is our thin wrapper over the FCM data model. The client renders
 // in-app UI solely from Data; Title/Body populate the OS notification shelf
 // as a fallback. Both are already localized to the target device's locale by
@@ -139,9 +147,23 @@ func buildFirebaseMessage(m Message) *messaging.Message {
 	}
 	if m.Title != "" || m.Body != "" {
 		fm.Notification = &messaging.Notification{Title: m.Title, Body: m.Body}
+		fm.Android.Notification = &messaging.AndroidNotification{
+			Priority: messaging.PriorityMax,
+		}
 		fm.APNS.Payload.Aps.Alert = &messaging.ApsAlert{
 			Title: m.Title,
 			Body:  m.Body,
+		}
+	}
+	if m.Kind == KindAlert {
+		if fm.Android.Notification == nil {
+			fm.Android.Notification = &messaging.AndroidNotification{
+				Priority: messaging.PriorityMax,
+			}
+		}
+		fm.Android.Notification.ChannelID = AndroidChannelWarning
+		if m.Critical {
+			fm.Android.Notification.ChannelID = AndroidChannelCritical
 		}
 	}
 	if m.AlertID != "" {

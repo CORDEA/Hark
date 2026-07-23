@@ -657,6 +657,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not used yet'**
   String get credentialsNeverUsed;
+
+  /// No description provided for @notificationChannelWarningName.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning alerts'**
+  String get notificationChannelWarningName;
+
+  /// No description provided for @notificationChannelWarningDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'On-call warnings that need your attention.'**
+  String get notificationChannelWarningDescription;
+
+  /// No description provided for @notificationChannelCriticalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical alerts'**
+  String get notificationChannelCriticalName;
+
+  /// No description provided for @notificationChannelCriticalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Service-outage alerts. Ring even when the device is silent.'**
+  String get notificationChannelCriticalDescription;
 }
 
 class _AppLocalizationsDelegate
