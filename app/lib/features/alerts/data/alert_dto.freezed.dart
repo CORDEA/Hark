@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AlertSummaryDto {
 
- String get id; String get type; String get status;@JsonKey(name: 'is_broadcast') bool get isBroadcast;@JsonKey(name: 'triggered_at') DateTime get triggeredAt;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt;@JsonKey(name: 'responder_id') String? get responderId;@JsonKey(name: 'responder_name') String? get responderName;@JsonKey(name: 'target_names') List<String> get targetNames;@JsonKey(name: 'ack_count') int get ackCount;@JsonKey(name: 'pending_count') int get pendingCount;@JsonKey(name: 'decline_count') int get declineCount;
+ String get id; String get type; String get status;@JsonKey(name: 'is_broadcast') bool get isBroadcast;@JsonKey(name: 'triggered_at') DateTime get triggeredAt;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt;@JsonKey(name: 'responder_id') String? get responderId;@JsonKey(name: 'responder_name') String? get responderName;@JsonKey(name: 'target_names') List<String> get targetNames;@JsonKey(name: 'ack_count') int get ackCount;@JsonKey(name: 'pending_count') int get pendingCount;@JsonKey(name: 'decline_count') int get declineCount;@JsonKey(name: 'is_recipient') bool get isRecipient;
 /// Create a copy of AlertSummaryDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AlertSummaryDtoCopyWith<AlertSummaryDto> get copyWith => _$AlertSummaryDtoCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertSummaryDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertSummaryDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&(identical(other.isRecipient, isRecipient) || other.isRecipient == isRecipient));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(targetNames),ackCount,pendingCount,declineCount);
+int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(targetNames),ackCount,pendingCount,declineCount,isRecipient);
 
 @override
 String toString() {
-  return 'AlertSummaryDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount)';
+  return 'AlertSummaryDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, isRecipient: $isRecipient)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AlertSummaryDtoCopyWith<$Res>  {
   factory $AlertSummaryDtoCopyWith(AlertSummaryDto value, $Res Function(AlertSummaryDto) _then) = _$AlertSummaryDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount
+ String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount,@JsonKey(name: 'is_recipient') bool isRecipient
 });
 
 
@@ -65,7 +65,7 @@ class _$AlertSummaryDtoCopyWithImpl<$Res>
 
 /// Create a copy of AlertSummaryDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? isRecipient = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,8 @@ as String?,targetNames: null == targetNames ? _self.targetNames : targetNames //
 as List<String>,ackCount: null == ackCount ? _self.ackCount : ackCount // ignore: cast_nullable_to_non_nullable
 as int,pendingCount: null == pendingCount ? _self.pendingCount : pendingCount // ignore: cast_nullable_to_non_nullable
 as int,declineCount: null == declineCount ? _self.declineCount : declineCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,isRecipient: null == isRecipient ? _self.isRecipient : isRecipient // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -164,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AlertSummaryDto() when $default != null:
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient);case _:
   return orElse();
 
 }
@@ -185,10 +186,10 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient)  $default,) {final _that = this;
 switch (_that) {
 case _AlertSummaryDto():
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +206,10 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient)?  $default,) {final _that = this;
 switch (_that) {
 case _AlertSummaryDto() when $default != null:
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient);case _:
   return null;
 
 }
@@ -220,7 +221,7 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 @JsonSerializable()
 
 class _AlertSummaryDto implements AlertSummaryDto {
-  const _AlertSummaryDto({required this.id, required this.type, required this.status, @JsonKey(name: 'is_broadcast') required this.isBroadcast, @JsonKey(name: 'triggered_at') required this.triggeredAt, @JsonKey(name: 'resolved_at') this.resolvedAt, @JsonKey(name: 'responder_id') this.responderId, @JsonKey(name: 'responder_name') this.responderName, @JsonKey(name: 'target_names') final  List<String> targetNames = const <String>[], @JsonKey(name: 'ack_count') this.ackCount = 0, @JsonKey(name: 'pending_count') this.pendingCount = 0, @JsonKey(name: 'decline_count') this.declineCount = 0}): _targetNames = targetNames;
+  const _AlertSummaryDto({required this.id, required this.type, required this.status, @JsonKey(name: 'is_broadcast') required this.isBroadcast, @JsonKey(name: 'triggered_at') required this.triggeredAt, @JsonKey(name: 'resolved_at') this.resolvedAt, @JsonKey(name: 'responder_id') this.responderId, @JsonKey(name: 'responder_name') this.responderName, @JsonKey(name: 'target_names') final  List<String> targetNames = const <String>[], @JsonKey(name: 'ack_count') this.ackCount = 0, @JsonKey(name: 'pending_count') this.pendingCount = 0, @JsonKey(name: 'decline_count') this.declineCount = 0, @JsonKey(name: 'is_recipient') this.isRecipient = false}): _targetNames = targetNames;
   factory _AlertSummaryDto.fromJson(Map<String, dynamic> json) => _$AlertSummaryDtoFromJson(json);
 
 @override final  String id;
@@ -241,6 +242,7 @@ class _AlertSummaryDto implements AlertSummaryDto {
 @override@JsonKey(name: 'ack_count') final  int ackCount;
 @override@JsonKey(name: 'pending_count') final  int pendingCount;
 @override@JsonKey(name: 'decline_count') final  int declineCount;
+@override@JsonKey(name: 'is_recipient') final  bool isRecipient;
 
 /// Create a copy of AlertSummaryDto
 /// with the given fields replaced by the non-null parameter values.
@@ -255,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertSummaryDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertSummaryDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&(identical(other.isRecipient, isRecipient) || other.isRecipient == isRecipient));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(_targetNames),ackCount,pendingCount,declineCount);
+int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(_targetNames),ackCount,pendingCount,declineCount,isRecipient);
 
 @override
 String toString() {
-  return 'AlertSummaryDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount)';
+  return 'AlertSummaryDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, isRecipient: $isRecipient)';
 }
 
 
@@ -275,7 +277,7 @@ abstract mixin class _$AlertSummaryDtoCopyWith<$Res> implements $AlertSummaryDto
   factory _$AlertSummaryDtoCopyWith(_AlertSummaryDto value, $Res Function(_AlertSummaryDto) _then) = __$AlertSummaryDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount
+ String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount,@JsonKey(name: 'is_recipient') bool isRecipient
 });
 
 
@@ -292,7 +294,7 @@ class __$AlertSummaryDtoCopyWithImpl<$Res>
 
 /// Create a copy of AlertSummaryDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? isRecipient = null,}) {
   return _then(_AlertSummaryDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -306,7 +308,8 @@ as String?,targetNames: null == targetNames ? _self._targetNames : targetNames /
 as List<String>,ackCount: null == ackCount ? _self.ackCount : ackCount // ignore: cast_nullable_to_non_nullable
 as int,pendingCount: null == pendingCount ? _self.pendingCount : pendingCount // ignore: cast_nullable_to_non_nullable
 as int,declineCount: null == declineCount ? _self.declineCount : declineCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,isRecipient: null == isRecipient ? _self.isRecipient : isRecipient // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -589,7 +592,7 @@ as DateTime?,
 /// @nodoc
 mixin _$AlertDetailDto {
 
- String get id; String get type; String get status;@JsonKey(name: 'is_broadcast') bool get isBroadcast;@JsonKey(name: 'triggered_at') DateTime get triggeredAt;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt;@JsonKey(name: 'responder_id') String? get responderId;@JsonKey(name: 'responder_name') String? get responderName;@JsonKey(name: 'target_names') List<String> get targetNames;@JsonKey(name: 'ack_count') int get ackCount;@JsonKey(name: 'pending_count') int get pendingCount;@JsonKey(name: 'decline_count') int get declineCount; List<AlertRecipientDto> get recipients;
+ String get id; String get type; String get status;@JsonKey(name: 'is_broadcast') bool get isBroadcast;@JsonKey(name: 'triggered_at') DateTime get triggeredAt;@JsonKey(name: 'resolved_at') DateTime? get resolvedAt;@JsonKey(name: 'responder_id') String? get responderId;@JsonKey(name: 'responder_name') String? get responderName;@JsonKey(name: 'target_names') List<String> get targetNames;@JsonKey(name: 'ack_count') int get ackCount;@JsonKey(name: 'pending_count') int get pendingCount;@JsonKey(name: 'decline_count') int get declineCount;@JsonKey(name: 'is_recipient') bool get isRecipient; List<AlertRecipientDto> get recipients;
 /// Create a copy of AlertDetailDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -602,16 +605,16 @@ $AlertDetailDtoCopyWith<AlertDetailDto> get copyWith => _$AlertDetailDtoCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&const DeepCollectionEquality().equals(other.recipients, recipients));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&(identical(other.isRecipient, isRecipient) || other.isRecipient == isRecipient)&&const DeepCollectionEquality().equals(other.recipients, recipients));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(targetNames),ackCount,pendingCount,declineCount,const DeepCollectionEquality().hash(recipients));
+int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(targetNames),ackCount,pendingCount,declineCount,isRecipient,const DeepCollectionEquality().hash(recipients));
 
 @override
 String toString() {
-  return 'AlertDetailDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, recipients: $recipients)';
+  return 'AlertDetailDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, isRecipient: $isRecipient, recipients: $recipients)';
 }
 
 
@@ -622,7 +625,7 @@ abstract mixin class $AlertDetailDtoCopyWith<$Res>  {
   factory $AlertDetailDtoCopyWith(AlertDetailDto value, $Res Function(AlertDetailDto) _then) = _$AlertDetailDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount, List<AlertRecipientDto> recipients
+ String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount,@JsonKey(name: 'is_recipient') bool isRecipient, List<AlertRecipientDto> recipients
 });
 
 
@@ -639,7 +642,7 @@ class _$AlertDetailDtoCopyWithImpl<$Res>
 
 /// Create a copy of AlertDetailDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? recipients = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? isRecipient = null,Object? recipients = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -653,7 +656,8 @@ as String?,targetNames: null == targetNames ? _self.targetNames : targetNames //
 as List<String>,ackCount: null == ackCount ? _self.ackCount : ackCount // ignore: cast_nullable_to_non_nullable
 as int,pendingCount: null == pendingCount ? _self.pendingCount : pendingCount // ignore: cast_nullable_to_non_nullable
 as int,declineCount: null == declineCount ? _self.declineCount : declineCount // ignore: cast_nullable_to_non_nullable
-as int,recipients: null == recipients ? _self.recipients : recipients // ignore: cast_nullable_to_non_nullable
+as int,isRecipient: null == isRecipient ? _self.isRecipient : isRecipient // ignore: cast_nullable_to_non_nullable
+as bool,recipients: null == recipients ? _self.recipients : recipients // ignore: cast_nullable_to_non_nullable
 as List<AlertRecipientDto>,
   ));
 }
@@ -739,10 +743,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount,  List<AlertRecipientDto> recipients)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient,  List<AlertRecipientDto> recipients)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AlertDetailDto() when $default != null:
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.recipients);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient,_that.recipients);case _:
   return orElse();
 
 }
@@ -760,10 +764,10 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount,  List<AlertRecipientDto> recipients)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient,  List<AlertRecipientDto> recipients)  $default,) {final _that = this;
 switch (_that) {
 case _AlertDetailDto():
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.recipients);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient,_that.recipients);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -780,10 +784,10 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount,  List<AlertRecipientDto> recipients)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String type,  String status, @JsonKey(name: 'is_broadcast')  bool isBroadcast, @JsonKey(name: 'triggered_at')  DateTime triggeredAt, @JsonKey(name: 'resolved_at')  DateTime? resolvedAt, @JsonKey(name: 'responder_id')  String? responderId, @JsonKey(name: 'responder_name')  String? responderName, @JsonKey(name: 'target_names')  List<String> targetNames, @JsonKey(name: 'ack_count')  int ackCount, @JsonKey(name: 'pending_count')  int pendingCount, @JsonKey(name: 'decline_count')  int declineCount, @JsonKey(name: 'is_recipient')  bool isRecipient,  List<AlertRecipientDto> recipients)?  $default,) {final _that = this;
 switch (_that) {
 case _AlertDetailDto() when $default != null:
-return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.recipients);case _:
+return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.triggeredAt,_that.resolvedAt,_that.responderId,_that.responderName,_that.targetNames,_that.ackCount,_that.pendingCount,_that.declineCount,_that.isRecipient,_that.recipients);case _:
   return null;
 
 }
@@ -795,7 +799,7 @@ return $default(_that.id,_that.type,_that.status,_that.isBroadcast,_that.trigger
 @JsonSerializable()
 
 class _AlertDetailDto implements AlertDetailDto {
-  const _AlertDetailDto({required this.id, required this.type, required this.status, @JsonKey(name: 'is_broadcast') required this.isBroadcast, @JsonKey(name: 'triggered_at') required this.triggeredAt, @JsonKey(name: 'resolved_at') this.resolvedAt, @JsonKey(name: 'responder_id') this.responderId, @JsonKey(name: 'responder_name') this.responderName, @JsonKey(name: 'target_names') final  List<String> targetNames = const <String>[], @JsonKey(name: 'ack_count') this.ackCount = 0, @JsonKey(name: 'pending_count') this.pendingCount = 0, @JsonKey(name: 'decline_count') this.declineCount = 0, final  List<AlertRecipientDto> recipients = const <AlertRecipientDto>[]}): _targetNames = targetNames,_recipients = recipients;
+  const _AlertDetailDto({required this.id, required this.type, required this.status, @JsonKey(name: 'is_broadcast') required this.isBroadcast, @JsonKey(name: 'triggered_at') required this.triggeredAt, @JsonKey(name: 'resolved_at') this.resolvedAt, @JsonKey(name: 'responder_id') this.responderId, @JsonKey(name: 'responder_name') this.responderName, @JsonKey(name: 'target_names') final  List<String> targetNames = const <String>[], @JsonKey(name: 'ack_count') this.ackCount = 0, @JsonKey(name: 'pending_count') this.pendingCount = 0, @JsonKey(name: 'decline_count') this.declineCount = 0, @JsonKey(name: 'is_recipient') this.isRecipient = false, final  List<AlertRecipientDto> recipients = const <AlertRecipientDto>[]}): _targetNames = targetNames,_recipients = recipients;
   factory _AlertDetailDto.fromJson(Map<String, dynamic> json) => _$AlertDetailDtoFromJson(json);
 
 @override final  String id;
@@ -816,6 +820,7 @@ class _AlertDetailDto implements AlertDetailDto {
 @override@JsonKey(name: 'ack_count') final  int ackCount;
 @override@JsonKey(name: 'pending_count') final  int pendingCount;
 @override@JsonKey(name: 'decline_count') final  int declineCount;
+@override@JsonKey(name: 'is_recipient') final  bool isRecipient;
  final  List<AlertRecipientDto> _recipients;
 @override@JsonKey() List<AlertRecipientDto> get recipients {
   if (_recipients is EqualUnmodifiableListView) return _recipients;
@@ -837,16 +842,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&const DeepCollectionEquality().equals(other._recipients, _recipients));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderId, responderId) || other.responderId == responderId)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.ackCount, ackCount) || other.ackCount == ackCount)&&(identical(other.pendingCount, pendingCount) || other.pendingCount == pendingCount)&&(identical(other.declineCount, declineCount) || other.declineCount == declineCount)&&(identical(other.isRecipient, isRecipient) || other.isRecipient == isRecipient)&&const DeepCollectionEquality().equals(other._recipients, _recipients));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(_targetNames),ackCount,pendingCount,declineCount,const DeepCollectionEquality().hash(_recipients));
+int get hashCode => Object.hash(runtimeType,id,type,status,isBroadcast,triggeredAt,resolvedAt,responderId,responderName,const DeepCollectionEquality().hash(_targetNames),ackCount,pendingCount,declineCount,isRecipient,const DeepCollectionEquality().hash(_recipients));
 
 @override
 String toString() {
-  return 'AlertDetailDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, recipients: $recipients)';
+  return 'AlertDetailDto(id: $id, type: $type, status: $status, isBroadcast: $isBroadcast, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderId: $responderId, responderName: $responderName, targetNames: $targetNames, ackCount: $ackCount, pendingCount: $pendingCount, declineCount: $declineCount, isRecipient: $isRecipient, recipients: $recipients)';
 }
 
 
@@ -857,7 +862,7 @@ abstract mixin class _$AlertDetailDtoCopyWith<$Res> implements $AlertDetailDtoCo
   factory _$AlertDetailDtoCopyWith(_AlertDetailDto value, $Res Function(_AlertDetailDto) _then) = __$AlertDetailDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount, List<AlertRecipientDto> recipients
+ String id, String type, String status,@JsonKey(name: 'is_broadcast') bool isBroadcast,@JsonKey(name: 'triggered_at') DateTime triggeredAt,@JsonKey(name: 'resolved_at') DateTime? resolvedAt,@JsonKey(name: 'responder_id') String? responderId,@JsonKey(name: 'responder_name') String? responderName,@JsonKey(name: 'target_names') List<String> targetNames,@JsonKey(name: 'ack_count') int ackCount,@JsonKey(name: 'pending_count') int pendingCount,@JsonKey(name: 'decline_count') int declineCount,@JsonKey(name: 'is_recipient') bool isRecipient, List<AlertRecipientDto> recipients
 });
 
 
@@ -874,7 +879,7 @@ class __$AlertDetailDtoCopyWithImpl<$Res>
 
 /// Create a copy of AlertDetailDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? recipients = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? status = null,Object? isBroadcast = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderId = freezed,Object? responderName = freezed,Object? targetNames = null,Object? ackCount = null,Object? pendingCount = null,Object? declineCount = null,Object? isRecipient = null,Object? recipients = null,}) {
   return _then(_AlertDetailDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -888,7 +893,8 @@ as String?,targetNames: null == targetNames ? _self._targetNames : targetNames /
 as List<String>,ackCount: null == ackCount ? _self.ackCount : ackCount // ignore: cast_nullable_to_non_nullable
 as int,pendingCount: null == pendingCount ? _self.pendingCount : pendingCount // ignore: cast_nullable_to_non_nullable
 as int,declineCount: null == declineCount ? _self.declineCount : declineCount // ignore: cast_nullable_to_non_nullable
-as int,recipients: null == recipients ? _self._recipients : recipients // ignore: cast_nullable_to_non_nullable
+as int,isRecipient: null == isRecipient ? _self.isRecipient : isRecipient // ignore: cast_nullable_to_non_nullable
+as bool,recipients: null == recipients ? _self._recipients : recipients // ignore: cast_nullable_to_non_nullable
 as List<AlertRecipientDto>,
   ));
 }

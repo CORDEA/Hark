@@ -6,28 +6,20 @@ import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_state.dart';
 
 class OrganizationCard extends StatelessWidget {
-  const OrganizationCard({
-    super.key,
-    required this.row,
-    required this.isCurrent,
-    required this.onLeave,
-    required this.onOpen,
-  });
+  const OrganizationCard({super.key, required this.row, required this.onOpen});
 
   final OrganizationRowViewState row;
-  final bool isCurrent;
-  final VoidCallback onLeave;
   final VoidCallback onOpen;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
-    final l10n = AppLocalizations.of(context);
     final title = switch (row.status) {
       OrgRowStatusOk(:final orgName) => orgName,
       _ => row.fallbackName,
     };
+    final severityColor = _severityColor(row.severity, colors);
     return InkWell(
       onTap: onOpen,
       borderRadius: BorderRadius.circular(16),
@@ -36,9 +28,7 @@ class OrganizationCard extends StatelessWidget {
           color: theme.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isCurrent
-                ? colors.critical.withValues(alpha: 0.4)
-                : colors.borderSubtle,
+            color: severityColor?.withValues(alpha: 0.4) ?? colors.borderSubtle,
           ),
         ),
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -81,13 +71,13 @@ class OrganizationCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (isCurrent)
+                if (severityColor != null)
                   Container(
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: colors.critical,
+                      color: severityColor,
                     ),
                   ),
               ],
@@ -95,25 +85,20 @@ class OrganizationCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             Divider(color: colors.borderSubtle, height: 1),
             const SizedBox(height: AppSpacing.sm),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: _StatusLine(status: row.status, colors: colors),
-                ),
-                TextButton(
-                  onPressed: onLeave,
-                  style: TextButton.styleFrom(foregroundColor: colors.critical),
-                  child: Text(l10n.orgCardDisconnect),
-                ),
-              ],
-            ),
+            _StatusLine(status: row.status, colors: colors),
           ],
         ),
       ),
     );
   }
 }
+
+Color? _severityColor(OrgAlertSeverity severity, AppColorSchemeExtension c) =>
+    switch (severity) {
+      OrgAlertSeverity.critical => c.critical,
+      OrgAlertSeverity.warning => c.warning,
+      OrgAlertSeverity.none => null,
+    };
 
 class _StatusLine extends StatelessWidget {
   const _StatusLine({required this.status, required this.colors});

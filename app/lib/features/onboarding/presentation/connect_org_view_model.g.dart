@@ -95,7 +95,7 @@ final class ConnectOrgViewModelProvider
 }
 
 String _$connectOrgViewModelHash() =>
-    r'23b76c7afe3c21349661eda3d28830416465b6d3';
+    r'a14a560a9a7808a7b3fbff5fa5aea74f0bffd49e';
 
 /// Drives the new-user onboarding wizard:
 ///

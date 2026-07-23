@@ -274,12 +274,6 @@ abstract class AppLocalizations {
   /// **'Notifications on'**
   String get orgCardNotificationsOn;
 
-  /// No description provided for @orgCardDisconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get orgCardDisconnect;
-
   /// No description provided for @orgCardStatusLoading.
   ///
   /// In en, this message translates to:
@@ -303,30 +297,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{devices, plural, one{{devices} device} other{{devices} devices}} · {credentials, plural, one{{credentials} passkey} other{{credentials} passkeys}}'**
   String orgCardCounts(int devices, int credentials);
-
-  /// No description provided for @orgCardDisconnectDialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get orgCardDisconnectDialogTitle;
-
-  /// No description provided for @orgCardDisconnectDialogBody.
-  ///
-  /// In en, this message translates to:
-  /// **'This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.'**
-  String orgCardDisconnectDialogBody(String org);
-
-  /// No description provided for @orgCardDisconnectDialogCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get orgCardDisconnectDialogCancel;
-
-  /// No description provided for @orgCardDisconnectDialogConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get orgCardDisconnectDialogConfirm;
 
   /// No description provided for @activeAlertHeader.
   ///

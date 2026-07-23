@@ -113,9 +113,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orgCardNotificationsOn => 'Notifications on';
 
   @override
-  String get orgCardDisconnect => 'Disconnect';
-
-  @override
   String get orgCardStatusLoading => 'Checking…';
 
   @override
@@ -140,20 +137,6 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
-
-  @override
-  String get orgCardDisconnectDialogTitle => 'Disconnect';
-
-  @override
-  String orgCardDisconnectDialogBody(String org) {
-    return 'This device will stop receiving alerts from $org. You can rejoin with a new invitation code.';
-  }
-
-  @override
-  String get orgCardDisconnectDialogCancel => 'Cancel';
-
-  @override
-  String get orgCardDisconnectDialogConfirm => 'Disconnect';
 
   @override
   String activeAlertHeader(String org) {

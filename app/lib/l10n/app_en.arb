@@ -73,8 +73,6 @@
 
   "orgCardNotificationsOn": "Notifications on",
   "@orgCardNotificationsOn": {},
-  "orgCardDisconnect": "Disconnect",
-  "@orgCardDisconnect": {},
   "orgCardStatusLoading": "Checking…",
   "@orgCardStatusLoading": {},
   "orgCardStatusReconnect": "Sign in again to reconnect",
@@ -88,16 +86,6 @@
       "credentials": { "type": "int" }
     }
   },
-  "orgCardDisconnectDialogTitle": "Disconnect",
-  "@orgCardDisconnectDialogTitle": {},
-  "orgCardDisconnectDialogBody": "This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.",
-  "@orgCardDisconnectDialogBody": {
-    "placeholders": { "org": { "type": "String" } }
-  },
-  "orgCardDisconnectDialogCancel": "Cancel",
-  "@orgCardDisconnectDialogCancel": {},
-  "orgCardDisconnectDialogConfirm": "Disconnect",
-  "@orgCardDisconnectDialogConfirm": {},
 
   "activeAlertHeader": "Alert · {org}",
   "@activeAlertHeader": {

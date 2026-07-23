@@ -32,6 +32,7 @@ abstract class AlertSummaryDto with _$AlertSummaryDto {
     @JsonKey(name: 'ack_count') @Default(0) int ackCount,
     @JsonKey(name: 'pending_count') @Default(0) int pendingCount,
     @JsonKey(name: 'decline_count') @Default(0) int declineCount,
+    @JsonKey(name: 'is_recipient') @Default(false) bool isRecipient,
   }) = _AlertSummaryDto;
 
   factory AlertSummaryDto.fromJson(Map<String, dynamic> json) =>
@@ -68,6 +69,7 @@ abstract class AlertDetailDto with _$AlertDetailDto {
     @JsonKey(name: 'ack_count') @Default(0) int ackCount,
     @JsonKey(name: 'pending_count') @Default(0) int pendingCount,
     @JsonKey(name: 'decline_count') @Default(0) int declineCount,
+    @JsonKey(name: 'is_recipient') @Default(false) bool isRecipient,
     @Default(<AlertRecipientDto>[]) List<AlertRecipientDto> recipients,
   }) = _AlertDetailDto;
 

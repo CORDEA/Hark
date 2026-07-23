@@ -35,9 +35,10 @@ class AlertRepository {
   Future<List<AlertSummaryDto>> findAll({
     required String serverUrl,
     int limit = 50,
+    String? status,
   }) async {
     final ds = await _dsFor(serverUrl);
-    return ds.list(limit: limit);
+    return ds.list(limit: limit, status: status);
   }
 
   /// [action] is `acknowledged` or `declined`.

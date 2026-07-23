@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 
+	appmw "github.com/cordea/hark/internal/middleware"
 	"github.com/cordea/hark/internal/models"
 )
 
@@ -56,6 +57,10 @@ type alertSummary struct {
 	AckCount      int        `json:"ack_count"`
 	PendingCount  int        `json:"pending_count"`
 	DeclineCount  int        `json:"decline_count"`
+	// IsRecipient reports whether the authenticated caller is a target of
+	// this alert (broadcast alerts count as targeting every user). Always
+	// false when the request has no attached user (e.g. admin dashboard).
+	IsRecipient bool `json:"is_recipient"`
 }
 
 type recipientView struct {
@@ -93,13 +98,23 @@ func (h *API) ListAlerts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	summaries, err := h.buildSummaries(alerts)
+	summaries, err := h.buildSummaries(alerts, callerID(r))
 	if err != nil {
 		slog.Error("list alerts", "err", err)
 		fail(w, http.StatusInternalServerError, "db", err.Error())
 		return
 	}
 	ok(w, summaries)
+}
+
+// callerID returns the authenticated user's ID from the request context,
+// or an empty string if the request is anonymous.
+func callerID(r *http.Request) string {
+	user, ok := appmw.UserFromContext(r.Context())
+	if !ok {
+		return ""
+	}
+	return user.ID
 }
 
 func (h *API) GetAlert(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +129,7 @@ func (h *API) GetAlert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	summaries, err := h.buildSummaries([]models.Alert{alert})
+	summaries, err := h.buildSummaries([]models.Alert{alert}, callerID(r))
 	if err != nil {
 		fail(w, http.StatusInternalServerError, "db", err.Error())
 		return
@@ -144,7 +159,7 @@ func (h *API) GetAlert(w http.ResponseWriter, r *http.Request) {
 	ok(w, alertDetail{alertSummary: summary, Recipients: views})
 }
 
-func (h *API) buildSummaries(alerts []models.Alert) ([]alertSummary, error) {
+func (h *API) buildSummaries(alerts []models.Alert, callerUserID string) ([]alertSummary, error) {
 	alertIDs := make([]string, 0, len(alerts))
 	for _, a := range alerts {
 		alertIDs = append(alertIDs, a.ID)
@@ -188,6 +203,10 @@ func (h *API) buildSummaries(alerts []models.Alert) ([]alertSummary, error) {
 			TriggeredAt: a.TriggeredAt,
 			ResolvedAt:  a.ResolvedAt,
 			ResponderID: a.ResponderID,
+			// Broadcast alerts target every user; for non-broadcast alerts
+			// we set this true only when the caller shows up in the
+			// recipient loop below.
+			IsRecipient: callerUserID != "" && a.IsBroadcast,
 		}
 		if a.ResponderID != nil {
 			if *a.ResponderID == models.AdminResponderID {
@@ -209,6 +228,9 @@ func (h *API) buildSummaries(alerts []models.Alert) ([]alertSummary, error) {
 			if !a.IsBroadcast {
 				if n, ok := names[r.UserID]; ok {
 					s.TargetNames = append(s.TargetNames, n)
+				}
+				if callerUserID != "" && r.UserID == callerUserID {
+					s.IsRecipient = true
 				}
 			}
 		}

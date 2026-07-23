@@ -50,7 +50,7 @@ final class HistoryViewModelProvider
   }
 }
 
-String _$historyViewModelHash() => r'1e7ae7f786e9f00d6c1f5d8258b606c7ab22d255';
+String _$historyViewModelHash() => r'4436bb8cb9f2746dd1c94e35a2d14e6f08a0983e';
 
 final class HistoryViewModelFamily extends $Family
     with

@@ -2,13 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/api/auth_reauth_notifier.dart';
-import '../../../core/fcm/fcm_token_provider.dart';
 import '../../current_user/data/current_user_repository.dart';
 import '../data/org_profile.dart';
 import '../data/org_remote_data_source.dart' show HarkApiException;
-import '../data/org_repository.dart';
+import '../domain/get_org_alert_severity_use_case.dart';
 import '../domain/get_organizations_use_case.dart';
-import '../domain/leave_organization_use_case.dart';
 import 'list_organization_view_state.dart';
 
 part 'list_organization_view_model.g.dart';
@@ -32,31 +30,17 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     await future;
   }
 
-  Future<void> onLeaveTapped(String serverUrl) async {
-    final target = await ref
-        .read(orgRepositoryProvider)
-        .findByServerUrl(serverUrl);
-    if (target == null) return;
-    final fcmToken = await ref.read(fcmTokenProvider.future);
-    await ref
-        .read(leaveOrganizationUseCaseProvider)
-        .execute(target, fcmToken: fcmToken);
-    // Drop any leftover stale-token flag so a future re-connect at the same
-    // URL renders as healthy instead of immediately flagging reconnect.
-    ref.read(authReauthProvider.notifier).clear(serverUrl);
-    ref.invalidateSelf();
-  }
-
   Future<void> _hydrateAll(List<OrgProfile> profiles) async {
     // If the reauth notifier already flagged a URL (e.g. from a background
-    // FCM request earlier), start it in the reconnect state and skip the
-    // fetch — the JWT is known-stale.
+    // FCM request earlier), start it in the reconnect state and skip both
+    // fetches — the JWT is known-stale, so /api/alerts would come back with
+    // `is_recipient = false` for everything and mis-color the row.
     final stale = ref.read(authReauthProvider);
     await Future.wait([
       for (final p in profiles)
         if (stale.contains(p.serverUrl))
           Future.sync(
-            () => _updateRow(p.serverUrl, const OrgRowStatus.reconnect()),
+            () => _updateStatus(p.serverUrl, const OrgRowStatus.reconnect()),
           )
         else
           _hydrateOne(p),
@@ -64,11 +48,15 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
   }
 
   Future<void> _hydrateOne(OrgProfile profile) async {
+    await Future.wait([_hydrateProfile(profile), _hydrateSeverity(profile)]);
+  }
+
+  Future<void> _hydrateProfile(OrgProfile profile) async {
     try {
       final current = await ref
           .read(currentUserRepositoryProvider)
           .fetch(profile);
-      _updateRow(
+      _updateStatus(
         profile.serverUrl,
         OrgRowStatus.ok(
           orgName: current.orgName,
@@ -78,24 +66,47 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
       );
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        _updateRow(profile.serverUrl, const OrgRowStatus.reconnect());
+        _updateStatus(profile.serverUrl, const OrgRowStatus.reconnect());
       } else {
-        _updateRow(profile.serverUrl, const OrgRowStatus.offline());
+        _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
       }
     } on HarkApiException {
-      _updateRow(profile.serverUrl, const OrgRowStatus.offline());
+      _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
     } catch (_) {
-      _updateRow(profile.serverUrl, const OrgRowStatus.offline());
+      _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
     }
   }
 
-  void _updateRow(String serverUrl, OrgRowStatus status) {
+  Future<void> _hydrateSeverity(OrgProfile profile) async {
+    try {
+      final severity = await ref
+          .read(getOrgAlertSeverityUseCaseProvider)
+          .execute(serverUrl: profile.serverUrl);
+      _updateSeverity(profile.serverUrl, severity);
+    } catch (_) {
+      // Leave the row at its default `none` severity — surfacing a stale or
+      // misleading highlight is worse than showing no highlight.
+    }
+  }
+
+  void _updateStatus(String serverUrl, OrgRowStatus status) {
+    _updateRow(serverUrl, (row) => row.copyWith(status: status));
+  }
+
+  void _updateSeverity(String serverUrl, OrgAlertSeverity severity) {
+    _updateRow(serverUrl, (row) => row.copyWith(severity: severity));
+  }
+
+  void _updateRow(
+    String serverUrl,
+    OrganizationRowViewState Function(OrganizationRowViewState) update,
+  ) {
     final list = state.value;
     if (list == null) return;
     final idx = list.indexWhere((r) => r.serverUrl == serverUrl);
     if (idx < 0) return;
     final next = [...list];
-    next[idx] = next[idx].copyWith(status: status);
+    next[idx] = update(next[idx]);
     state = AsyncData(next);
   }
 

@@ -1,5 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../domain/org_alert_severity.dart';
+
+export '../domain/org_alert_severity.dart';
+
 part 'list_organization_view_state.freezed.dart';
 
 /// Per-row status for the org list. Populated as the /api/me fan-out
@@ -26,5 +30,6 @@ abstract class OrganizationRowViewState with _$OrganizationRowViewState {
     required String fallbackName,
     required String initials,
     required OrgRowStatus status,
+    @Default(OrgAlertSeverity.none) OrgAlertSeverity severity,
   }) = _OrganizationRowViewState;
 }

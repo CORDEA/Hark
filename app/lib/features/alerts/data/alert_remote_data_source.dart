@@ -14,10 +14,10 @@ class AlertRemoteDataSource {
     return AlertDetailDto.fromJson(_unwrapData(res.data));
   }
 
-  Future<List<AlertSummaryDto>> list({int limit = 50}) async {
+  Future<List<AlertSummaryDto>> list({int limit = 50, String? status}) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/api/alerts',
-      queryParameters: {'limit': limit},
+      queryParameters: {'limit': limit, 'status': ?status},
     );
     final data = _unwrapDataList(res.data);
     return data

@@ -59,6 +59,37 @@ func JWT(db *gorm.DB, signer *auth.Signer) func(http.Handler) http.Handler {
 	}
 }
 
+// OptionalJWT attaches a User to the request context when a valid Bearer
+// token is present, and passes through anonymously otherwise. Used on
+// endpoints shared by the admin dashboard (no per-user auth) and the mobile
+// client (Bearer JWT) so handlers can enrich responses with per-caller
+// context when it's available.
+func OptionalJWT(db *gorm.DB, signer *auth.Signer) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			authHeader := r.Header.Get("Authorization")
+			const bearer = "Bearer "
+			if !strings.HasPrefix(authHeader, bearer) {
+				next.ServeHTTP(w, r)
+				return
+			}
+			raw := strings.TrimSpace(strings.TrimPrefix(authHeader, bearer))
+			claims, err := signer.Parse(raw)
+			if err != nil {
+				next.ServeHTTP(w, r)
+				return
+			}
+			var user models.User
+			if err := db.First(&user, "id = ?", claims.Subject).Error; err != nil {
+				next.ServeHTTP(w, r)
+				return
+			}
+			ctx := context.WithValue(r.Context(), userCtxKey, user)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
 type errBody struct {
 	Error errPayload `json:"error"`
 }

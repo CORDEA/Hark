@@ -26,6 +26,7 @@ _AlertSummaryDto _$AlertSummaryDtoFromJson(Map<String, dynamic> json) =>
       ackCount: (json['ack_count'] as num?)?.toInt() ?? 0,
       pendingCount: (json['pending_count'] as num?)?.toInt() ?? 0,
       declineCount: (json['decline_count'] as num?)?.toInt() ?? 0,
+      isRecipient: json['is_recipient'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AlertSummaryDtoToJson(_AlertSummaryDto instance) =>
@@ -42,6 +43,7 @@ Map<String, dynamic> _$AlertSummaryDtoToJson(_AlertSummaryDto instance) =>
       'ack_count': instance.ackCount,
       'pending_count': instance.pendingCount,
       'decline_count': instance.declineCount,
+      'is_recipient': instance.isRecipient,
     };
 
 _AlertRecipientDto _$AlertRecipientDtoFromJson(Map<String, dynamic> json) =>
@@ -82,6 +84,7 @@ _AlertDetailDto _$AlertDetailDtoFromJson(Map<String, dynamic> json) =>
       ackCount: (json['ack_count'] as num?)?.toInt() ?? 0,
       pendingCount: (json['pending_count'] as num?)?.toInt() ?? 0,
       declineCount: (json['decline_count'] as num?)?.toInt() ?? 0,
+      isRecipient: json['is_recipient'] as bool? ?? false,
       recipients:
           (json['recipients'] as List<dynamic>?)
               ?.map(
@@ -105,6 +108,7 @@ Map<String, dynamic> _$AlertDetailDtoToJson(_AlertDetailDto instance) =>
       'ack_count': instance.ackCount,
       'pending_count': instance.pendingCount,
       'decline_count': instance.declineCount,
+      'is_recipient': instance.isRecipient,
       'recipients': instance.recipients,
     };
 

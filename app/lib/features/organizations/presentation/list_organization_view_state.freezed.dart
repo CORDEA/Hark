@@ -352,7 +352,7 @@ String toString() {
 /// @nodoc
 mixin _$OrganizationRowViewState {
 
- String get serverUrl; String get fallbackName; String get initials; OrgRowStatus get status;
+ String get serverUrl; String get fallbackName; String get initials; OrgRowStatus get status; OrgAlertSeverity get severity;
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -363,16 +363,16 @@ $OrganizationRowViewStateCopyWith<OrganizationRowViewState> get copyWith => _$Or
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.fallbackName, fallbackName) || other.fallbackName == fallbackName)&&(identical(other.initials, initials) || other.initials == initials)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.fallbackName, fallbackName) || other.fallbackName == fallbackName)&&(identical(other.initials, initials) || other.initials == initials)&&(identical(other.status, status) || other.status == status)&&(identical(other.severity, severity) || other.severity == severity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,serverUrl,fallbackName,initials,status);
+int get hashCode => Object.hash(runtimeType,serverUrl,fallbackName,initials,status,severity);
 
 @override
 String toString() {
-  return 'OrganizationRowViewState(serverUrl: $serverUrl, fallbackName: $fallbackName, initials: $initials, status: $status)';
+  return 'OrganizationRowViewState(serverUrl: $serverUrl, fallbackName: $fallbackName, initials: $initials, status: $status, severity: $severity)';
 }
 
 
@@ -383,7 +383,7 @@ abstract mixin class $OrganizationRowViewStateCopyWith<$Res>  {
   factory $OrganizationRowViewStateCopyWith(OrganizationRowViewState value, $Res Function(OrganizationRowViewState) _then) = _$OrganizationRowViewStateCopyWithImpl;
 @useResult
 $Res call({
- String serverUrl, String fallbackName, String initials, OrgRowStatus status
+ String serverUrl, String fallbackName, String initials, OrgRowStatus status, OrgAlertSeverity severity
 });
 
 
@@ -400,13 +400,14 @@ class _$OrganizationRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? serverUrl = null,Object? fallbackName = null,Object? initials = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? serverUrl = null,Object? fallbackName = null,Object? initials = null,Object? status = null,Object? severity = null,}) {
   return _then(_self.copyWith(
 serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,fallbackName: null == fallbackName ? _self.fallbackName : fallbackName // ignore: cast_nullable_to_non_nullable
 as String,initials: null == initials ? _self.initials : initials // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OrgRowStatus,
+as OrgRowStatus,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
+as OrgAlertSeverity,
   ));
 }
 /// Create a copy of OrganizationRowViewState
@@ -500,10 +501,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status,  OrgAlertSeverity severity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState() when $default != null:
-return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);case _:
+return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status,_that.severity);case _:
   return orElse();
 
 }
@@ -521,10 +522,10 @@ return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status,  OrgAlertSeverity severity)  $default,) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState():
-return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);case _:
+return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status,_that.severity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -541,10 +542,10 @@ return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String serverUrl,  String fallbackName,  String initials,  OrgRowStatus status,  OrgAlertSeverity severity)?  $default,) {final _that = this;
 switch (_that) {
 case _OrganizationRowViewState() when $default != null:
-return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);case _:
+return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status,_that.severity);case _:
   return null;
 
 }
@@ -556,13 +557,14 @@ return $default(_that.serverUrl,_that.fallbackName,_that.initials,_that.status);
 
 
 class _OrganizationRowViewState implements OrganizationRowViewState {
-  const _OrganizationRowViewState({required this.serverUrl, required this.fallbackName, required this.initials, required this.status});
+  const _OrganizationRowViewState({required this.serverUrl, required this.fallbackName, required this.initials, required this.status, this.severity = OrgAlertSeverity.none});
   
 
 @override final  String serverUrl;
 @override final  String fallbackName;
 @override final  String initials;
 @override final  OrgRowStatus status;
+@override@JsonKey() final  OrgAlertSeverity severity;
 
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
@@ -574,16 +576,16 @@ _$OrganizationRowViewStateCopyWith<_OrganizationRowViewState> get copyWith => __
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.fallbackName, fallbackName) || other.fallbackName == fallbackName)&&(identical(other.initials, initials) || other.initials == initials)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrganizationRowViewState&&(identical(other.serverUrl, serverUrl) || other.serverUrl == serverUrl)&&(identical(other.fallbackName, fallbackName) || other.fallbackName == fallbackName)&&(identical(other.initials, initials) || other.initials == initials)&&(identical(other.status, status) || other.status == status)&&(identical(other.severity, severity) || other.severity == severity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,serverUrl,fallbackName,initials,status);
+int get hashCode => Object.hash(runtimeType,serverUrl,fallbackName,initials,status,severity);
 
 @override
 String toString() {
-  return 'OrganizationRowViewState(serverUrl: $serverUrl, fallbackName: $fallbackName, initials: $initials, status: $status)';
+  return 'OrganizationRowViewState(serverUrl: $serverUrl, fallbackName: $fallbackName, initials: $initials, status: $status, severity: $severity)';
 }
 
 
@@ -594,7 +596,7 @@ abstract mixin class _$OrganizationRowViewStateCopyWith<$Res> implements $Organi
   factory _$OrganizationRowViewStateCopyWith(_OrganizationRowViewState value, $Res Function(_OrganizationRowViewState) _then) = __$OrganizationRowViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String serverUrl, String fallbackName, String initials, OrgRowStatus status
+ String serverUrl, String fallbackName, String initials, OrgRowStatus status, OrgAlertSeverity severity
 });
 
 
@@ -611,13 +613,14 @@ class __$OrganizationRowViewStateCopyWithImpl<$Res>
 
 /// Create a copy of OrganizationRowViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? serverUrl = null,Object? fallbackName = null,Object? initials = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? serverUrl = null,Object? fallbackName = null,Object? initials = null,Object? status = null,Object? severity = null,}) {
   return _then(_OrganizationRowViewState(
 serverUrl: null == serverUrl ? _self.serverUrl : serverUrl // ignore: cast_nullable_to_non_nullable
 as String,fallbackName: null == fallbackName ? _self.fallbackName : fallbackName // ignore: cast_nullable_to_non_nullable
 as String,initials: null == initials ? _self.initials : initials // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OrgRowStatus,
+as OrgRowStatus,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
+as OrgAlertSeverity,
   ));
 }
 

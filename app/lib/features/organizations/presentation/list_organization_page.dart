@@ -7,7 +7,6 @@ import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import 'list_organization_view_model.dart';
-import 'list_organization_view_state.dart';
 import 'organization_card.dart';
 
 class ListOrganizationPage extends ConsumerWidget {
@@ -118,15 +117,6 @@ class _OrgList extends ConsumerWidget {
                     final row = rows[i];
                     return OrganizationCard(
                       row: row,
-                      isCurrent: i == 0,
-                      onLeave: () async {
-                        final ok = await _confirmLeave(context, _titleFor(row));
-                        if (ok && context.mounted) {
-                          await ref
-                              .read(listOrganizationViewModelProvider.notifier)
-                              .onLeaveTapped(row.serverUrl);
-                        }
-                      },
                       onOpen: () => context.push(
                         Uri(
                           path:
@@ -141,33 +131,6 @@ class _OrgList extends ConsumerWidget {
     );
   }
 }
-
-Future<bool> _confirmLeave(BuildContext context, String orgName) async {
-  final l10n = AppLocalizations.of(context);
-  final result = await showDialog<bool>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(l10n.orgCardDisconnectDialogTitle),
-      content: Text(l10n.orgCardDisconnectDialogBody(orgName)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(ctx).pop(false),
-          child: Text(l10n.orgCardDisconnectDialogCancel),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.of(ctx).pop(true),
-          child: Text(l10n.orgCardDisconnectDialogConfirm),
-        ),
-      ],
-    ),
-  );
-  return result ?? false;
-}
-
-String _titleFor(OrganizationRowViewState row) => switch (row.status) {
-  OrgRowStatusOk(:final orgName) => orgName,
-  _ => row.fallbackName,
-};
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState({required this.colors});

@@ -73,8 +73,15 @@ func NewRouter(d Deps) http.Handler {
 		r.Delete("/users/{id}/devices/{deviceId}", api.AdminDeleteDevice)
 		r.Delete("/users/{id}", api.KickUser)
 
-		r.Get("/alerts", api.ListAlerts)
-		r.Get("/alerts/{id}", api.GetAlert)
+		// Read endpoints are shared with the admin dashboard, which relies on
+		// reverse-proxy auth. OptionalJWT enriches responses with per-caller
+		// context (e.g. is_recipient) when the mobile client passes a Bearer
+		// token, and stays transparent when it doesn't.
+		r.Group(func(r chi.Router) {
+			r.Use(appmw.OptionalJWT(d.DB, d.Signer))
+			r.Get("/alerts", api.ListAlerts)
+			r.Get("/alerts/{id}", api.GetAlert)
+		})
 		r.Post("/alerts/trigger", api.TriggerAlert)
 		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)
 	})
