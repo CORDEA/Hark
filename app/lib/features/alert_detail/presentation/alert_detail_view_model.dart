@@ -45,10 +45,25 @@ class AlertDetailViewModel extends _$AlertDetailViewModel {
       responderName: d.responderName,
       targetNames: d.targetNames,
       isBroadcast: d.isBroadcast,
+      myResponse: _mapMyResponse(d.myResponseStatus),
+      myRespondedAt: d.myRespondedAt,
       acknowledged: filter(RecipientResponse.acknowledged),
       declined: filter(RecipientResponse.declined),
       pending: filter(RecipientResponse.pending),
     );
+  }
+
+  AlertDetailMyResponse _mapMyResponse(String? status) {
+    switch (status) {
+      case RecipientResponse.acknowledged:
+        return AlertDetailMyResponse.acknowledged;
+      case RecipientResponse.declined:
+        return AlertDetailMyResponse.declined;
+      case RecipientResponse.pending:
+        return AlertDetailMyResponse.pending;
+      default:
+        return AlertDetailMyResponse.none;
+    }
   }
 
   String _hostOf(String url) {

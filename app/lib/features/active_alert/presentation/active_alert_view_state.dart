@@ -1,8 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../alert_detail/presentation/alert_detail_view_state.dart';
+
 part 'active_alert_view_state.freezed.dart';
 
-/// Terminal state after the user or a teammate resolves the alert.
+/// Terminal state after the user resolves the alert locally (by ack/decline)
+/// or after the admin resolves it server-side.
 enum ActiveAlertOutcome {
   /// Local user acknowledged.
   acknowledgedByMe,
@@ -10,8 +13,8 @@ enum ActiveAlertOutcome {
   /// Local user declined.
   declinedByMe,
 
-  /// A teammate acked (or admin resolved) before we did — silent-resolve
-  /// arrived over FCM.
+  /// Admin resolved the alert while we were still viewing it — a
+  /// silent-resolve FCM message arrived from the backend.
   resolvedByOther,
 }
 
@@ -33,6 +36,12 @@ abstract class ActiveAlertViewState with _$ActiveAlertViewState {
     @Default(false) bool isSending,
     ActiveAlertOutcome? outcome,
     String? resolvedByName,
+    @Default(<AlertDetailRecipientViewState>[])
+    List<AlertDetailRecipientViewState> acknowledged,
+    @Default(<AlertDetailRecipientViewState>[])
+    List<AlertDetailRecipientViewState> declined,
+    @Default(<AlertDetailRecipientViewState>[])
+    List<AlertDetailRecipientViewState> pending,
     @Default(ActiveAlertViewEvent.none()) ActiveAlertViewEvent event,
   }) = _ActiveAlertViewState;
 

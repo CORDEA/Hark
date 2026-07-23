@@ -277,7 +277,7 @@ as DateTime?,
 /// @nodoc
 mixin _$AlertDetailViewState {
 
- String get alertId; String get type; String get status; String get orgName; DateTime get triggeredAt; DateTime? get resolvedAt; String? get responderName; List<String> get targetNames; bool get isBroadcast; List<AlertDetailRecipientViewState> get acknowledged; List<AlertDetailRecipientViewState> get declined; List<AlertDetailRecipientViewState> get pending;
+ String get alertId; String get type; String get status; String get orgName; DateTime get triggeredAt; DateTime? get resolvedAt; String? get responderName; List<String> get targetNames; bool get isBroadcast; AlertDetailMyResponse get myResponse; DateTime? get myRespondedAt; List<AlertDetailRecipientViewState> get acknowledged; List<AlertDetailRecipientViewState> get declined; List<AlertDetailRecipientViewState> get pending;
 /// Create a copy of AlertDetailViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -288,16 +288,16 @@ $AlertDetailViewStateCopyWith<AlertDetailViewState> get copyWith => _$AlertDetai
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertDetailViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&const DeepCollectionEquality().equals(other.acknowledged, acknowledged)&&const DeepCollectionEquality().equals(other.declined, declined)&&const DeepCollectionEquality().equals(other.pending, pending));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlertDetailViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other.targetNames, targetNames)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.myResponse, myResponse) || other.myResponse == myResponse)&&(identical(other.myRespondedAt, myRespondedAt) || other.myRespondedAt == myRespondedAt)&&const DeepCollectionEquality().equals(other.acknowledged, acknowledged)&&const DeepCollectionEquality().equals(other.declined, declined)&&const DeepCollectionEquality().equals(other.pending, pending));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,type,status,orgName,triggeredAt,resolvedAt,responderName,const DeepCollectionEquality().hash(targetNames),isBroadcast,const DeepCollectionEquality().hash(acknowledged),const DeepCollectionEquality().hash(declined),const DeepCollectionEquality().hash(pending));
+int get hashCode => Object.hash(runtimeType,alertId,type,status,orgName,triggeredAt,resolvedAt,responderName,const DeepCollectionEquality().hash(targetNames),isBroadcast,myResponse,myRespondedAt,const DeepCollectionEquality().hash(acknowledged),const DeepCollectionEquality().hash(declined),const DeepCollectionEquality().hash(pending));
 
 @override
 String toString() {
-  return 'AlertDetailViewState(alertId: $alertId, type: $type, status: $status, orgName: $orgName, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderName: $responderName, targetNames: $targetNames, isBroadcast: $isBroadcast, acknowledged: $acknowledged, declined: $declined, pending: $pending)';
+  return 'AlertDetailViewState(alertId: $alertId, type: $type, status: $status, orgName: $orgName, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderName: $responderName, targetNames: $targetNames, isBroadcast: $isBroadcast, myResponse: $myResponse, myRespondedAt: $myRespondedAt, acknowledged: $acknowledged, declined: $declined, pending: $pending)';
 }
 
 
@@ -308,7 +308,7 @@ abstract mixin class $AlertDetailViewStateCopyWith<$Res>  {
   factory $AlertDetailViewStateCopyWith(AlertDetailViewState value, $Res Function(AlertDetailViewState) _then) = _$AlertDetailViewStateCopyWithImpl;
 @useResult
 $Res call({
- String alertId, String type, String status, String orgName, DateTime triggeredAt, DateTime? resolvedAt, String? responderName, List<String> targetNames, bool isBroadcast, List<AlertDetailRecipientViewState> acknowledged, List<AlertDetailRecipientViewState> declined, List<AlertDetailRecipientViewState> pending
+ String alertId, String type, String status, String orgName, DateTime triggeredAt, DateTime? resolvedAt, String? responderName, List<String> targetNames, bool isBroadcast, AlertDetailMyResponse myResponse, DateTime? myRespondedAt, List<AlertDetailRecipientViewState> acknowledged, List<AlertDetailRecipientViewState> declined, List<AlertDetailRecipientViewState> pending
 });
 
 
@@ -325,7 +325,7 @@ class _$AlertDetailViewStateCopyWithImpl<$Res>
 
 /// Create a copy of AlertDetailViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? type = null,Object? status = null,Object? orgName = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderName = freezed,Object? targetNames = null,Object? isBroadcast = null,Object? acknowledged = null,Object? declined = null,Object? pending = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? alertId = null,Object? type = null,Object? status = null,Object? orgName = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderName = freezed,Object? targetNames = null,Object? isBroadcast = null,Object? myResponse = null,Object? myRespondedAt = freezed,Object? acknowledged = null,Object? declined = null,Object? pending = null,}) {
   return _then(_self.copyWith(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -336,7 +336,9 @@ as DateTime,resolvedAt: freezed == resolvedAt ? _self.resolvedAt : resolvedAt //
 as DateTime?,responderName: freezed == responderName ? _self.responderName : responderName // ignore: cast_nullable_to_non_nullable
 as String?,targetNames: null == targetNames ? _self.targetNames : targetNames // ignore: cast_nullable_to_non_nullable
 as List<String>,isBroadcast: null == isBroadcast ? _self.isBroadcast : isBroadcast // ignore: cast_nullable_to_non_nullable
-as bool,acknowledged: null == acknowledged ? _self.acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
+as bool,myResponse: null == myResponse ? _self.myResponse : myResponse // ignore: cast_nullable_to_non_nullable
+as AlertDetailMyResponse,myRespondedAt: freezed == myRespondedAt ? _self.myRespondedAt : myRespondedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acknowledged: null == acknowledged ? _self.acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,declined: null == declined ? _self.declined : declined // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,
@@ -424,10 +426,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  AlertDetailMyResponse myResponse,  DateTime? myRespondedAt,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AlertDetailViewState() when $default != null:
-return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.acknowledged,_that.declined,_that.pending);case _:
+return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.myResponse,_that.myRespondedAt,_that.acknowledged,_that.declined,_that.pending);case _:
   return orElse();
 
 }
@@ -445,10 +447,10 @@ return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.trigge
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  AlertDetailMyResponse myResponse,  DateTime? myRespondedAt,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)  $default,) {final _that = this;
 switch (_that) {
 case _AlertDetailViewState():
-return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.acknowledged,_that.declined,_that.pending);case _:
+return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.myResponse,_that.myRespondedAt,_that.acknowledged,_that.declined,_that.pending);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -465,10 +467,10 @@ return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.trigge
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String alertId,  String type,  String status,  String orgName,  DateTime triggeredAt,  DateTime? resolvedAt,  String? responderName,  List<String> targetNames,  bool isBroadcast,  AlertDetailMyResponse myResponse,  DateTime? myRespondedAt,  List<AlertDetailRecipientViewState> acknowledged,  List<AlertDetailRecipientViewState> declined,  List<AlertDetailRecipientViewState> pending)?  $default,) {final _that = this;
 switch (_that) {
 case _AlertDetailViewState() when $default != null:
-return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.acknowledged,_that.declined,_that.pending);case _:
+return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.triggeredAt,_that.resolvedAt,_that.responderName,_that.targetNames,_that.isBroadcast,_that.myResponse,_that.myRespondedAt,_that.acknowledged,_that.declined,_that.pending);case _:
   return null;
 
 }
@@ -480,7 +482,7 @@ return $default(_that.alertId,_that.type,_that.status,_that.orgName,_that.trigge
 
 
 class _AlertDetailViewState extends AlertDetailViewState {
-  const _AlertDetailViewState({required this.alertId, required this.type, required this.status, required this.orgName, required this.triggeredAt, this.resolvedAt, this.responderName, final  List<String> targetNames = const <String>[], required this.isBroadcast, final  List<AlertDetailRecipientViewState> acknowledged = const <AlertDetailRecipientViewState>[], final  List<AlertDetailRecipientViewState> declined = const <AlertDetailRecipientViewState>[], final  List<AlertDetailRecipientViewState> pending = const <AlertDetailRecipientViewState>[]}): _targetNames = targetNames,_acknowledged = acknowledged,_declined = declined,_pending = pending,super._();
+  const _AlertDetailViewState({required this.alertId, required this.type, required this.status, required this.orgName, required this.triggeredAt, this.resolvedAt, this.responderName, final  List<String> targetNames = const <String>[], required this.isBroadcast, this.myResponse = AlertDetailMyResponse.none, this.myRespondedAt, final  List<AlertDetailRecipientViewState> acknowledged = const <AlertDetailRecipientViewState>[], final  List<AlertDetailRecipientViewState> declined = const <AlertDetailRecipientViewState>[], final  List<AlertDetailRecipientViewState> pending = const <AlertDetailRecipientViewState>[]}): _targetNames = targetNames,_acknowledged = acknowledged,_declined = declined,_pending = pending,super._();
   
 
 @override final  String alertId;
@@ -498,6 +500,8 @@ class _AlertDetailViewState extends AlertDetailViewState {
 }
 
 @override final  bool isBroadcast;
+@override@JsonKey() final  AlertDetailMyResponse myResponse;
+@override final  DateTime? myRespondedAt;
  final  List<AlertDetailRecipientViewState> _acknowledged;
 @override@JsonKey() List<AlertDetailRecipientViewState> get acknowledged {
   if (_acknowledged is EqualUnmodifiableListView) return _acknowledged;
@@ -530,16 +534,16 @@ _$AlertDetailViewStateCopyWith<_AlertDetailViewState> get copyWith => __$AlertDe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertDetailViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&const DeepCollectionEquality().equals(other._acknowledged, _acknowledged)&&const DeepCollectionEquality().equals(other._declined, _declined)&&const DeepCollectionEquality().equals(other._pending, _pending));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlertDetailViewState&&(identical(other.alertId, alertId) || other.alertId == alertId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.orgName, orgName) || other.orgName == orgName)&&(identical(other.triggeredAt, triggeredAt) || other.triggeredAt == triggeredAt)&&(identical(other.resolvedAt, resolvedAt) || other.resolvedAt == resolvedAt)&&(identical(other.responderName, responderName) || other.responderName == responderName)&&const DeepCollectionEquality().equals(other._targetNames, _targetNames)&&(identical(other.isBroadcast, isBroadcast) || other.isBroadcast == isBroadcast)&&(identical(other.myResponse, myResponse) || other.myResponse == myResponse)&&(identical(other.myRespondedAt, myRespondedAt) || other.myRespondedAt == myRespondedAt)&&const DeepCollectionEquality().equals(other._acknowledged, _acknowledged)&&const DeepCollectionEquality().equals(other._declined, _declined)&&const DeepCollectionEquality().equals(other._pending, _pending));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,alertId,type,status,orgName,triggeredAt,resolvedAt,responderName,const DeepCollectionEquality().hash(_targetNames),isBroadcast,const DeepCollectionEquality().hash(_acknowledged),const DeepCollectionEquality().hash(_declined),const DeepCollectionEquality().hash(_pending));
+int get hashCode => Object.hash(runtimeType,alertId,type,status,orgName,triggeredAt,resolvedAt,responderName,const DeepCollectionEquality().hash(_targetNames),isBroadcast,myResponse,myRespondedAt,const DeepCollectionEquality().hash(_acknowledged),const DeepCollectionEquality().hash(_declined),const DeepCollectionEquality().hash(_pending));
 
 @override
 String toString() {
-  return 'AlertDetailViewState(alertId: $alertId, type: $type, status: $status, orgName: $orgName, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderName: $responderName, targetNames: $targetNames, isBroadcast: $isBroadcast, acknowledged: $acknowledged, declined: $declined, pending: $pending)';
+  return 'AlertDetailViewState(alertId: $alertId, type: $type, status: $status, orgName: $orgName, triggeredAt: $triggeredAt, resolvedAt: $resolvedAt, responderName: $responderName, targetNames: $targetNames, isBroadcast: $isBroadcast, myResponse: $myResponse, myRespondedAt: $myRespondedAt, acknowledged: $acknowledged, declined: $declined, pending: $pending)';
 }
 
 
@@ -550,7 +554,7 @@ abstract mixin class _$AlertDetailViewStateCopyWith<$Res> implements $AlertDetai
   factory _$AlertDetailViewStateCopyWith(_AlertDetailViewState value, $Res Function(_AlertDetailViewState) _then) = __$AlertDetailViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String alertId, String type, String status, String orgName, DateTime triggeredAt, DateTime? resolvedAt, String? responderName, List<String> targetNames, bool isBroadcast, List<AlertDetailRecipientViewState> acknowledged, List<AlertDetailRecipientViewState> declined, List<AlertDetailRecipientViewState> pending
+ String alertId, String type, String status, String orgName, DateTime triggeredAt, DateTime? resolvedAt, String? responderName, List<String> targetNames, bool isBroadcast, AlertDetailMyResponse myResponse, DateTime? myRespondedAt, List<AlertDetailRecipientViewState> acknowledged, List<AlertDetailRecipientViewState> declined, List<AlertDetailRecipientViewState> pending
 });
 
 
@@ -567,7 +571,7 @@ class __$AlertDetailViewStateCopyWithImpl<$Res>
 
 /// Create a copy of AlertDetailViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? type = null,Object? status = null,Object? orgName = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderName = freezed,Object? targetNames = null,Object? isBroadcast = null,Object? acknowledged = null,Object? declined = null,Object? pending = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? alertId = null,Object? type = null,Object? status = null,Object? orgName = null,Object? triggeredAt = null,Object? resolvedAt = freezed,Object? responderName = freezed,Object? targetNames = null,Object? isBroadcast = null,Object? myResponse = null,Object? myRespondedAt = freezed,Object? acknowledged = null,Object? declined = null,Object? pending = null,}) {
   return _then(_AlertDetailViewState(
 alertId: null == alertId ? _self.alertId : alertId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -578,7 +582,9 @@ as DateTime,resolvedAt: freezed == resolvedAt ? _self.resolvedAt : resolvedAt //
 as DateTime?,responderName: freezed == responderName ? _self.responderName : responderName // ignore: cast_nullable_to_non_nullable
 as String?,targetNames: null == targetNames ? _self._targetNames : targetNames // ignore: cast_nullable_to_non_nullable
 as List<String>,isBroadcast: null == isBroadcast ? _self.isBroadcast : isBroadcast // ignore: cast_nullable_to_non_nullable
-as bool,acknowledged: null == acknowledged ? _self._acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
+as bool,myResponse: null == myResponse ? _self.myResponse : myResponse // ignore: cast_nullable_to_non_nullable
+as AlertDetailMyResponse,myRespondedAt: freezed == myRespondedAt ? _self.myRespondedAt : myRespondedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acknowledged: null == acknowledged ? _self._acknowledged : acknowledged // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,declined: null == declined ? _self._declined : declined // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,pending: null == pending ? _self._pending : pending // ignore: cast_nullable_to_non_nullable
 as List<AlertDetailRecipientViewState>,

@@ -241,6 +241,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDetailRowResponder => 'Responder';
 
   @override
+  String get alertDetailRowMyAction => 'Your action';
+
+  @override
+  String get alertDetailMyActionAcknowledged => 'Acknowledged';
+
+  @override
+  String get alertDetailMyActionDeclined => 'Declined';
+
+  @override
+  String get alertDetailMyActionPending => 'Pending';
+
+  @override
+  String get alertDetailMyActionNone => '—';
+
+  @override
   String get alertDetailTargetAll => 'All subscribers';
 
   @override

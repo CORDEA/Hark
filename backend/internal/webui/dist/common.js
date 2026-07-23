@@ -15,6 +15,10 @@ const catalogs = {
     'broadcast.section': 'Broadcast an alert',
     'broadcast.critical': 'Trigger Critical Alert',
     'broadcast.warning': 'Trigger Warning Alert',
+    'broadcast.trigger': 'Trigger Alert',
+    'broadcast.typeLabel': 'Type',
+    'broadcast.typeOption.critical': 'Critical',
+    'broadcast.typeOption.warning': 'Warning',
 
     'ongoing.section': 'Ongoing alerts',
     'ongoing.resolve': 'Resolve',

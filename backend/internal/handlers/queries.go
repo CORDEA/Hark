@@ -61,6 +61,11 @@ type alertSummary struct {
 	// this alert (broadcast alerts count as targeting every user). Always
 	// false when the request has no attached user (e.g. admin dashboard).
 	IsRecipient bool `json:"is_recipient"`
+	// MyResponseStatus is the caller's own recipient row status
+	// (pending/acknowledged/declined). Nil when the caller is not attached
+	// or not a recipient.
+	MyResponseStatus *string    `json:"my_response_status,omitempty"`
+	MyRespondedAt    *time.Time `json:"my_responded_at,omitempty"`
 }
 
 type recipientView struct {
@@ -229,9 +234,12 @@ func (h *API) buildSummaries(alerts []models.Alert, callerUserID string) ([]aler
 				if n, ok := names[r.UserID]; ok {
 					s.TargetNames = append(s.TargetNames, n)
 				}
-				if callerUserID != "" && r.UserID == callerUserID {
-					s.IsRecipient = true
-				}
+			}
+			if callerUserID != "" && r.UserID == callerUserID {
+				s.IsRecipient = true
+				status := r.ResponseStatus
+				s.MyResponseStatus = &status
+				s.MyRespondedAt = r.RespondedAt
 			}
 		}
 		if s.TargetNames == nil {

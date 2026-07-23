@@ -14,6 +14,10 @@ abstract class AlertDetailRecipientViewState
   }) = _AlertDetailRecipientViewState;
 }
 
+/// The caller's own response on the alert. `none` when the caller was not on
+/// the recipient list or the request was anonymous (e.g. admin console).
+enum AlertDetailMyResponse { none, pending, acknowledged, declined }
+
 @freezed
 abstract class AlertDetailViewState with _$AlertDetailViewState {
   const factory AlertDetailViewState({
@@ -26,6 +30,8 @@ abstract class AlertDetailViewState with _$AlertDetailViewState {
     String? responderName,
     @Default(<String>[]) List<String> targetNames,
     required bool isBroadcast,
+    @Default(AlertDetailMyResponse.none) AlertDetailMyResponse myResponse,
+    DateTime? myRespondedAt,
     @Default(<AlertDetailRecipientViewState>[])
     List<AlertDetailRecipientViewState> acknowledged,
     @Default(<AlertDetailRecipientViewState>[])
@@ -38,5 +44,5 @@ abstract class AlertDetailViewState with _$AlertDetailViewState {
 
   bool get isCritical => type == 'critical';
   bool get isAcknowledgedByMe =>
-      status == 'resolved' && responderName != null && responderName != 'Admin';
+      myResponse == AlertDetailMyResponse.acknowledged;
 }

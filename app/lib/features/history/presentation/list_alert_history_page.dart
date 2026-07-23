@@ -227,7 +227,9 @@ class _BadgePill extends StatelessWidget {
       case HistoryRowBadge.ackedAt:
         bg = colors.ackBackground;
         fg = colors.ackText;
-        label = l10n.historyBadgeAck(_hm(row.badgeAt ?? row.triggeredAt));
+        label = l10n.historyBadgeAck(
+          _hm((row.badgeAt ?? row.triggeredAt).toLocal()),
+        );
       case HistoryRowBadge.declined:
         bg = colors.declineBackground;
         fg = colors.declineText;

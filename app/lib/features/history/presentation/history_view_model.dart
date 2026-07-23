@@ -23,10 +23,10 @@ class HistoryViewModel extends _$HistoryViewModel {
     final ongoing = <HistoryRowViewState>[];
     final history = <HistoryRowViewState>[];
     for (final a in alerts) {
-      final row = _mapRow(a, profile.userId);
-      if (a.status == 'resolved') {
+      final row = _mapRow(a);
+      if (_isHistoryRow(a)) {
         history.add(row);
-      } else {
+      } else if (_isOngoingRow(a)) {
         ongoing.add(row);
       }
     }
@@ -57,16 +57,27 @@ class HistoryViewModel extends _$HistoryViewModel {
 
 int _typeRank(String type) => type == AlertType.critical ? 0 : 1;
 
-HistoryRowViewState _mapRow(AlertSummaryDto a, String currentUserId) {
+// The current user has already recorded their response on this alert.
+bool _hasMyResponse(AlertSummaryDto a) =>
+    a.myResponseStatus == RecipientResponse.acknowledged ||
+    a.myResponseStatus == RecipientResponse.declined;
+
+bool _isHistoryRow(AlertSummaryDto a) =>
+    a.status == 'resolved' || _hasMyResponse(a);
+
+bool _isOngoingRow(AlertSummaryDto a) =>
+    a.status != 'resolved' && !_hasMyResponse(a);
+
+HistoryRowViewState _mapRow(AlertSummaryDto a) {
   HistoryRowBadge badge;
   DateTime? badgeAt;
-  if (a.status == 'resolved') {
-    if (a.responderId == currentUserId) {
-      badge = HistoryRowBadge.ackedAt;
-      badgeAt = a.resolvedAt;
-    } else {
-      badge = HistoryRowBadge.resolved;
-    }
+  if (a.myResponseStatus == RecipientResponse.acknowledged) {
+    badge = HistoryRowBadge.ackedAt;
+    badgeAt = a.myRespondedAt;
+  } else if (a.myResponseStatus == RecipientResponse.declined) {
+    badge = HistoryRowBadge.declined;
+  } else if (a.status == 'resolved') {
+    badge = HistoryRowBadge.resolved;
   } else {
     badge = HistoryRowBadge.ongoing;
   }

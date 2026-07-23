@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/domain/observe_fcm_event_use_case.dart';
+import '../../alert_detail/domain/get_alert_detail_use_case.dart';
+import '../../alert_detail/presentation/alert_detail_view_state.dart';
 import '../../alerts/data/alert_dto.dart';
 import '../domain/respond_alert_use_case.dart';
 import 'active_alert_view_state.dart';
@@ -16,16 +18,18 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
     required String type,
     required DateTime triggeredAt,
   }) {
-    // Subscribe to silent-resolve events so a teammate's ack auto-closes this screen.
+    // The only remote-resolve signal we now honor is an admin resolve —
+    // peer acks no longer close the alert on the backend.
     ref.listen(observeFcmEventUseCaseProvider, (_, event) {
       if (event is FcmEventAlertResolved && event.alertId == alertId) {
         _handleRemoteResolve();
       }
-      // Consume any resolve event regardless of alertId — no other handler will.
       if (event is FcmEventAlertResolved) {
         ref.read(observeFcmEventUseCaseProvider.notifier).consume();
       }
     });
+
+    Future.microtask(_loadRecipients);
 
     return ActiveAlertViewState(
       alertId: alertId,
@@ -62,11 +66,39 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
             ? ActiveAlertOutcome.acknowledgedByMe
             : ActiveAlertOutcome.declinedByMe,
       );
+      await _loadRecipients();
     } catch (e) {
       state = state.copyWith(
         isSending: false,
         event: ActiveAlertViewEvent.respondFailed(e),
       );
+    }
+  }
+
+  Future<void> _loadRecipients() async {
+    try {
+      final detail = await ref
+          .read(getAlertDetailUseCaseProvider)
+          .execute(serverUrl: state.serverUrl, alertId: state.alertId);
+      List<AlertDetailRecipientViewState> filter(String status) => detail
+          .recipients
+          .where((r) => r.responseStatus == status)
+          .map(
+            (r) => AlertDetailRecipientViewState(
+              name: r.name,
+              responseStatus: r.responseStatus,
+              respondedAt: r.respondedAt,
+            ),
+          )
+          .toList();
+      state = state.copyWith(
+        acknowledged: filter(RecipientResponse.acknowledged),
+        declined: filter(RecipientResponse.declined),
+        pending: filter(RecipientResponse.pending),
+      );
+    } catch (_) {
+      // Recipient list is supplemental — swallow load errors rather than
+      // masking the primary ack/decline UX.
     }
   }
 

@@ -478,6 +478,36 @@ abstract class AppLocalizations {
   /// **'Responder'**
   String get alertDetailRowResponder;
 
+  /// No description provided for @alertDetailRowMyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Your action'**
+  String get alertDetailRowMyAction;
+
+  /// No description provided for @alertDetailMyActionAcknowledged.
+  ///
+  /// In en, this message translates to:
+  /// **'Acknowledged'**
+  String get alertDetailMyActionAcknowledged;
+
+  /// No description provided for @alertDetailMyActionDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get alertDetailMyActionDeclined;
+
+  /// No description provided for @alertDetailMyActionPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get alertDetailMyActionPending;
+
+  /// No description provided for @alertDetailMyActionNone.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get alertDetailMyActionNone;
+
   /// No description provided for @alertDetailTargetAll.
   ///
   /// In en, this message translates to:

@@ -194,7 +194,6 @@ class _StatusPills extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
-    final ackByMe = state.isAcknowledgedByMe;
     return Row(
       children: [
         _Pill(
@@ -210,9 +209,7 @@ class _StatusPills extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         if (state.status == 'resolved')
           _Pill(
-            text: ackByMe
-                ? l10n.alertDetailStatusAcknowledged
-                : l10n.alertDetailStatusResolved,
+            text: l10n.alertDetailStatusResolved,
             background: colors.ackBackground,
             border: colors.ackBorder,
             foreground: colors.ackText,
@@ -311,6 +308,15 @@ class _MetaCard extends StatelessWidget {
             context,
             bold: true,
           ),
+          if (state.myResponse != AlertDetailMyResponse.none) ...[
+            _divider(colors),
+            _row(
+              l10n.alertDetailRowMyAction,
+              _myActionLabel(l10n, state.myResponse),
+              context,
+              bold: true,
+            ),
+          ],
         ],
       ),
     );
@@ -320,6 +326,19 @@ class _MetaCard extends StatelessWidget {
     return s.isCritical
         ? l10n.activeAlertTypeCritical
         : l10n.activeAlertTypeWarning;
+  }
+
+  static String _myActionLabel(AppLocalizations l10n, AlertDetailMyResponse r) {
+    switch (r) {
+      case AlertDetailMyResponse.acknowledged:
+        return l10n.alertDetailMyActionAcknowledged;
+      case AlertDetailMyResponse.declined:
+        return l10n.alertDetailMyActionDeclined;
+      case AlertDetailMyResponse.pending:
+        return l10n.alertDetailMyActionPending;
+      case AlertDetailMyResponse.none:
+        return l10n.alertDetailMyActionNone;
+    }
   }
 
   static Widget _divider(AppColorSchemeExtension colors) =>

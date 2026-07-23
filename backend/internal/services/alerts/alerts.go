@@ -95,10 +95,12 @@ func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs [
 	return alert, nil
 }
 
-// Respond records the user's action. On acknowledgement, atomically flips the
-// alert to resolved and fires a silent-resolve to every OTHER device on the
-// alert. Only the first winning ack triggers the fanout (RowsAffected==1).
+// Respond records the caller's ack/decline on the alert. It does NOT resolve
+// the alert — only an admin's explicit /resolve-admin call moves an alert to
+// the resolved state. This keeps every recipient's response visible on the
+// admin console until the on-call situation is actually closed out.
 func (s *Service) Respond(ctx context.Context, alertID, userID, action string) (models.Alert, bool, error) {
+	_ = ctx
 	if action != models.RecipientAcknowledged && action != models.RecipientDeclined {
 		return models.Alert{}, false, ErrInvalidAction
 	}
@@ -123,36 +125,6 @@ func (s *Service) Respond(ctx context.Context, alertID, userID, action string) (
 	}
 	if res.RowsAffected == 0 {
 		return alert, false, ErrUserNotOnAlert
-	}
-
-	if action != models.RecipientAcknowledged {
-		return alert, false, nil
-	}
-
-	// Ack-race: only the first winner flips status active→resolved.
-	won := s.DB.Model(&models.Alert{}).
-		Where("id = ? AND status = ?", alertID, models.AlertStatusActive).
-		Updates(map[string]any{
-			"status":       models.AlertStatusResolved,
-			"responder_id": userID,
-			"resolved_at":  now,
-		})
-	if won.Error != nil {
-		return alert, false, won.Error
-	}
-	if won.RowsAffected == 0 {
-		// Another responder beat us to it; do NOT re-fanout.
-		_ = s.DB.First(&alert, "id = ?", alertID).Error
-		return alert, false, nil
-	}
-
-	alert.Status = models.AlertStatusResolved
-	respID := userID
-	alert.ResponderID = &respID
-	alert.ResolvedAt = &now
-
-	if err := s.silentResolveFanout(ctx, alertID, userID); err != nil {
-		slog.Error("silent resolve fanout", "err", err, "alert_id", alertID)
 	}
 	return alert, true, nil
 }

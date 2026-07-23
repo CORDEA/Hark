@@ -196,6 +196,13 @@ function openTrigger(type) {
   modal.classList.add('flex');
 }
 
+function updateTriggerButtonStyle() {
+  const type = q('#trigger-type').value;
+  const btn = q('#btn-trigger');
+  btn.style.background = type === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
+  btn.style.color      = type === 'critical' ? '#fff' : '#241a04';
+}
+
 function closeTrigger() {
   q('#trigger-modal').classList.add('hidden');
   q('#trigger-modal').classList.remove('flex');
@@ -297,8 +304,9 @@ async function refresh() {
 // ---------- event wiring ----------
 
 document.addEventListener('DOMContentLoaded', () => {
-  q('#btn-critical').addEventListener('click', () => openTrigger('critical'));
-  q('#btn-warning').addEventListener('click',  () => openTrigger('warning'));
+  q('#trigger-type').addEventListener('change', updateTriggerButtonStyle);
+  updateTriggerButtonStyle();
+  q('#btn-trigger').addEventListener('click', () => openTrigger(q('#trigger-type').value));
 
   const cancelTrigger = () => { closeTrigger(); resetTriggerState(); };
   const cancelConfirm = () => { closeConfirm(); resetTriggerState(); };

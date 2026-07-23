@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -95,7 +97,11 @@ class ShowActiveAlertPage extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: _Content(provider: provider)),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _Content(provider: provider),
+                ),
+              ),
               _ActionButtons(provider: provider),
             ],
           ),
@@ -194,13 +200,151 @@ class _Content extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        Text(
-          _elapsed(l10n, state.triggeredAt),
-          style: AppTheme.monoStyle(
-            theme.textTheme.bodySmall?.copyWith(color: colors.criticalTextDim),
-          ),
-        ),
+        _ElapsedText(triggeredAt: state.triggeredAt),
+        const SizedBox(height: AppSpacing.lg),
+        _RecipientSections(state: state),
       ],
+    );
+  }
+}
+
+class _ElapsedText extends HookWidget {
+  const _ElapsedText({required this.triggeredAt});
+  final DateTime triggeredAt;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    final l10n = AppLocalizations.of(context);
+    final tick = useState(0);
+    useEffect(() {
+      final timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        tick.value = tick.value + 1;
+      });
+      return timer.cancel;
+    }, const []);
+    return Text(
+      _elapsed(l10n, triggeredAt),
+      style: AppTheme.monoStyle(
+        theme.textTheme.bodySmall?.copyWith(color: colors.criticalTextDim),
+      ),
+    );
+  }
+}
+
+class _RecipientSections extends StatelessWidget {
+  const _RecipientSections({required this.state});
+  final ActiveAlertViewState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (state.acknowledged.isNotEmpty) ...[
+          _SectionLabel(
+            l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
+            color: colors.criticalTextDim,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.acknowledged.map(
+            (r) => _AckRow(name: r.name, respondedAt: r.respondedAt),
+          ),
+          const SizedBox(height: AppSpacing.md),
+        ],
+        if (state.pending.isNotEmpty) ...[
+          _SectionLabel(
+            l10n.alertDetailSectionPending(state.pending.length),
+            color: colors.criticalTextDim,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.pending.map(
+            (r) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+              child: Text(
+                r.name,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.criticalTextDim,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+        ],
+        if (state.declined.isNotEmpty) ...[
+          _SectionLabel(
+            l10n.alertDetailSectionDeclined(state.declined.length),
+            color: colors.criticalTextDim,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ...state.declined.map(
+            (r) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+              child: Text(
+                r.name,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.declineText,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text, {required this.color});
+  final String text;
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+        color: color,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+class _AckRow extends StatelessWidget {
+  const _AckRow({required this.name, this.respondedAt});
+  final String name;
+  final DateTime? respondedAt;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            name,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          Text(
+            respondedAt != null
+                ? _fmtTime(respondedAt!)
+                : l10n.alertDetailValueEmpty,
+            style: AppTheme.monoStyle(
+              theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

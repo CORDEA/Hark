@@ -27,6 +27,10 @@ _AlertSummaryDto _$AlertSummaryDtoFromJson(Map<String, dynamic> json) =>
       pendingCount: (json['pending_count'] as num?)?.toInt() ?? 0,
       declineCount: (json['decline_count'] as num?)?.toInt() ?? 0,
       isRecipient: json['is_recipient'] as bool? ?? false,
+      myResponseStatus: json['my_response_status'] as String?,
+      myRespondedAt: json['my_responded_at'] == null
+          ? null
+          : DateTime.parse(json['my_responded_at'] as String),
     );
 
 Map<String, dynamic> _$AlertSummaryDtoToJson(_AlertSummaryDto instance) =>
@@ -44,6 +48,8 @@ Map<String, dynamic> _$AlertSummaryDtoToJson(_AlertSummaryDto instance) =>
       'pending_count': instance.pendingCount,
       'decline_count': instance.declineCount,
       'is_recipient': instance.isRecipient,
+      'my_response_status': instance.myResponseStatus,
+      'my_responded_at': instance.myRespondedAt?.toIso8601String(),
     };
 
 _AlertRecipientDto _$AlertRecipientDtoFromJson(Map<String, dynamic> json) =>
@@ -85,6 +91,10 @@ _AlertDetailDto _$AlertDetailDtoFromJson(Map<String, dynamic> json) =>
       pendingCount: (json['pending_count'] as num?)?.toInt() ?? 0,
       declineCount: (json['decline_count'] as num?)?.toInt() ?? 0,
       isRecipient: json['is_recipient'] as bool? ?? false,
+      myResponseStatus: json['my_response_status'] as String?,
+      myRespondedAt: json['my_responded_at'] == null
+          ? null
+          : DateTime.parse(json['my_responded_at'] as String),
       recipients:
           (json['recipients'] as List<dynamic>?)
               ?.map(
@@ -109,6 +119,8 @@ Map<String, dynamic> _$AlertDetailDtoToJson(_AlertDetailDto instance) =>
       'pending_count': instance.pendingCount,
       'decline_count': instance.declineCount,
       'is_recipient': instance.isRecipient,
+      'my_response_status': instance.myResponseStatus,
+      'my_responded_at': instance.myRespondedAt?.toIso8601String(),
       'recipients': instance.recipients,
     };
 
