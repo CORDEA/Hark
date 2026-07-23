@@ -562,35 +562,47 @@ abstract class AppLocalizations {
   /// **'{date} · {hhmm}'**
   String historyTimeAbsolute(String date, String hhmm);
 
-  /// No description provided for @historyDisconnect.
+  /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Disconnect from {org}'**
-  String historyDisconnect(String org);
+  /// **'Settings'**
+  String get settingsTitle;
 
-  /// No description provided for @historyDisconnectDialogTitle.
+  /// No description provided for @settingsCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get historyDisconnectDialogTitle;
+  /// **'Devices & passkeys'**
+  String get settingsCredentials;
 
-  /// No description provided for @historyDisconnectDialogBody.
+  /// No description provided for @settingsLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave {org}'**
+  String settingsLeave(String org);
+
+  /// No description provided for @settingsLeaveDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave organization'**
+  String get settingsLeaveDialogTitle;
+
+  /// No description provided for @settingsLeaveDialogBody.
   ///
   /// In en, this message translates to:
   /// **'This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.'**
-  String historyDisconnectDialogBody(String org);
+  String settingsLeaveDialogBody(String org);
 
-  /// No description provided for @historyDisconnectDialogCancel.
+  /// No description provided for @settingsLeaveDialogCancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get historyDisconnectDialogCancel;
+  String get settingsLeaveDialogCancel;
 
-  /// No description provided for @historyDisconnectDialogConfirm.
+  /// No description provided for @settingsLeaveDialogConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get historyDisconnectDialogConfirm;
+  /// **'Leave'**
+  String get settingsLeaveDialogConfirm;
 
   /// No description provided for @credentialsTitle.
   ///

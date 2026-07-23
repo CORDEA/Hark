@@ -8,6 +8,7 @@ import '../features/current_user/presentation/list_credentials_page.dart';
 import '../features/history/presentation/list_alert_history_page.dart';
 import '../features/onboarding/presentation/connect_org_page.dart';
 import '../features/organizations/presentation/list_organization_page.dart';
+import '../features/settings/presentation/show_settings_page.dart';
 import 'deep_link/observe_deep_link_use_case.dart';
 
 part 'router.g.dart';
@@ -68,6 +69,15 @@ GoRouter router(Ref ref) {
                 state.pathParameters['serverUrl'] ?? '',
               );
               return ListCredentialsPage(serverUrl: url);
+            },
+          ),
+          GoRoute(
+            path: 'orgs/:serverUrl/settings',
+            builder: (context, state) {
+              final url = Uri.decodeComponent(
+                state.pathParameters['serverUrl'] ?? '',
+              );
+              return ShowSettingsPage(serverUrl: url);
             },
           ),
           GoRoute(

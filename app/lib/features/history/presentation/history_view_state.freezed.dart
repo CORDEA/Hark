@@ -281,304 +281,9 @@ as DateTime?,
 }
 
 /// @nodoc
-mixin _$HistoryViewEvent {
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEvent);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'HistoryViewEvent()';
-}
-
-
-}
-
-/// @nodoc
-class $HistoryViewEventCopyWith<$Res>  {
-$HistoryViewEventCopyWith(HistoryViewEvent _, $Res Function(HistoryViewEvent) __);
-}
-
-
-/// Adds pattern-matching-related methods to [HistoryViewEvent].
-extension HistoryViewEventPatterns on HistoryViewEvent {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HistoryViewEventNone value)?  none,TResult Function( HistoryViewEventLeaveFailed value)?  leaveFailed,TResult Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case HistoryViewEventNone() when none != null:
-return none(_that);case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HistoryViewEventNone value)  none,required TResult Function( HistoryViewEventLeaveFailed value)  leaveFailed,required TResult Function( HistoryViewEventNavigateToOrgs value)  navigateToOrgs,}){
-final _that = this;
-switch (_that) {
-case HistoryViewEventNone():
-return none(_that);case HistoryViewEventLeaveFailed():
-return leaveFailed(_that);case HistoryViewEventNavigateToOrgs():
-return navigateToOrgs(_that);}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HistoryViewEventNone value)?  none,TResult? Function( HistoryViewEventLeaveFailed value)?  leaveFailed,TResult? Function( HistoryViewEventNavigateToOrgs value)?  navigateToOrgs,}){
-final _that = this;
-switch (_that) {
-case HistoryViewEventNone() when none != null:
-return none(_that);case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  none,TResult Function( Object error)?  leaveFailed,TResult Function()?  navigateToOrgs,required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case HistoryViewEventNone() when none != null:
-return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs();case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  none,required TResult Function( Object error)  leaveFailed,required TResult Function()  navigateToOrgs,}) {final _that = this;
-switch (_that) {
-case HistoryViewEventNone():
-return none();case HistoryViewEventLeaveFailed():
-return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs():
-return navigateToOrgs();}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  none,TResult? Function( Object error)?  leaveFailed,TResult? Function()?  navigateToOrgs,}) {final _that = this;
-switch (_that) {
-case HistoryViewEventNone() when none != null:
-return none();case HistoryViewEventLeaveFailed() when leaveFailed != null:
-return leaveFailed(_that.error);case HistoryViewEventNavigateToOrgs() when navigateToOrgs != null:
-return navigateToOrgs();case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-
-
-class HistoryViewEventNone implements HistoryViewEvent {
-  const HistoryViewEventNone();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventNone);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'HistoryViewEvent.none()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class HistoryViewEventLeaveFailed implements HistoryViewEvent {
-  const HistoryViewEventLeaveFailed(this.error);
-  
-
- final  Object error;
-
-/// Create a copy of HistoryViewEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$HistoryViewEventLeaveFailedCopyWith<HistoryViewEventLeaveFailed> get copyWith => _$HistoryViewEventLeaveFailedCopyWithImpl<HistoryViewEventLeaveFailed>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventLeaveFailed&&const DeepCollectionEquality().equals(other.error, error));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(error));
-
-@override
-String toString() {
-  return 'HistoryViewEvent.leaveFailed(error: $error)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $HistoryViewEventLeaveFailedCopyWith<$Res> implements $HistoryViewEventCopyWith<$Res> {
-  factory $HistoryViewEventLeaveFailedCopyWith(HistoryViewEventLeaveFailed value, $Res Function(HistoryViewEventLeaveFailed) _then) = _$HistoryViewEventLeaveFailedCopyWithImpl;
-@useResult
-$Res call({
- Object error
-});
-
-
-
-
-}
-/// @nodoc
-class _$HistoryViewEventLeaveFailedCopyWithImpl<$Res>
-    implements $HistoryViewEventLeaveFailedCopyWith<$Res> {
-  _$HistoryViewEventLeaveFailedCopyWithImpl(this._self, this._then);
-
-  final HistoryViewEventLeaveFailed _self;
-  final $Res Function(HistoryViewEventLeaveFailed) _then;
-
-/// Create a copy of HistoryViewEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
-  return _then(HistoryViewEventLeaveFailed(
-null == error ? _self.error : error ,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class HistoryViewEventNavigateToOrgs implements HistoryViewEvent {
-  const HistoryViewEventNavigateToOrgs();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewEventNavigateToOrgs);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'HistoryViewEvent.navigateToOrgs()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
 mixin _$HistoryViewState {
 
- String get orgName; List<HistoryRowViewState> get rows; bool get isLeaving; HistoryViewEvent get event;
+ String get orgName; List<HistoryRowViewState> get rows;
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -589,16 +294,16 @@ $HistoryViewStateCopyWith<HistoryViewState> get copyWith => _$HistoryViewStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other.rows, rows)&&(identical(other.isLeaving, isLeaving) || other.isLeaving == isLeaving)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other.rows, rows));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(rows),isLeaving,event);
+int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(rows));
 
 @override
 String toString() {
-  return 'HistoryViewState(orgName: $orgName, rows: $rows, isLeaving: $isLeaving, event: $event)';
+  return 'HistoryViewState(orgName: $orgName, rows: $rows)';
 }
 
 
@@ -609,11 +314,11 @@ abstract mixin class $HistoryViewStateCopyWith<$Res>  {
   factory $HistoryViewStateCopyWith(HistoryViewState value, $Res Function(HistoryViewState) _then) = _$HistoryViewStateCopyWithImpl;
 @useResult
 $Res call({
- String orgName, List<HistoryRowViewState> rows, bool isLeaving, HistoryViewEvent event
+ String orgName, List<HistoryRowViewState> rows
 });
 
 
-$HistoryViewEventCopyWith<$Res> get event;
+
 
 }
 /// @nodoc
@@ -626,25 +331,14 @@ class _$HistoryViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orgName = null,Object? rows = null,Object? isLeaving = null,Object? event = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? orgName = null,Object? rows = null,}) {
   return _then(_self.copyWith(
 orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
 as String,rows: null == rows ? _self.rows : rows // ignore: cast_nullable_to_non_nullable
-as List<HistoryRowViewState>,isLeaving: null == isLeaving ? _self.isLeaving : isLeaving // ignore: cast_nullable_to_non_nullable
-as bool,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
-as HistoryViewEvent,
+as List<HistoryRowViewState>,
   ));
 }
-/// Create a copy of HistoryViewState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$HistoryViewEventCopyWith<$Res> get event {
-  
-  return $HistoryViewEventCopyWith<$Res>(_self.event, (value) {
-    return _then(_self.copyWith(event: value));
-  });
-}
+
 }
 
 
@@ -726,10 +420,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows,  bool isLeaving,  HistoryViewEvent event)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HistoryViewState() when $default != null:
-return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
+return $default(_that.orgName,_that.rows);case _:
   return orElse();
 
 }
@@ -747,10 +441,10 @@ return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows,  bool isLeaving,  HistoryViewEvent event)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows)  $default,) {final _that = this;
 switch (_that) {
 case _HistoryViewState():
-return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
+return $default(_that.orgName,_that.rows);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -767,10 +461,10 @@ return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgName,  List<HistoryRowViewState> rows,  bool isLeaving,  HistoryViewEvent event)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgName,  List<HistoryRowViewState> rows)?  $default,) {final _that = this;
 switch (_that) {
 case _HistoryViewState() when $default != null:
-return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
+return $default(_that.orgName,_that.rows);case _:
   return null;
 
 }
@@ -782,7 +476,7 @@ return $default(_that.orgName,_that.rows,_that.isLeaving,_that.event);case _:
 
 
 class _HistoryViewState implements HistoryViewState {
-  const _HistoryViewState({required this.orgName, required final  List<HistoryRowViewState> rows, this.isLeaving = false, this.event = const HistoryViewEvent.none()}): _rows = rows;
+  const _HistoryViewState({required this.orgName, required final  List<HistoryRowViewState> rows}): _rows = rows;
   
 
 @override final  String orgName;
@@ -793,8 +487,6 @@ class _HistoryViewState implements HistoryViewState {
   return EqualUnmodifiableListView(_rows);
 }
 
-@override@JsonKey() final  bool isLeaving;
-@override@JsonKey() final  HistoryViewEvent event;
 
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
@@ -806,16 +498,16 @@ _$HistoryViewStateCopyWith<_HistoryViewState> get copyWith => __$HistoryViewStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other._rows, _rows)&&(identical(other.isLeaving, isLeaving) || other.isLeaving == isLeaving)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other._rows, _rows));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(_rows),isLeaving,event);
+int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(_rows));
 
 @override
 String toString() {
-  return 'HistoryViewState(orgName: $orgName, rows: $rows, isLeaving: $isLeaving, event: $event)';
+  return 'HistoryViewState(orgName: $orgName, rows: $rows)';
 }
 
 
@@ -826,11 +518,11 @@ abstract mixin class _$HistoryViewStateCopyWith<$Res> implements $HistoryViewSta
   factory _$HistoryViewStateCopyWith(_HistoryViewState value, $Res Function(_HistoryViewState) _then) = __$HistoryViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String orgName, List<HistoryRowViewState> rows, bool isLeaving, HistoryViewEvent event
+ String orgName, List<HistoryRowViewState> rows
 });
 
 
-@override $HistoryViewEventCopyWith<$Res> get event;
+
 
 }
 /// @nodoc
@@ -843,26 +535,15 @@ class __$HistoryViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orgName = null,Object? rows = null,Object? isLeaving = null,Object? event = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? orgName = null,Object? rows = null,}) {
   return _then(_HistoryViewState(
 orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
 as String,rows: null == rows ? _self._rows : rows // ignore: cast_nullable_to_non_nullable
-as List<HistoryRowViewState>,isLeaving: null == isLeaving ? _self.isLeaving : isLeaving // ignore: cast_nullable_to_non_nullable
-as bool,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
-as HistoryViewEvent,
+as List<HistoryRowViewState>,
   ));
 }
 
-/// Create a copy of HistoryViewState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$HistoryViewEventCopyWith<$Res> get event {
-  
-  return $HistoryViewEventCopyWith<$Res>(_self.event, (value) {
-    return _then(_self.copyWith(event: value));
-  });
-}
+
 }
 
 // dart format on

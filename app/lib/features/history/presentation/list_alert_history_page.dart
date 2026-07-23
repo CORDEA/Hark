@@ -10,9 +10,6 @@ import '../../../l10n/app_localizations.dart';
 import 'history_view_model.dart';
 import 'history_view_state.dart';
 
-/// Screen 6: chronological history of alerts for one org, plus the
-/// "Disconnect" action (per plan, the settings feature is fulfilled by this
-/// bottom button).
 class ListAlertHistoryPage extends ConsumerWidget {
   const ListAlertHistoryPage({super.key, required this.serverUrl});
 
@@ -24,33 +21,16 @@ class ListAlertHistoryPage extends ConsumerWidget {
     final async = ref.watch(provider);
     final l10n = AppLocalizations.of(context);
 
-    ref.listen(provider.select((s) => s.value?.event), (_, event) {
-      if (event == null) return;
-      switch (event) {
-        case HistoryViewEventLeaveFailed(:final error):
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(ErrorLocalizer.localize(l10n, error))),
-            );
-            ref.read(provider.notifier).onEventConsumed();
-          }
-        case HistoryViewEventNavigateToOrgs():
-          if (context.mounted) context.go('/');
-        case HistoryViewEventNone():
-          break;
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.historyTitle),
         actions: [
           IconButton(
-            tooltip: l10n.credentialsTitle,
-            icon: const Icon(Icons.tune),
+            tooltip: l10n.settingsTitle,
+            icon: const Icon(Icons.settings_outlined),
             onPressed: () => context.push(
               Uri(
-                path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
+                path: '/orgs/${Uri.encodeComponent(serverUrl)}/settings',
               ).toString(),
             ),
           ),
@@ -88,7 +68,6 @@ class _Body extends ConsumerWidget {
               child: _RowList(rows: state.rows),
             ),
           ),
-          _DisconnectButton(state: state, provider: provider),
           const SizedBox(height: AppSpacing.xl),
         ],
       ),
@@ -230,67 +209,6 @@ class _BadgePill extends StatelessWidget {
       ),
     );
   }
-}
-
-class _DisconnectButton extends ConsumerWidget {
-  const _DisconnectButton({required this.state, required this.provider});
-  final HistoryViewState state;
-  final HistoryViewModelProvider provider;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.harkColors;
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    return SizedBox(
-      height: 48,
-      width: double.infinity,
-      child: TextButton(
-        onPressed: state.isLeaving
-            ? null
-            : () async {
-                final ok = await _confirmLeave(context, state.orgName);
-                if (ok && context.mounted) {
-                  ref.read(provider.notifier).onLeaveTapped();
-                }
-              },
-        child: state.isLeaving
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : Text(
-                l10n.historyDisconnect(state.orgName),
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colors.critical,
-                ),
-              ),
-      ),
-    );
-  }
-}
-
-Future<bool> _confirmLeave(BuildContext context, String orgName) async {
-  final l10n = AppLocalizations.of(context);
-  final result = await showDialog<bool>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(l10n.historyDisconnectDialogTitle),
-      content: Text(l10n.historyDisconnectDialogBody(orgName)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(ctx).pop(false),
-          child: Text(l10n.historyDisconnectDialogCancel),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.of(ctx).pop(true),
-          child: Text(l10n.historyDisconnectDialogConfirm),
-        ),
-      ],
-    ),
-  );
-  return result ?? false;
 }
 
 Color _dotColor(HistoryRowViewState row, AppColorSchemeExtension colors) {

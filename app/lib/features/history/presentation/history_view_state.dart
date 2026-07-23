@@ -18,20 +18,9 @@ abstract class HistoryRowViewState with _$HistoryRowViewState {
 }
 
 @freezed
-sealed class HistoryViewEvent with _$HistoryViewEvent {
-  const factory HistoryViewEvent.none() = HistoryViewEventNone;
-  const factory HistoryViewEvent.leaveFailed(Object error) =
-      HistoryViewEventLeaveFailed;
-  const factory HistoryViewEvent.navigateToOrgs() =
-      HistoryViewEventNavigateToOrgs;
-}
-
-@freezed
 abstract class HistoryViewState with _$HistoryViewState {
   const factory HistoryViewState({
     required String orgName,
     required List<HistoryRowViewState> rows,
-    @Default(false) bool isLeaving,
-    @Default(HistoryViewEvent.none()) HistoryViewEvent event,
   }) = _HistoryViewState;
 }

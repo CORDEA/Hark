@@ -291,23 +291,29 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String historyDisconnect(String org) {
-    return 'Disconnect from $org';
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsCredentials => 'Devices & passkeys';
+
+  @override
+  String settingsLeave(String org) {
+    return 'Leave $org';
   }
 
   @override
-  String get historyDisconnectDialogTitle => 'Disconnect';
+  String get settingsLeaveDialogTitle => 'Leave organization';
 
   @override
-  String historyDisconnectDialogBody(String org) {
+  String settingsLeaveDialogBody(String org) {
     return 'This device will stop receiving alerts from $org. You can rejoin with a new invitation code.';
   }
 
   @override
-  String get historyDisconnectDialogCancel => 'Cancel';
+  String get settingsLeaveDialogCancel => 'Cancel';
 
   @override
-  String get historyDisconnectDialogConfirm => 'Disconnect';
+  String get settingsLeaveDialogConfirm => 'Leave';
 
   @override
   String get credentialsTitle => 'Devices & passkeys';

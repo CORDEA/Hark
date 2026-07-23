@@ -203,20 +203,24 @@
       "hhmm": { "type": "String" }
     }
   },
-  "historyDisconnect": "Disconnect from {org}",
-  "@historyDisconnect": {
+  "settingsTitle": "Settings",
+  "@settingsTitle": {},
+  "settingsCredentials": "Devices & passkeys",
+  "@settingsCredentials": {},
+  "settingsLeave": "Leave {org}",
+  "@settingsLeave": {
     "placeholders": { "org": { "type": "String" } }
   },
-  "historyDisconnectDialogTitle": "Disconnect",
-  "@historyDisconnectDialogTitle": {},
-  "historyDisconnectDialogBody": "This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.",
-  "@historyDisconnectDialogBody": {
+  "settingsLeaveDialogTitle": "Leave organization",
+  "@settingsLeaveDialogTitle": {},
+  "settingsLeaveDialogBody": "This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.",
+  "@settingsLeaveDialogBody": {
     "placeholders": { "org": { "type": "String" } }
   },
-  "historyDisconnectDialogCancel": "Cancel",
-  "@historyDisconnectDialogCancel": {},
-  "historyDisconnectDialogConfirm": "Disconnect",
-  "@historyDisconnectDialogConfirm": {},
+  "settingsLeaveDialogCancel": "Cancel",
+  "@settingsLeaveDialogCancel": {},
+  "settingsLeaveDialogConfirm": "Leave",
+  "@settingsLeaveDialogConfirm": {},
 
   "credentialsTitle": "Devices & passkeys",
   "@credentialsTitle": {},
