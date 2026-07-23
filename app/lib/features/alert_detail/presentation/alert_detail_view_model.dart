@@ -42,7 +42,6 @@ class AlertDetailViewModel extends _$AlertDetailViewModel {
       orgName: orgName,
       triggeredAt: d.triggeredAt,
       resolvedAt: d.resolvedAt,
-      responderName: d.responderName,
       targetNames: d.targetNames,
       isBroadcast: d.isBroadcast,
       myResponse: _mapMyResponse(d.myResponseStatus),

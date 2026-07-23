@@ -412,6 +412,12 @@ abstract class AppLocalizations {
   /// **'Declined ({count})'**
   String alertDetailSectionDeclined(int count);
 
+  /// No description provided for @alertDetailSectionRecipients.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipients'**
+  String get alertDetailSectionRecipients;
+
   /// No description provided for @alertDetailStatusActive.
   ///
   /// In en, this message translates to:
@@ -447,12 +453,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resolved'**
   String get alertDetailRowResolved;
-
-  /// No description provided for @alertDetailRowResponder.
-  ///
-  /// In en, this message translates to:
-  /// **'Responder'**
-  String get alertDetailRowResponder;
 
   /// No description provided for @alertDetailRowMyAction.
   ///

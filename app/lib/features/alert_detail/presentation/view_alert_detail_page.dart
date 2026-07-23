@@ -105,6 +105,10 @@ class _Body extends StatelessWidget {
     final colors = context.harkColors;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
+    final hasRecipients =
+        state.acknowledged.isNotEmpty ||
+        state.pending.isNotEmpty ||
+        state.declined.isNotEmpty;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -112,44 +116,56 @@ class _Body extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         _MetaCard(state: state),
         const SizedBox(height: AppSpacing.lg),
-        if (state.acknowledged.isNotEmpty) ...[
-          _SectionLabel(
-            l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          ...state.acknowledged.map(_ackRow),
-          const SizedBox(height: AppSpacing.md),
-        ],
-        if (state.pending.isNotEmpty) ...[
-          _SectionLabel(l10n.alertDetailSectionPending(state.pending.length)),
-          const SizedBox(height: AppSpacing.sm),
-          ...state.pending.map(
-            (r) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-              child: Text(
-                r.name,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
+        if (hasRecipients) ...[
+          Text(
+            l10n.alertDetailSectionRecipients,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-        ],
-        if (state.declined.isNotEmpty) ...[
-          _SectionLabel(l10n.alertDetailSectionDeclined(state.declined.length)),
-          const SizedBox(height: AppSpacing.sm),
-          ...state.declined.map(
-            (r) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-              child: Text(
-                r.name,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colors.declineText,
+          if (state.acknowledged.isNotEmpty) ...[
+            _SectionLabel(
+              l10n.alertDetailSectionAcknowledged(state.acknowledged.length),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            ...state.acknowledged.map(_ackRow),
+            const SizedBox(height: AppSpacing.md),
+          ],
+          if (state.pending.isNotEmpty) ...[
+            _SectionLabel(l10n.alertDetailSectionPending(state.pending.length)),
+            const SizedBox(height: AppSpacing.sm),
+            ...state.pending.map(
+              (r) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                child: Text(
+                  r.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             ),
-          ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+          if (state.declined.isNotEmpty) ...[
+            _SectionLabel(
+              l10n.alertDetailSectionDeclined(state.declined.length),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            ...state.declined.map(
+              (r) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                child: Text(
+                  r.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colors.declineText,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ],
     );
@@ -299,13 +315,6 @@ class _MetaCard extends StatelessWidget {
               mono: true,
             ),
           ],
-          _divider(colors),
-          _row(
-            l10n.alertDetailRowResponder,
-            state.responderName ?? l10n.alertDetailValueEmpty,
-            context,
-            bold: true,
-          ),
           if (state.myResponse != AlertDetailMyResponse.none) ...[
             _divider(colors),
             _row(

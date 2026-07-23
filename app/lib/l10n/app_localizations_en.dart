@@ -208,6 +208,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get alertDetailSectionRecipients => 'Recipients';
+
+  @override
   String get alertDetailStatusActive => 'ACTIVE';
 
   @override
@@ -224,9 +227,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alertDetailRowResolved => 'Resolved';
-
-  @override
-  String get alertDetailRowResponder => 'Responder';
 
   @override
   String get alertDetailRowMyAction => 'Your action';

@@ -51,7 +51,7 @@ final class AlertDetailViewModelProvider
 }
 
 String _$alertDetailViewModelHash() =>
-    r'fcbc48bb88d0787fd73e17f5dde5f33b5930e3cf';
+    r'1f01337c2b8b93128207b28560390357fe437982';
 
 final class AlertDetailViewModelFamily extends $Family
     with

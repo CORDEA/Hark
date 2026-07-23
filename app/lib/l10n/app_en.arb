@@ -141,6 +141,8 @@
   "@alertDetailSectionDeclined": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "alertDetailSectionRecipients": "Recipients",
+  "@alertDetailSectionRecipients": {},
   "alertDetailStatusActive": "ACTIVE",
   "@alertDetailStatusActive": {},
   "alertDetailStatusResolved": "RESOLVED",
@@ -153,8 +155,6 @@
   "@alertDetailRowTriggered": {},
   "alertDetailRowResolved": "Resolved",
   "@alertDetailRowResolved": {},
-  "alertDetailRowResponder": "Responder",
-  "@alertDetailRowResponder": {},
   "alertDetailRowMyAction": "Your action",
   "@alertDetailRowMyAction": {},
   "alertDetailMyActionAcknowledged": "Acknowledged",

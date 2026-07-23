@@ -27,7 +27,6 @@ abstract class AlertDetailViewState with _$AlertDetailViewState {
     required String orgName,
     required DateTime triggeredAt,
     DateTime? resolvedAt,
-    String? responderName,
     @Default(<String>[]) List<String> targetNames,
     required bool isBroadcast,
     @Default(AlertDetailMyResponse.none) AlertDetailMyResponse myResponse,
