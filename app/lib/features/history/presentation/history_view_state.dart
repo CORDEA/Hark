@@ -21,6 +21,7 @@ abstract class HistoryRowViewState with _$HistoryRowViewState {
 abstract class HistoryViewState with _$HistoryViewState {
   const factory HistoryViewState({
     required String orgName,
-    required List<HistoryRowViewState> rows,
+    required List<HistoryRowViewState> ongoingRows,
+    required List<HistoryRowViewState> historyRows,
   }) = _HistoryViewState;
 }

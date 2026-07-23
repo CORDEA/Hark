@@ -502,23 +502,29 @@ abstract class AppLocalizations {
   /// **'—'**
   String get alertDetailValueEmpty;
 
-  /// No description provided for @historyTitle.
+  /// No description provided for @alertsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alertsTitle;
+
+  /// No description provided for @alertsSectionOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing alerts'**
+  String get alertsSectionOngoing;
+
+  /// No description provided for @alertsSectionHistory.
   ///
   /// In en, this message translates to:
   /// **'History'**
-  String get historyTitle;
+  String get alertsSectionHistory;
 
   /// No description provided for @historyEmpty.
   ///
   /// In en, this message translates to:
   /// **'No alerts yet'**
   String get historyEmpty;
-
-  /// No description provided for @historyBadgeOngoing.
-  ///
-  /// In en, this message translates to:
-  /// **'ONGOING'**
-  String get historyBadgeOngoing;
 
   /// No description provided for @historyBadgeAck.
   ///

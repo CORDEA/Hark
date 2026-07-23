@@ -283,7 +283,7 @@ as DateTime?,
 /// @nodoc
 mixin _$HistoryViewState {
 
- String get orgName; List<HistoryRowViewState> get rows;
+ String get orgName; List<HistoryRowViewState> get ongoingRows; List<HistoryRowViewState> get historyRows;
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -294,16 +294,16 @@ $HistoryViewStateCopyWith<HistoryViewState> get copyWith => _$HistoryViewStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other.rows, rows));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other.ongoingRows, ongoingRows)&&const DeepCollectionEquality().equals(other.historyRows, historyRows));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(rows));
+int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(ongoingRows),const DeepCollectionEquality().hash(historyRows));
 
 @override
 String toString() {
-  return 'HistoryViewState(orgName: $orgName, rows: $rows)';
+  return 'HistoryViewState(orgName: $orgName, ongoingRows: $ongoingRows, historyRows: $historyRows)';
 }
 
 
@@ -314,7 +314,7 @@ abstract mixin class $HistoryViewStateCopyWith<$Res>  {
   factory $HistoryViewStateCopyWith(HistoryViewState value, $Res Function(HistoryViewState) _then) = _$HistoryViewStateCopyWithImpl;
 @useResult
 $Res call({
- String orgName, List<HistoryRowViewState> rows
+ String orgName, List<HistoryRowViewState> ongoingRows, List<HistoryRowViewState> historyRows
 });
 
 
@@ -331,10 +331,11 @@ class _$HistoryViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orgName = null,Object? rows = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? orgName = null,Object? ongoingRows = null,Object? historyRows = null,}) {
   return _then(_self.copyWith(
 orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,rows: null == rows ? _self.rows : rows // ignore: cast_nullable_to_non_nullable
+as String,ongoingRows: null == ongoingRows ? _self.ongoingRows : ongoingRows // ignore: cast_nullable_to_non_nullable
+as List<HistoryRowViewState>,historyRows: null == historyRows ? _self.historyRows : historyRows // ignore: cast_nullable_to_non_nullable
 as List<HistoryRowViewState>,
   ));
 }
@@ -420,10 +421,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> ongoingRows,  List<HistoryRowViewState> historyRows)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HistoryViewState() when $default != null:
-return $default(_that.orgName,_that.rows);case _:
+return $default(_that.orgName,_that.ongoingRows,_that.historyRows);case _:
   return orElse();
 
 }
@@ -441,10 +442,10 @@ return $default(_that.orgName,_that.rows);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> rows)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orgName,  List<HistoryRowViewState> ongoingRows,  List<HistoryRowViewState> historyRows)  $default,) {final _that = this;
 switch (_that) {
 case _HistoryViewState():
-return $default(_that.orgName,_that.rows);case _:
+return $default(_that.orgName,_that.ongoingRows,_that.historyRows);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -461,10 +462,10 @@ return $default(_that.orgName,_that.rows);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgName,  List<HistoryRowViewState> rows)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orgName,  List<HistoryRowViewState> ongoingRows,  List<HistoryRowViewState> historyRows)?  $default,) {final _that = this;
 switch (_that) {
 case _HistoryViewState() when $default != null:
-return $default(_that.orgName,_that.rows);case _:
+return $default(_that.orgName,_that.ongoingRows,_that.historyRows);case _:
   return null;
 
 }
@@ -476,15 +477,22 @@ return $default(_that.orgName,_that.rows);case _:
 
 
 class _HistoryViewState implements HistoryViewState {
-  const _HistoryViewState({required this.orgName, required final  List<HistoryRowViewState> rows}): _rows = rows;
+  const _HistoryViewState({required this.orgName, required final  List<HistoryRowViewState> ongoingRows, required final  List<HistoryRowViewState> historyRows}): _ongoingRows = ongoingRows,_historyRows = historyRows;
   
 
 @override final  String orgName;
- final  List<HistoryRowViewState> _rows;
-@override List<HistoryRowViewState> get rows {
-  if (_rows is EqualUnmodifiableListView) return _rows;
+ final  List<HistoryRowViewState> _ongoingRows;
+@override List<HistoryRowViewState> get ongoingRows {
+  if (_ongoingRows is EqualUnmodifiableListView) return _ongoingRows;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_rows);
+  return EqualUnmodifiableListView(_ongoingRows);
+}
+
+ final  List<HistoryRowViewState> _historyRows;
+@override List<HistoryRowViewState> get historyRows {
+  if (_historyRows is EqualUnmodifiableListView) return _historyRows;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_historyRows);
 }
 
 
@@ -498,16 +506,16 @@ _$HistoryViewStateCopyWith<_HistoryViewState> get copyWith => __$HistoryViewStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other._rows, _rows));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryViewState&&(identical(other.orgName, orgName) || other.orgName == orgName)&&const DeepCollectionEquality().equals(other._ongoingRows, _ongoingRows)&&const DeepCollectionEquality().equals(other._historyRows, _historyRows));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(_rows));
+int get hashCode => Object.hash(runtimeType,orgName,const DeepCollectionEquality().hash(_ongoingRows),const DeepCollectionEquality().hash(_historyRows));
 
 @override
 String toString() {
-  return 'HistoryViewState(orgName: $orgName, rows: $rows)';
+  return 'HistoryViewState(orgName: $orgName, ongoingRows: $ongoingRows, historyRows: $historyRows)';
 }
 
 
@@ -518,7 +526,7 @@ abstract mixin class _$HistoryViewStateCopyWith<$Res> implements $HistoryViewSta
   factory _$HistoryViewStateCopyWith(_HistoryViewState value, $Res Function(_HistoryViewState) _then) = __$HistoryViewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String orgName, List<HistoryRowViewState> rows
+ String orgName, List<HistoryRowViewState> ongoingRows, List<HistoryRowViewState> historyRows
 });
 
 
@@ -535,10 +543,11 @@ class __$HistoryViewStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryViewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orgName = null,Object? rows = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? orgName = null,Object? ongoingRows = null,Object? historyRows = null,}) {
   return _then(_HistoryViewState(
 orgName: null == orgName ? _self.orgName : orgName // ignore: cast_nullable_to_non_nullable
-as String,rows: null == rows ? _self._rows : rows // ignore: cast_nullable_to_non_nullable
+as String,ongoingRows: null == ongoingRows ? _self._ongoingRows : ongoingRows // ignore: cast_nullable_to_non_nullable
+as List<HistoryRowViewState>,historyRows: null == historyRows ? _self._historyRows : historyRows // ignore: cast_nullable_to_non_nullable
 as List<HistoryRowViewState>,
   ));
 }

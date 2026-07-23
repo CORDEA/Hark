@@ -23,7 +23,7 @@ class ListAlertHistoryPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.historyTitle),
+        title: Text(l10n.alertsTitle),
         actions: [
           IconButton(
             tooltip: l10n.settingsTitle,
@@ -62,57 +62,90 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: AppSpacing.md),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => ref.read(provider.notifier).onRefresh(),
-              child: _RowList(rows: state.rows, serverUrl: serverUrl),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xl),
+    final l10n = AppLocalizations.of(context);
+    final isEmpty = state.ongoingRows.isEmpty && state.historyRows.isEmpty;
+    return RefreshIndicator(
+      onRefresh: () => ref.read(provider.notifier).onRefresh(),
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          if (isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Text(
+                  l10n.historyEmpty,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
+            )
+          else ...[
+            if (state.ongoingRows.isNotEmpty) ...[
+              PinnedHeaderSliver(
+                child: _SectionHeader(label: l10n.alertsSectionOngoing),
+              ),
+              _RowSliver(rows: state.ongoingRows, serverUrl: serverUrl),
+            ],
+            if (state.historyRows.isNotEmpty) ...[
+              PinnedHeaderSliver(
+                child: _SectionHeader(label: l10n.alertsSectionHistory),
+              ),
+              _RowSliver(rows: state.historyRows, serverUrl: serverUrl),
+            ],
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
+          ],
         ],
       ),
     );
   }
 }
 
-class _RowList extends StatelessWidget {
-  const _RowList({required this.rows, required this.serverUrl});
-  final List<HistoryRowViewState> rows;
-  final String serverUrl;
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.label});
+  final String label;
+
   @override
   Widget build(BuildContext context) {
-    if (rows.isEmpty) {
-      return LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Center(
-              child: Text(
-                AppLocalizations.of(context).historyEmpty,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
-              ),
-            ),
-          ),
+    final theme = Theme.of(context);
+    return Container(
+      color: theme.colorScheme.surface,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.md,
+        AppSpacing.lg,
+        AppSpacing.sm,
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.titleSmall?.copyWith(
+          fontWeight: FontWeight.w700,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
         ),
-      );
-    }
-    return ListView.separated(
-      physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: rows.length,
-      separatorBuilder: (_, _) =>
-          Container(height: 1, color: context.harkColors.borderHairline),
-      itemBuilder: (context, i) => _Row(row: rows[i], serverUrl: serverUrl),
+      ),
+    );
+  }
+}
+
+class _RowSliver extends StatelessWidget {
+  const _RowSliver({required this.rows, required this.serverUrl});
+  final List<HistoryRowViewState> rows;
+  final String serverUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.harkColors;
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      sliver: SliverList.separated(
+        itemCount: rows.length,
+        separatorBuilder: (_, _) =>
+            Container(height: 1, color: colors.borderHairline),
+        itemBuilder: (context, i) => _Row(row: rows[i], serverUrl: serverUrl),
+      ),
     );
   }
 }
@@ -169,7 +202,7 @@ class _Row extends StatelessWidget {
                 ],
               ),
             ),
-            _BadgePill(row: row),
+            if (row.badge != HistoryRowBadge.ongoing) _BadgePill(row: row),
           ],
         ),
       ),
@@ -190,9 +223,7 @@ class _BadgePill extends StatelessWidget {
     late String label;
     switch (row.badge) {
       case HistoryRowBadge.ongoing:
-        bg = colors.critical.withValues(alpha: 0.15);
-        fg = colors.criticalStrong;
-        label = l10n.historyBadgeOngoing;
+        return const SizedBox.shrink();
       case HistoryRowBadge.ackedAt:
         bg = colors.ackBackground;
         fg = colors.ackText;

@@ -253,13 +253,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDetailValueEmpty => '—';
 
   @override
-  String get historyTitle => 'History';
+  String get alertsTitle => 'Alerts';
+
+  @override
+  String get alertsSectionOngoing => 'Ongoing alerts';
+
+  @override
+  String get alertsSectionHistory => 'History';
 
   @override
   String get historyEmpty => 'No alerts yet';
-
-  @override
-  String get historyBadgeOngoing => 'ONGOING';
 
   @override
   String historyBadgeAck(String hhmm) {

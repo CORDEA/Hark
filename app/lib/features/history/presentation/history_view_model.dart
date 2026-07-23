@@ -20,8 +20,27 @@ class HistoryViewModel extends _$HistoryViewModel {
     final alerts = await ref
         .watch(getHistoryUseCaseProvider)
         .execute(serverUrl: serverUrl);
-    final rows = alerts.map((a) => _mapRow(a, profile.userId)).toList();
-    return HistoryViewState(orgName: _hostOf(serverUrl), rows: rows);
+    final ongoing = <HistoryRowViewState>[];
+    final history = <HistoryRowViewState>[];
+    for (final a in alerts) {
+      final row = _mapRow(a, profile.userId);
+      if (a.status == 'resolved') {
+        history.add(row);
+      } else {
+        ongoing.add(row);
+      }
+    }
+    ongoing.sort((a, b) {
+      final byType = _typeRank(a.type).compareTo(_typeRank(b.type));
+      if (byType != 0) return byType;
+      return b.triggeredAt.compareTo(a.triggeredAt);
+    });
+    history.sort((a, b) => b.triggeredAt.compareTo(a.triggeredAt));
+    return HistoryViewState(
+      orgName: _hostOf(serverUrl),
+      ongoingRows: ongoing,
+      historyRows: history,
+    );
   }
 
   Future<void> onRefresh() async {
@@ -35,6 +54,8 @@ class HistoryViewModel extends _$HistoryViewModel {
     return u.host;
   }
 }
+
+int _typeRank(String type) => type == AlertType.critical ? 0 : 1;
 
 HistoryRowViewState _mapRow(AlertSummaryDto a, String currentUserId) {
   HistoryRowBadge badge;

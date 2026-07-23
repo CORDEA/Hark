@@ -172,12 +172,14 @@
   "alertDetailValueEmpty": "—",
   "@alertDetailValueEmpty": {},
 
-  "historyTitle": "History",
-  "@historyTitle": {},
+  "alertsTitle": "Alerts",
+  "@alertsTitle": {},
+  "alertsSectionOngoing": "Ongoing alerts",
+  "@alertsSectionOngoing": {},
+  "alertsSectionHistory": "History",
+  "@alertsSectionHistory": {},
   "historyEmpty": "No alerts yet",
   "@historyEmpty": {},
-  "historyBadgeOngoing": "ONGOING",
-  "@historyBadgeOngoing": {},
   "historyBadgeAck": "ACK {hhmm}",
   "@historyBadgeAck": {
     "placeholders": { "hhmm": { "type": "String" } }
