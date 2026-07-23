@@ -176,6 +176,8 @@
   "@historyTitle": {},
   "historyEmpty": "No alerts yet",
   "@historyEmpty": {},
+  "historyBadgeOngoing": "ONGOING",
+  "@historyBadgeOngoing": {},
   "historyBadgeAck": "ACK {hhmm}",
   "@historyBadgeAck": {
     "placeholders": { "hhmm": { "type": "String" } }

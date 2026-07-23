@@ -20,10 +20,7 @@ class HistoryViewModel extends _$HistoryViewModel {
     final alerts = await ref
         .watch(getHistoryUseCaseProvider)
         .execute(serverUrl: serverUrl);
-    final rows = alerts
-        .map((a) => _mapRow(a, profile.userId))
-        .whereType<HistoryRowViewState>()
-        .toList();
+    final rows = alerts.map((a) => _mapRow(a, profile.userId)).toList();
     return HistoryViewState(orgName: _hostOf(serverUrl), rows: rows);
   }
 
@@ -39,7 +36,7 @@ class HistoryViewModel extends _$HistoryViewModel {
   }
 }
 
-HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
+HistoryRowViewState _mapRow(AlertSummaryDto a, String currentUserId) {
   HistoryRowBadge badge;
   DateTime? badgeAt;
   if (a.status == 'resolved') {
@@ -50,7 +47,7 @@ HistoryRowViewState? _mapRow(AlertSummaryDto a, String currentUserId) {
       badge = HistoryRowBadge.resolved;
     }
   } else {
-    return null;
+    badge = HistoryRowBadge.ongoing;
   }
   return HistoryRowViewState(
     alertId: a.id,

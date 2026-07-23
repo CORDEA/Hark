@@ -514,6 +514,12 @@ abstract class AppLocalizations {
   /// **'No alerts yet'**
   String get historyEmpty;
 
+  /// No description provided for @historyBadgeOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'ONGOING'**
+  String get historyBadgeOngoing;
+
   /// No description provided for @historyBadgeAck.
   ///
   /// In en, this message translates to:

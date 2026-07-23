@@ -42,7 +42,8 @@ class ListAlertHistoryPage extends ConsumerWidget {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) =>
               Center(child: Text(ErrorLocalizer.localize(l10n, e))),
-          data: (state) => _Body(state: state, provider: provider),
+          data: (state) =>
+              _Body(state: state, provider: provider, serverUrl: serverUrl),
         ),
       ),
     );
@@ -50,9 +51,14 @@ class ListAlertHistoryPage extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.state, required this.provider});
+  const _Body({
+    required this.state,
+    required this.provider,
+    required this.serverUrl,
+  });
   final HistoryViewState state;
   final HistoryViewModelProvider provider;
+  final String serverUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -65,7 +71,7 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => ref.read(provider.notifier).onRefresh(),
-              child: _RowList(rows: state.rows),
+              child: _RowList(rows: state.rows, serverUrl: serverUrl),
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
@@ -76,8 +82,9 @@ class _Body extends ConsumerWidget {
 }
 
 class _RowList extends StatelessWidget {
-  const _RowList({required this.rows});
+  const _RowList({required this.rows, required this.serverUrl});
   final List<HistoryRowViewState> rows;
+  final String serverUrl;
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
@@ -105,62 +112,66 @@ class _RowList extends StatelessWidget {
       itemCount: rows.length,
       separatorBuilder: (_, _) =>
           Container(height: 1, color: context.harkColors.borderHairline),
-      itemBuilder: (context, i) => _Row(row: rows[i]),
+      itemBuilder: (context, i) => _Row(row: rows[i], serverUrl: serverUrl),
     );
   }
 }
 
 class _Row extends StatelessWidget {
-  const _Row({required this.row});
+  const _Row({required this.row, required this.serverUrl});
   final HistoryRowViewState row;
+  final String serverUrl;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-      child: Row(
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _dotColor(row, colors),
+    return InkWell(
+      onTap: () => _openAlert(context, row, serverUrl),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        child: Row(
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _dotColor(row, colors),
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  row.type == 'critical'
-                      ? l10n.historyRowTitleCritical
-                      : l10n.historyRowTitleWarning,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: row.badge == HistoryRowBadge.resolved
-                        ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
-                        : theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w600,
-                    decoration: row.badge == HistoryRowBadge.resolved
-                        ? TextDecoration.lineThrough
-                        : null,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    row.type == 'critical'
+                        ? l10n.historyRowTitleCritical
+                        : l10n.historyRowTitleWarning,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: row.badge == HistoryRowBadge.resolved
+                          ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
+                          : theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w600,
+                      decoration: row.badge == HistoryRowBadge.resolved
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  _timeLabel(l10n, row.triggeredAt),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    _timeLabel(l10n, row.triggeredAt),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          _BadgePill(row: row),
-        ],
+            _BadgePill(row: row),
+          ],
+        ),
       ),
     );
   }
@@ -178,6 +189,10 @@ class _BadgePill extends StatelessWidget {
     late Color fg;
     late String label;
     switch (row.badge) {
+      case HistoryRowBadge.ongoing:
+        bg = colors.critical.withValues(alpha: 0.15);
+        fg = colors.criticalStrong;
+        label = l10n.historyBadgeOngoing;
       case HistoryRowBadge.ackedAt:
         bg = colors.ackBackground;
         fg = colors.ackText;
@@ -215,6 +230,19 @@ Color _dotColor(HistoryRowViewState row, AppColorSchemeExtension colors) {
   if (row.badge == HistoryRowBadge.resolved) return colors.borderSubtle;
   if (row.type == 'critical') return colors.critical;
   return colors.warning;
+}
+
+void _openAlert(
+  BuildContext context,
+  HistoryRowViewState row,
+  String serverUrl,
+) {
+  final encoded = Uri.encodeComponent(serverUrl);
+  if (row.badge == HistoryRowBadge.ongoing) {
+    context.push('/orgs/$encoded/alert/${row.alertId}?type=${row.type}');
+  } else {
+    context.push('/orgs/$encoded/alert/${row.alertId}/detail');
+  }
 }
 
 String _timeLabel(AppLocalizations l10n, DateTime iso) {

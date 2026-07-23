@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'history_view_state.freezed.dart';
 
 /// The badge on the right of each row. Encodes the outcome from the local
-/// user's perspective (ACK / DECLINED / RESOLVED).
-enum HistoryRowBadge { ackedAt, declined, resolved }
+/// user's perspective (ONGOING / ACK / DECLINED / RESOLVED).
+enum HistoryRowBadge { ongoing, ackedAt, declined, resolved }
 
 @freezed
 abstract class HistoryRowViewState with _$HistoryRowViewState {

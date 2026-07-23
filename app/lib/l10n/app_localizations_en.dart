@@ -259,6 +259,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyEmpty => 'No alerts yet';
 
   @override
+  String get historyBadgeOngoing => 'ONGOING';
+
+  @override
   String historyBadgeAck(String hhmm) {
     return 'ACK $hhmm';
   }
