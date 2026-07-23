@@ -394,13 +394,6 @@ class _ActionButtons extends ConsumerWidget {
             onPressed: state.isSending
                 ? null
                 : () => ref.read(provider.notifier).onAckTapped(),
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.critical,
-              foregroundColor: theme.colorScheme.onPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
             child: state.isSending
                 ? SizedBox(
                     height: 22,
@@ -410,34 +403,17 @@ class _ActionButtons extends ConsumerWidget {
                       color: theme.colorScheme.onPrimary,
                     ),
                   )
-                : Text(
-                    l10n.activeAlertAck,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
+                : Text(l10n.activeAlertAck),
           ),
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 56,
           width: double.infinity,
           child: OutlinedButton(
             onPressed: state.isSending
                 ? null
                 : () => ref.read(provider.notifier).onDeclineTapped(),
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.criticalBorder),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: Text(
-              l10n.activeAlertDecline,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: colors.criticalTextMuted,
-              ),
-            ),
+            child: Text(l10n.activeAlertDecline),
           ),
         ),
       ],

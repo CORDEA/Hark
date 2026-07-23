@@ -142,18 +142,6 @@ abstract class AppLocalizations {
   /// **'Connect'**
   String get connectOrgSubmit;
 
-  /// No description provided for @connectOrgAlreadyHaveOrgs.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have organizations? '**
-  String get connectOrgAlreadyHaveOrgs;
-
-  /// No description provided for @connectOrgViewList.
-  ///
-  /// In en, this message translates to:
-  /// **'View list'**
-  String get connectOrgViewList;
-
   /// No description provided for @connectOrgMissingFields.
   ///
   /// In en, this message translates to:

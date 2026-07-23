@@ -127,7 +127,6 @@ class _InputPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -153,24 +152,13 @@ class _InputPane extends ConsumerWidget {
         Consumer(
           builder: (context, ref, _) {
             final isBusy = ref.watch(provider.select((s) => s.isBusy));
-            final colors = context.harkColors;
-            return SizedBox(
-              height: 56,
-              child: FilledButton(
-                onPressed: isBusy
-                    ? null
-                    : () => ref.read(provider.notifier).onContinueTapped(),
-                style: FilledButton.styleFrom(
-                  backgroundColor: colors.critical,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                child: isBusy
-                    ? const _ButtonSpinner()
-                    : Text(l10n.connectOrgLookup),
-              ),
+            return FilledButton(
+              onPressed: isBusy
+                  ? null
+                  : () => ref.read(provider.notifier).onContinueTapped(),
+              child: isBusy
+                  ? const _ButtonSpinner()
+                  : Text(l10n.connectOrgLookup),
             );
           },
         ),
@@ -178,39 +166,15 @@ class _InputPane extends ConsumerWidget {
         Consumer(
           builder: (context, ref, _) {
             final isBusy = ref.watch(provider.select((s) => s.isBusy));
-            return Center(
-              child: TextButton(
-                onPressed: isBusy
-                    ? null
-                    : () => ref
-                          .read(provider.notifier)
-                          .onUseExistingPasskeyTapped(),
-                child: Text(l10n.connectOrgUseExistingPasskey),
-              ),
+            return OutlinedButton(
+              onPressed: isBusy
+                  ? null
+                  : () => ref
+                        .read(provider.notifier)
+                        .onUseExistingPasskeyTapped(),
+              child: Text(l10n.connectOrgUseExistingPasskey),
             );
           },
-        ),
-        const SizedBox(height: AppSpacing.md),
-        Center(
-          child: GestureDetector(
-            onTap: ref.read(provider.notifier).onOrgsTapped,
-            child: Text.rich(
-              TextSpan(
-                text: l10n.connectOrgAlreadyHaveOrgs,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-                children: [
-                  TextSpan(
-                    text: l10n.connectOrgViewList,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
       ],
     );
@@ -326,32 +290,20 @@ class _ConfirmPane extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
-        SizedBox(
-          height: 56,
-          child: FilledButton(
-            onPressed: isBusy
-                ? null
-                : () => ref.read(provider.notifier).onCreatePasskeyTapped(),
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.critical,
-              foregroundColor: theme.colorScheme.onPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-            child: isBusy
-                ? const _ButtonSpinner()
-                : Text(l10n.connectOrgConfirmCta),
-          ),
+        FilledButton(
+          onPressed: isBusy
+              ? null
+              : () => ref.read(provider.notifier).onCreatePasskeyTapped(),
+          child: isBusy
+              ? const _ButtonSpinner()
+              : Text(l10n.connectOrgConfirmCta),
         ),
-        const SizedBox(height: AppSpacing.md),
-        Center(
-          child: TextButton(
-            onPressed: isBusy
-                ? null
-                : () => ref.read(provider.notifier).onBackToInputTapped(),
-            child: Text(l10n.connectOrgConfirmCancel),
-          ),
+        const SizedBox(height: AppSpacing.sm),
+        OutlinedButton(
+          onPressed: isBusy
+              ? null
+              : () => ref.read(provider.notifier).onBackToInputTapped(),
+          child: Text(l10n.connectOrgConfirmCancel),
         ),
       ],
     );

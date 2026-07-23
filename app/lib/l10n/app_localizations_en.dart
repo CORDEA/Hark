@@ -34,12 +34,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connectOrgSubmit => 'Connect';
 
   @override
-  String get connectOrgAlreadyHaveOrgs => 'Already have organizations? ';
-
-  @override
-  String get connectOrgViewList => 'View list';
-
-  @override
   String get connectOrgMissingFields =>
       'Enter a server URL and an invitation code';
 

@@ -36,6 +36,26 @@ abstract final class AppTheme {
         outlineVariant: Color(0xFF1C1C1F),
       ),
       textTheme: textTheme,
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(0, 56),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: textTheme.titleMedium,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(0, 56),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: textTheme.labelLarge,
+          side: BorderSide(color: AppColorSchemeExtension.dark.criticalBorder),
+          foregroundColor: AppColorSchemeExtension.dark.criticalTextMuted,
+        ),
+      ),
     );
 
     return base.copyWith(extensions: const [AppColorSchemeExtension.dark]);

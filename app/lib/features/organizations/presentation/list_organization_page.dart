@@ -25,7 +25,7 @@ class ListOrganizationPage extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: AppSpacing.md),
               Text(
@@ -37,37 +37,9 @@ class ListOrganizationPage extends ConsumerWidget {
               const SizedBox(height: AppSpacing.lg),
               Expanded(child: _OrgList(colors: colors)),
               const SizedBox(height: AppSpacing.md),
-              InkWell(
-                onTap: () => context.go('/connect'),
-                borderRadius: BorderRadius.circular(14),
-                child: Container(
-                  height: 48,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: colors.borderSubtle,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add,
-                        size: 20,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(
-                        l10n.orgListAdd,
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              OutlinedButton(
+                onPressed: () => context.go('/connect'),
+                child: Text(l10n.orgListAdd),
               ),
               const SizedBox(height: AppSpacing.xl),
             ],

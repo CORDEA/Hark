@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import 'show_settings_view_model.dart';
 import 'show_settings_view_state.dart';
@@ -40,28 +41,95 @@ class ShowSettingsPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: SafeArea(
         top: false,
-        child: ListView(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.key_outlined),
-              title: Text(l10n.settingsCredentials),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push(
-                Uri(
-                  path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
-                ).toString(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          child: ListView(
+            children: [
+              const SizedBox(height: AppSpacing.md),
+              _SettingsCard(
+                icon: Icons.key_outlined,
+                title: l10n.settingsCredentials,
+                onTap: () => context.push(
+                  Uri(
+                    path: '/orgs/${Uri.encodeComponent(serverUrl)}/credentials',
+                  ).toString(),
+                ),
               ),
-            ),
-            _LeaveTile(provider: provider, orgName: orgName),
-          ],
+              _LeaveCard(provider: provider, orgName: orgName),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _LeaveTile extends ConsumerWidget {
-  const _LeaveTile({required this.provider, required this.orgName});
+class _SettingsCard extends StatelessWidget {
+  const _SettingsCard({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.titleColor,
+    this.iconColor,
+    this.trailing,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback? onTap;
+  final Color? titleColor;
+  final Color? iconColor;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.harkColors;
+    final effectiveIconColor = iconColor ?? theme.colorScheme.onSurfaceVariant;
+    final effectiveTitleColor = titleColor ?? theme.colorScheme.onSurface;
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colors.borderSubtle),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Row(
+              children: [
+                Icon(icon, color: effectiveIconColor),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: effectiveTitleColor,
+                    ),
+                  ),
+                ),
+                trailing ??
+                    Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                    ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LeaveCard extends ConsumerWidget {
+  const _LeaveCard({required this.provider, required this.orgName});
   final ShowSettingsViewModelProvider provider;
   final String orgName;
 
@@ -70,19 +138,18 @@ class _LeaveTile extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.harkColors;
     final isLeaving = ref.watch(provider.select((s) => s.isLeaving));
-    return ListTile(
-      leading: Icon(Icons.logout, color: colors.critical),
-      title: Text(
-        l10n.settingsLeave(orgName),
-        style: TextStyle(color: colors.critical),
-      ),
+    return _SettingsCard(
+      icon: Icons.logout,
+      title: l10n.settingsLeave(orgName),
+      iconColor: colors.critical,
+      titleColor: colors.critical,
       trailing: isLeaving
           ? const SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
-          : null,
+          : const SizedBox.shrink(),
       onTap: isLeaving
           ? null
           : () async {
