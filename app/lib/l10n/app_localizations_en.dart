@@ -268,12 +268,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyBadgeResolved => 'RESOLVED';
 
   @override
-  String get historyRowTitleCritical => 'Service outage';
-
-  @override
-  String get historyRowTitleWarning => 'Warning';
-
-  @override
   String historyTimeToday(String hhmm) {
     return 'Today · $hhmm';
   }
@@ -345,16 +339,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get credentialsNeverUsed => 'Not used yet';
 
   @override
-  String get notificationChannelWarningName => 'Warning alerts';
+  String get notificationChannelAlertName => 'Alerts';
 
   @override
-  String get notificationChannelWarningDescription =>
-      'On-call warnings that need your attention.';
-
-  @override
-  String get notificationChannelCriticalName => 'Critical alerts';
-
-  @override
-  String get notificationChannelCriticalDescription =>
-      'Service-outage alerts. Ring even when the device is silent.';
+  String get notificationChannelAlertDescription =>
+      'On-call alerts that need your attention.';
 }

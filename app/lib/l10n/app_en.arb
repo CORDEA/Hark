@@ -182,10 +182,6 @@
   "@historyBadgeDeclined": {},
   "historyBadgeResolved": "RESOLVED",
   "@historyBadgeResolved": {},
-  "historyRowTitleCritical": "Service outage",
-  "@historyRowTitleCritical": {},
-  "historyRowTitleWarning": "Warning",
-  "@historyRowTitleWarning": {},
   "historyTimeToday": "Today · {hhmm}",
   "@historyTimeToday": {
     "placeholders": { "hhmm": { "type": "String" } }
@@ -243,12 +239,7 @@
   "credentialsNeverUsed": "Not used yet",
   "@credentialsNeverUsed": {},
 
-  "notificationChannelWarningName": "Warning alerts",
-  "@notificationChannelWarningName": {},
-  "notificationChannelWarningDescription": "On-call warnings that need your attention.",
-  "@notificationChannelWarningDescription": {},
-  "notificationChannelCriticalName": "Critical alerts",
-  "@notificationChannelCriticalName": {},
-  "notificationChannelCriticalDescription": "Service-outage alerts. Ring even when the device is silent.",
-  "@notificationChannelCriticalDescription": {}
+  "notificationChannelAlertName": "Alerts",
+  "@notificationChannelAlertName": {},
+  "notificationChannelAlertDescription": "On-call alerts that need your attention."
 }

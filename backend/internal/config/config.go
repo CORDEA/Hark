@@ -19,6 +19,8 @@ type Config struct {
 	FCMCredentials string
 	PublicURL      string
 	OrgName        string
+	AlertTypesPath string
+	AlertTypes     AlertTypes
 
 	// AppleAppIDs is the list of `<TEAMID>.<bundle_id>` app IDs published
 	// via /.well-known/apple-app-site-association. Populated from the
@@ -42,6 +44,11 @@ func Load() (Config, error) {
 	if publicURL == "" {
 		return Config{}, ErrPublicURLRequired
 	}
+	alertTypesPath := os.Getenv("ALERT_TYPES")
+	alertTypes, err := LoadAlertTypes(alertTypesPath)
+	if err != nil {
+		return Config{}, err
+	}
 	return Config{
 		Port:            envOr("PORT", "8080"),
 		DBDriver:        envOr("DB_DRIVER", "sqlite"),
@@ -49,6 +56,8 @@ func Load() (Config, error) {
 		FCMCredentials:  os.Getenv("FCM_CREDENTIALS"),
 		PublicURL:       publicURL,
 		OrgName:         envOr("ORG_NAME", "Hark"),
+		AlertTypesPath:  alertTypesPath,
+		AlertTypes:      alertTypes,
 		AppleAppIDs:     parseCSV(os.Getenv("APPLE_APP_IDS")),
 		AndroidAppLinks: parseAndroidAppLinks(os.Getenv("ANDROID_APP_LINKS")),
 	}, nil

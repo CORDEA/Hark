@@ -7,6 +7,7 @@ import '../../../core/error/error_localizer.dart';
 import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../alert_types/presentation/alert_type_lookup.dart';
 import 'history_view_model.dart';
 import 'history_view_state.dart';
 
@@ -150,15 +151,19 @@ class _RowSliver extends StatelessWidget {
   }
 }
 
-class _Row extends StatelessWidget {
+class _Row extends ConsumerWidget {
   const _Row({required this.row, required this.serverUrl});
   final HistoryRowViewState row;
   final String serverUrl;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.harkColors;
-    final l10n = AppLocalizations.of(context);
+    final type = watchAlertType(ref, serverUrl: serverUrl, typeId: row.type);
+    final title = type?.name ?? row.type;
+    final dotColor = row.badge == HistoryRowBadge.resolved
+        ? colors.borderSubtle
+        : type?.color ?? kUnknownAlertTypeColor;
     return InkWell(
       onTap: () => _openAlert(context, row, serverUrl),
       child: Padding(
@@ -170,7 +175,7 @@ class _Row extends StatelessWidget {
               height: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _dotColor(row, colors),
+                color: dotColor,
               ),
             ),
             const SizedBox(width: 12),
@@ -179,9 +184,7 @@ class _Row extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    row.type == 'critical'
-                        ? l10n.historyRowTitleCritical
-                        : l10n.historyRowTitleWarning,
+                    title,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: row.badge == HistoryRowBadge.resolved
                           ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
@@ -194,7 +197,7 @@ class _Row extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    _timeLabel(l10n, row.triggeredAt),
+                    _timeLabel(AppLocalizations.of(context), row.triggeredAt),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
@@ -257,12 +260,6 @@ class _BadgePill extends StatelessWidget {
       ),
     );
   }
-}
-
-Color _dotColor(HistoryRowViewState row, AppColorSchemeExtension colors) {
-  if (row.badge == HistoryRowBadge.resolved) return colors.borderSubtle;
-  if (row.type == 'critical') return colors.critical;
-  return colors.warning;
 }
 
 void _openAlert(

@@ -13,12 +13,8 @@ const catalogs = {
     'header.subscribers': 'Subscribers →',
 
     'broadcast.section': 'Broadcast an alert',
-    'broadcast.critical': 'Trigger Critical Alert',
-    'broadcast.warning': 'Trigger Warning Alert',
     'broadcast.trigger': 'Trigger Alert',
     'broadcast.typeLabel': 'Type',
-    'broadcast.typeOption.critical': 'Critical',
-    'broadcast.typeOption.warning': 'Warning',
 
     'ongoing.section': 'Ongoing alerts',
     'ongoing.resolve': 'Resolve',
@@ -36,8 +32,7 @@ const catalogs = {
     'history.rangeArrow': '{from} → {to}',
 
     'trigger.title.default': 'Trigger Alert',
-    'trigger.title.critical': 'Trigger Critical Alert',
-    'trigger.title.warning': 'Trigger Warning Alert',
+    'trigger.title.named': 'Trigger {name} Alert',
     'trigger.subtitle': 'Choose who receives this page',
     'trigger.targetAll': 'All subscribers',
     'trigger.cancel': 'Cancel',
@@ -47,8 +42,7 @@ const catalogs = {
     'trigger.failed': 'Trigger failed: {error}',
 
     'confirm.title.default': 'Send Alert',
-    'confirm.title.critical': 'Send Critical Alert',
-    'confirm.title.warning': 'Send Warning Alert',
+    'confirm.title.named': 'Send {name} Alert',
     'confirm.subtitle': 'Review who will receive this page',
     'confirm.recipients': 'Recipients',
     'confirm.everyoneHint': '{n} subscriber(s) will be paged.',

@@ -95,8 +95,8 @@ class OrganizationCard extends StatelessWidget {
 
 Color? _severityColor(OrgAlertSeverity severity, AppColorSchemeExtension c) =>
     switch (severity) {
-      OrgAlertSeverity.critical => c.critical,
-      OrgAlertSeverity.warning => c.warning,
+      OrgAlertSeverity.forMe => c.critical,
+      OrgAlertSeverity.forOther => c.warning,
       OrgAlertSeverity.none => null,
     };
 

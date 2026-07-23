@@ -11,6 +11,7 @@ import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../alert_types/presentation/alert_type_lookup.dart';
 import 'active_alert_view_model.dart';
 import 'active_alert_view_state.dart';
 
@@ -69,7 +70,7 @@ class ShowActiveAlertPage extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: isResolved
           ? Theme.of(context).scaffoldBackgroundColor
-          : _bg(context, ref.watch(provider.select((s) => s.isCritical))),
+          : context.harkColors.criticalBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -110,11 +111,6 @@ class ShowActiveAlertPage extends HookConsumerWidget {
       ),
     );
   }
-
-  Color _bg(BuildContext context, bool isCritical) {
-    if (!isCritical) return Theme.of(context).scaffoldBackgroundColor;
-    return context.harkColors.criticalBackground;
-  }
 }
 
 class _Content extends ConsumerWidget {
@@ -132,6 +128,13 @@ class _Content extends ConsumerWidget {
       return _ResolvedContent(state: state);
     }
 
+    final type = watchAlertType(
+      ref,
+      serverUrl: state.serverUrl,
+      typeId: state.type,
+    );
+    final typeColor = type?.color ?? kUnknownAlertTypeColor;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -143,15 +146,13 @@ class _Content extends ConsumerWidget {
               vertical: AppSpacing.sm,
             ),
             decoration: BoxDecoration(
-              color: state.isCritical ? colors.critical : colors.warning,
+              color: typeColor,
               borderRadius: BorderRadius.circular(100),
             ),
             child: Text(
-              state.type.toUpperCase(),
+              (type?.name ?? state.type).toUpperCase(),
               style: theme.textTheme.bodySmall?.copyWith(
-                color: state.isCritical
-                    ? theme.colorScheme.onPrimary
-                    : theme.colorScheme.onSecondary,
+                color: _badgeForeground(typeColor),
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.08,
               ),
@@ -163,7 +164,7 @@ class _Content extends ConsumerWidget {
           decoration: BoxDecoration(
             color: colors.criticalBackground,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: colors.criticalBorder),
+            border: Border.all(color: typeColor.withValues(alpha: 0.35)),
           ),
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
@@ -178,7 +179,7 @@ class _Content extends ConsumerWidget {
                 valueColor: colors.warning,
                 valueBold: true,
               ),
-              const _CriticalDivider(),
+              _CriticalDivider(color: typeColor.withValues(alpha: 0.35)),
               _KeyValue(
                 label: l10n.activeAlertRowTriggered,
                 value: _fmtTime(state.triggeredAt),
@@ -477,15 +478,21 @@ class _KeyValue extends StatelessWidget {
 }
 
 class _CriticalDivider extends StatelessWidget {
-  const _CriticalDivider();
+  const _CriticalDivider({required this.color});
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 1,
       margin: const EdgeInsets.symmetric(vertical: 12),
-      color: context.harkColors.criticalBorder,
+      color: color,
     );
   }
+}
+
+Color _badgeForeground(Color background) {
+  final l = background.computeLuminance();
+  return l > 0.6 ? const Color(0xFF241A04) : Colors.white;
 }
 
 class _ActionButtons extends ConsumerWidget {

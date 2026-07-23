@@ -41,6 +41,7 @@ func NewRouter(d Deps) http.Handler {
 		r.Get("/health", Health)
 		r.Get("/stats", api.Stats)
 		r.Get("/users", api.ListUsers)
+		r.Get("/alert-types", api.ListAlertTypes)
 
 		// Passkey-era invitation endpoints. Admin-only enforcement is
 		// delegated to the reverse proxy, matching the existing model.

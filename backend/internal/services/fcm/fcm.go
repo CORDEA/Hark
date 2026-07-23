@@ -24,13 +24,10 @@ const (
 	KindTest    = "test"
 )
 
-// Android notification channel IDs. The mobile client registers these on
-// launch; the backend stamps the matching id so the OS routes each push to
-// the channel with the right importance/sound.
-const (
-	AndroidChannelWarning  = "hark_alert_warning"
-	AndroidChannelCritical = "hark_alert_critical"
-)
+// AndroidChannelAlert is the single Android channel every alert push routes
+// through. The mobile client creates it on launch at IMPORTANCE_HIGH; the
+// backend stamps the matching id so the OS routes each push through it.
+const AndroidChannelAlert = "hark_alert"
 
 // Message is our thin wrapper over the FCM data model. The client renders
 // in-app UI solely from Data; Title/Body populate the OS notification shelf
@@ -41,8 +38,6 @@ type Message struct {
 	Data    map[string]string // required (contextless payload)
 	AlertID string            // used for collapse-id/tag
 	Kind    string            // KindAlert / KindResolve / KindTest
-	// Critical flag decides interruption-level + collapse behavior.
-	Critical bool
 	// Title/Body are pre-localized notification strings. Leaving them empty
 	// keeps the legacy data-only behavior for backwards compatibility.
 	Title string
@@ -161,20 +156,10 @@ func buildFirebaseMessage(m Message) *messaging.Message {
 				Priority: messaging.PriorityMax,
 			}
 		}
-		fm.Android.Notification.ChannelID = AndroidChannelWarning
-		if m.Critical {
-			fm.Android.Notification.ChannelID = AndroidChannelCritical
-		}
+		fm.Android.Notification.ChannelID = AndroidChannelAlert
 	}
 	if m.AlertID != "" {
 		fm.APNS.Headers["apns-collapse-id"] = m.AlertID
-	}
-	if m.Kind == KindAlert && m.Critical {
-		fm.APNS.Payload.Aps.CriticalSound = &messaging.CriticalSound{
-			Critical: true,
-			Name:     "alarm.caf",
-			Volume:   1.0,
-		}
 	}
 	return fm
 }

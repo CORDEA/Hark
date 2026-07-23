@@ -41,7 +41,6 @@ abstract class AlertDetailViewState with _$AlertDetailViewState {
 
   const AlertDetailViewState._();
 
-  bool get isCritical => type == 'critical';
   bool get isAcknowledgedByMe =>
       myResponse == AlertDetailMyResponse.acknowledged;
 }

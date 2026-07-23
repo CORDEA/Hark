@@ -47,6 +47,5 @@ abstract class ActiveAlertViewState with _$ActiveAlertViewState {
 
   const ActiveAlertViewState._();
 
-  bool get isCritical => type == 'critical';
   bool get isResolved => outcome != null;
 }

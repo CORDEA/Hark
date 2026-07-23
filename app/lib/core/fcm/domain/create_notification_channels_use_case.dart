@@ -18,10 +18,8 @@ class CreateNotificationChannelsUseCase {
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
     final l10n = await AppLocalizations.delegate.load(locale);
     await _repository.createAndroidAlertChannels(
-      warningName: l10n.notificationChannelWarningName,
-      warningDescription: l10n.notificationChannelWarningDescription,
-      criticalName: l10n.notificationChannelCriticalName,
-      criticalDescription: l10n.notificationChannelCriticalDescription,
+      name: l10n.notificationChannelAlertName,
+      description: l10n.notificationChannelAlertDescription,
     );
   }
 }

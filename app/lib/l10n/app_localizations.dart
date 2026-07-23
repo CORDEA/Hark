@@ -532,18 +532,6 @@ abstract class AppLocalizations {
   /// **'RESOLVED'**
   String get historyBadgeResolved;
 
-  /// No description provided for @historyRowTitleCritical.
-  ///
-  /// In en, this message translates to:
-  /// **'Service outage'**
-  String get historyRowTitleCritical;
-
-  /// No description provided for @historyRowTitleWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning'**
-  String get historyRowTitleWarning;
-
   /// No description provided for @historyTimeToday.
   ///
   /// In en, this message translates to:
@@ -658,29 +646,17 @@ abstract class AppLocalizations {
   /// **'Not used yet'**
   String get credentialsNeverUsed;
 
-  /// No description provided for @notificationChannelWarningName.
+  /// No description provided for @notificationChannelAlertName.
   ///
   /// In en, this message translates to:
-  /// **'Warning alerts'**
-  String get notificationChannelWarningName;
+  /// **'Alerts'**
+  String get notificationChannelAlertName;
 
-  /// No description provided for @notificationChannelWarningDescription.
+  /// No description provided for @notificationChannelAlertDescription.
   ///
   /// In en, this message translates to:
-  /// **'On-call warnings that need your attention.'**
-  String get notificationChannelWarningDescription;
-
-  /// No description provided for @notificationChannelCriticalName.
-  ///
-  /// In en, this message translates to:
-  /// **'Critical alerts'**
-  String get notificationChannelCriticalName;
-
-  /// No description provided for @notificationChannelCriticalDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Service-outage alerts. Ring even when the device is silent.'**
-  String get notificationChannelCriticalDescription;
+  /// **'On-call alerts that need your attention.'**
+  String get notificationChannelAlertDescription;
 }
 
 class _AppLocalizationsDelegate

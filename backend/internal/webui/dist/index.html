@@ -30,8 +30,6 @@
     .pulse-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
     .badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px;
              font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; }
-    .badge-critical { background:var(--red-6); color:#fff; }
-    .badge-warning  { background:var(--amber-8); color:#241a04; }
     .badge-neutral  { background:var(--n-5); color:var(--text-4); }
     .badge-ack      { background:var(--green-bg); color:var(--green-text); border:1px solid var(--green-border); }
     .badge-resolved { background:var(--blue-bg); color:var(--blue-7); border:1px solid var(--blue-border); }
@@ -76,10 +74,7 @@
           <span class="text-[10px] font-bold uppercase tracking-widest mb-1"
                 style="color:var(--text-5)" data-i18n="broadcast.typeLabel">Type</span>
           <select id="trigger-type" class="bg-transparent text-base font-bold outline-none w-full"
-                  style="color:var(--text-1)">
-            <option value="critical" data-i18n="broadcast.typeOption.critical">Critical</option>
-            <option value="warning" data-i18n="broadcast.typeOption.warning">Warning</option>
-          </select>
+                  style="color:var(--text-1)"></select>
         </label>
         <button id="btn-trigger" type="button"
                 class="rounded-xl font-bold text-lg px-8"

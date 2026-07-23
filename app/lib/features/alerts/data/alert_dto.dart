@@ -3,12 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'alert_dto.freezed.dart';
 part 'alert_dto.g.dart';
 
-// Alert types as sent by the backend (see backend/models/models.go).
-class AlertType {
-  static const critical = 'critical';
-  static const warning = 'warning';
-}
-
 class RecipientResponse {
   static const pending = 'pending';
   static const acknowledged = 'acknowledged';

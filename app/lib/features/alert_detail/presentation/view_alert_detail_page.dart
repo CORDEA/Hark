@@ -7,6 +7,7 @@ import '../../../core/theme/app_color_scheme_extension.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../alert_types/presentation/alert_type_lookup.dart';
 import 'alert_detail_view_model.dart';
 import 'alert_detail_view_state.dart';
 
@@ -54,7 +55,7 @@ class ViewAlertDetailPage extends ConsumerWidget {
                 vertical: AppSpacing.xl,
               ),
               sliver: SliverToBoxAdapter(
-                child: _Body(state: async.requireValue),
+                child: _Body(state: async.requireValue, serverUrl: serverUrl),
               ),
             ),
         ],
@@ -97,8 +98,9 @@ class _ErrorView extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.state});
+  const _Body({required this.state, required this.serverUrl});
   final AlertDetailViewState state;
+  final String serverUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,7 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _StatusPills(state: state),
+        _StatusPills(state: state, serverUrl: serverUrl),
         const SizedBox(height: AppSpacing.md),
         _MetaCard(state: state),
         const SizedBox(height: AppSpacing.lg),
@@ -203,24 +205,23 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _StatusPills extends StatelessWidget {
-  const _StatusPills({required this.state});
+class _StatusPills extends ConsumerWidget {
+  const _StatusPills({required this.state, required this.serverUrl});
   final AlertDetailViewState state;
+  final String serverUrl;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.harkColors;
     final l10n = AppLocalizations.of(context);
+    final type = watchAlertType(ref, serverUrl: serverUrl, typeId: state.type);
+    final typeColor = type?.color ?? kUnknownAlertTypeColor;
     return Row(
       children: [
         _Pill(
-          text: state.type.toUpperCase(),
-          background: state.isCritical
-              ? colors.critical.withValues(alpha: 0.15)
-              : colors.warning.withValues(alpha: 0.15),
-          border: state.isCritical
-              ? colors.critical.withValues(alpha: 0.4)
-              : colors.warning.withValues(alpha: 0.4),
-          foreground: state.isCritical ? colors.criticalStrong : colors.warning,
+          text: (type?.name ?? state.type).toUpperCase(),
+          background: typeColor.withValues(alpha: 0.15),
+          border: typeColor.withValues(alpha: 0.4),
+          foreground: typeColor,
         ),
         const SizedBox(width: AppSpacing.sm),
         if (state.status == 'resolved')

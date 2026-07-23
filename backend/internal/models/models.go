@@ -3,9 +3,6 @@ package models
 import "time"
 
 const (
-	AlertTypeCritical = "critical"
-	AlertTypeWarning  = "warning"
-
 	AlertStatusActive   = "active"
 	AlertStatusResolved = "resolved"
 

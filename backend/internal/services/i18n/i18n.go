@@ -113,11 +113,10 @@ func interpolate(tmpl string, args map[string]string) string {
 
 func enCatalog() Catalog {
 	return Catalog{
-		// Alert push notifications.
-		"push.alert.critical.title": "Critical alert",
-		"push.alert.critical.body":  "Tap to respond.",
-		"push.alert.warning.title":  "Warning alert",
-		"push.alert.warning.body":   "Tap to respond.",
+		// Alert push notifications. The {name} placeholder resolves to the
+		// operator-configured alert type name (e.g. "P0") at fanout time.
+		"push.alert.title": "{name} alert",
+		"push.alert.body":  "Tap to respond.",
 
 		// Silent-resolve is data-only in practice, but populate the strings so
 		// clients that decide to surface a notification have text to show.

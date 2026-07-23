@@ -37,7 +37,7 @@ func (h *API) TriggerAlert(w http.ResponseWriter, r *http.Request) {
 			ID: alert.ID, Type: alert.Type, Status: alert.Status, TriggeredAt: alert.TriggeredAt,
 		})
 	case errors.Is(err, alerts.ErrInvalidType):
-		fail(w, http.StatusBadRequest, "invalid_type", `type must be "critical" or "warning"`)
+		fail(w, http.StatusBadRequest, "invalid_type", "type is not in the alert-types catalog")
 	case errors.Is(err, alerts.ErrNoRecipients):
 		fail(w, http.StatusBadRequest, "no_recipients", "no active users match the target")
 	default:

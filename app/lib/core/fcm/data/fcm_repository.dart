@@ -8,10 +8,16 @@ import '../../logger/app_logger.dart';
 
 part 'fcm_repository.g.dart';
 
-/// Channel ids must match the values the backend stamps into
+/// Channel id must match the value the backend stamps into
 /// AndroidNotification.channel_id (see backend/internal/services/fcm/fcm.go).
-const fcmAndroidChannelWarning = 'hark_alert_warning';
-const fcmAndroidChannelCritical = 'hark_alert_critical';
+const fcmAndroidChannelAlert = 'hark_alert';
+
+/// Legacy channel ids we now delete on startup so the OS settings screen
+/// doesn't keep listing per-severity channels the app no longer emits on.
+const _legacyAndroidChannels = <String>[
+  'hark_alert_warning',
+  'hark_alert_critical',
+];
 
 @Riverpod(keepAlive: true)
 FcmRepository fcmRepository(Ref ref) =>
@@ -71,15 +77,13 @@ class FcmRepository {
   Stream<RemoteMessage> get onMessageOpenedApp =>
       FirebaseMessaging.onMessageOpenedApp;
 
-  /// Registers the Android notification channels the backend routes alerts to.
+  /// Registers the Android notification channel the backend routes alerts to.
   /// No-op on non-Android platforms. Channel creation is idempotent, so it is
   /// safe to call this on every launch — subsequent calls only update the
   /// display name/description of an existing channel.
   Future<void> createAndroidAlertChannels({
-    required String warningName,
-    required String warningDescription,
-    required String criticalName,
-    required String criticalDescription,
+    required String name,
+    required String description,
   }) async {
     if (defaultTargetPlatform != TargetPlatform.android) return;
     try {
@@ -90,20 +94,15 @@ class FcmRepository {
       if (android == null) return;
       await android.createNotificationChannel(
         AndroidNotificationChannel(
-          fcmAndroidChannelWarning,
-          warningName,
-          description: warningDescription,
-          importance: Importance.high,
-        ),
-      );
-      await android.createNotificationChannel(
-        AndroidNotificationChannel(
-          fcmAndroidChannelCritical,
-          criticalName,
-          description: criticalDescription,
+          fcmAndroidChannelAlert,
+          name,
+          description: description,
           importance: Importance.max,
         ),
       );
+      for (final legacy in _legacyAndroidChannels) {
+        await android.deleteNotificationChannel(channelId: legacy);
+      }
     } catch (e) {
       _logger.e('fcm channels', error: e);
     }

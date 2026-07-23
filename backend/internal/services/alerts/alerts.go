@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
+	"github.com/cordea/hark/internal/config"
 	"github.com/cordea/hark/internal/models"
 	"github.com/cordea/hark/internal/services/fcm"
 	"github.com/cordea/hark/internal/services/i18n"
@@ -29,6 +30,10 @@ type Service struct {
 	DB        *gorm.DB
 	Sender    fcm.Sender
 	Localizer *i18n.Localizer
+	// AlertTypes is the operator-supplied catalog used to validate trigger
+	// requests and to stamp the display name/color into each outgoing push
+	// so the client can render the badge without a separate lookup.
+	AlertTypes config.AlertTypes
 	// PublicURL is stamped into every alert payload as `org_id`. It's the
 	// stable server identifier the mobile client uses to route the push to
 	// the right stored profile before it makes any authenticated call.
@@ -38,7 +43,8 @@ type Service struct {
 // Trigger creates the alert and fans out a high-priority push. When
 // targetUserIDs is empty, defaults to ALL active users.
 func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs []string) (models.Alert, error) {
-	if alertType != models.AlertTypeCritical && alertType != models.AlertTypeWarning {
+	typ, ok := s.AlertTypes.Lookup(alertType)
+	if !ok {
 		return models.Alert{}, ErrInvalidType
 	}
 
@@ -91,7 +97,7 @@ func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs [
 		return models.Alert{}, err
 	}
 
-	s.fanoutAlert(ctx, alert, devices)
+	s.fanoutAlert(ctx, alert, typ, devices)
 	return alert, nil
 }
 
@@ -206,31 +212,26 @@ func (s *Service) silentResolveFanout(ctx context.Context, alertID, exceptUserID
 	return nil
 }
 
-func (s *Service) fanoutAlert(ctx context.Context, alert models.Alert, devices []models.Device) {
+func (s *Service) fanoutAlert(ctx context.Context, alert models.Alert, typ config.AlertType, devices []models.Device) {
 	if len(devices) == 0 {
 		return
 	}
 	msgs := make([]fcm.Message, 0, len(devices))
-	critical := alert.Type == models.AlertTypeCritical
-	titleKey := "push.alert.warning.title"
-	bodyKey := "push.alert.warning.body"
-	if critical {
-		titleKey = "push.alert.critical.title"
-		bodyKey = "push.alert.critical.body"
-	}
+	titleArgs := map[string]string{"name": typ.Name}
 	for _, d := range devices {
 		msgs = append(msgs, fcm.Message{
-			Token:    d.FCMToken,
-			Kind:     fcm.KindAlert,
-			AlertID:  alert.ID,
-			Critical: critical,
-			Title:    s.t(d.Locale, titleKey, nil),
-			Body:     s.t(d.Locale, bodyKey, nil),
+			Token:   d.FCMToken,
+			Kind:    fcm.KindAlert,
+			AlertID: alert.ID,
+			Title:   s.t(d.Locale, "push.alert.title", titleArgs),
+			Body:    s.t(d.Locale, "push.alert.body", nil),
 			Data: map[string]string{
-				"kind":     fcm.KindAlert,
-				"alert_id": alert.ID,
-				"type":     alert.Type,
-				"org_id":   s.PublicURL,
+				"kind":       fcm.KindAlert,
+				"alert_id":   alert.ID,
+				"type":       alert.Type,
+				"type_name":  typ.Name,
+				"type_color": typ.Color,
+				"org_id":     s.PublicURL,
 			},
 		})
 	}

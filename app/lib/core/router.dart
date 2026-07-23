@@ -87,7 +87,7 @@ GoRouter router(Ref ref) {
               final url = Uri.decodeComponent(
                 state.pathParameters['serverUrl'] ?? '',
               );
-              final type = state.uri.queryParameters['type'] ?? 'critical';
+              final type = state.uri.queryParameters['type'] ?? '';
               return ShowActiveAlertPage(
                 alertId: id,
                 serverUrl: url,

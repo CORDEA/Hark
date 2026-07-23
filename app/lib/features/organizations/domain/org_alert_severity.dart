@@ -1,8 +1,8 @@
-/// Severity of the most relevant active alert for a connected org.
+/// Relevance of the org's active alerts to the current user.
 ///
-/// * [critical] — an active critical alert that targets the current user.
-/// * [warning] — an active warning alert that targets the current user, or
-///   any active critical alert (even one that doesn't target the current
-///   user). The user still deserves a visible cue that something is firing.
+/// * [forMe] — I'm a recipient of at least one active alert. Shown in the
+///   destructive accent color.
+/// * [forOther] — active alerts exist but none of them target me. Shown in
+///   the advisory accent so I still get a cue that something is firing.
 /// * [none] — no active alert triggers a highlight.
-enum OrgAlertSeverity { none, warning, critical }
+enum OrgAlertSeverity { none, forOther, forMe }

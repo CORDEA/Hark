@@ -4,7 +4,9 @@ const state = {
   users: [],           // GET /api/users
   alerts: [],          // GET /api/alerts (all)
   stats: null,         // GET /api/stats
-  triggerType: null,   // 'critical' | 'warning' | null
+  alertTypes: [],      // GET /api/alert-types
+  alertTypeById: new Map(),
+  triggerType: null,   // alert type id | null
   targetAll: true,
   selected: new Set(), // user_ids when !targetAll
   detailId: null,
@@ -17,9 +19,27 @@ function targetLabel(a) {
   return names.join(', ');
 }
 
-function typeBadge(type) {
-  const cls = type === 'critical' ? 'badge-critical' : 'badge-warning';
-  return `<span class="badge ${cls}">${type}</span>`;
+// Foreground text picked so short uppercase labels stay legible on any admin-
+// configured badge color.
+function contrastText(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+  if (!m) return '#fff';
+  const n = parseInt(m[1], 16);
+  const r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  return lum > 0.6 ? '#241a04' : '#fff';
+}
+
+function typeOf(id) {
+  return state.alertTypeById.get(id);
+}
+
+function typeBadge(typeId) {
+  const type = typeOf(typeId);
+  const label = escapeHtml(type ? type.name : typeId);
+  const bg = type ? type.color : 'var(--n-5)';
+  const fg = type ? contrastText(type.color) : 'var(--text-4)';
+  return `<span class="badge" style="background:${bg};color:${fg}">${label}</span>`;
 }
 
 function renderStats() {
@@ -112,8 +132,13 @@ function renderTargetList() {
   btn.disabled = !state.targetAll && state.selected.size === 0;
   btn.style.opacity = btn.disabled ? '0.5' : '1';
   btn.style.cursor  = btn.disabled ? 'not-allowed' : 'pointer';
-  btn.style.background = state.triggerType === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
-  btn.style.color      = state.triggerType === 'critical' ? '#fff' : '#241a04';
+  applyTypeStyle(btn, state.triggerType);
+}
+
+function applyTypeStyle(el, typeId) {
+  const type = typeOf(typeId);
+  el.style.background = type ? type.color : 'var(--n-5)';
+  el.style.color      = type ? contrastText(type.color) : 'var(--text-4)';
 }
 
 function triggerSummary() {
@@ -132,9 +157,17 @@ function selectedUserNames() {
 async function openDetail(id) {
   state.detailId = id;
   const detail = await api(`/api/alerts/${id}`);
+  const type = typeOf(detail.type);
   const badge = q('#detail-badge');
-  badge.textContent = detail.type;
-  badge.className   = 'badge ' + (detail.type === 'critical' ? 'badge-critical' : 'badge-warning');
+  badge.textContent = type ? type.name : detail.type;
+  badge.className = 'badge';
+  if (type) {
+    badge.style.background = type.color;
+    badge.style.color = contrastText(type.color);
+  } else {
+    badge.style.background = 'var(--n-5)';
+    badge.style.color = 'var(--text-4)';
+  }
 
   const action = q('#detail-action');
   action.textContent   = actionLabel(detail);
@@ -182,13 +215,14 @@ function closeDetail() {
 }
 
 // ---------- trigger modal ----------
-function openTrigger(type) {
-  state.triggerType = type;
+function openTrigger(typeId) {
+  state.triggerType = typeId;
   state.targetAll = true;
   state.selected.clear();
-  q('#trigger-title').textContent = type === 'critical'
-    ? t('trigger.title.critical')
-    : t('trigger.title.warning');
+  const type = typeOf(typeId);
+  q('#trigger-title').textContent = type
+    ? t('trigger.title.named', { name: type.name })
+    : t('trigger.title.default');
   q('#target-all').checked = true;
   renderTargetList();
   const modal = q('#trigger-modal');
@@ -197,10 +231,16 @@ function openTrigger(type) {
 }
 
 function updateTriggerButtonStyle() {
-  const type = q('#trigger-type').value;
-  const btn = q('#btn-trigger');
-  btn.style.background = type === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
-  btn.style.color      = type === 'critical' ? '#fff' : '#241a04';
+  const typeId = q('#trigger-type').value;
+  applyTypeStyle(q('#btn-trigger'), typeId);
+}
+
+function renderTriggerTypeOptions() {
+  const sel = q('#trigger-type');
+  sel.innerHTML = state.alertTypes
+    .map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)}</option>`)
+    .join('');
+  updateTriggerButtonStyle();
 }
 
 function closeTrigger() {
@@ -219,9 +259,10 @@ function openConfirm() {
   if (!state.triggerType) return;
   if (!state.targetAll && state.selected.size === 0) return;
 
-  q('#confirm-title').textContent = state.triggerType === 'critical'
-    ? t('confirm.title.critical')
-    : t('confirm.title.warning');
+  const type = typeOf(state.triggerType);
+  q('#confirm-title').textContent = type
+    ? t('confirm.title.named', { name: type.name })
+    : t('confirm.title.default');
 
   const recipientsEl = q('#confirm-recipients');
   if (state.targetAll) {
@@ -241,8 +282,7 @@ function openConfirm() {
 
   const sendBtn = q('#confirm-send');
   sendBtn.textContent = t('confirm.sendButton');
-  sendBtn.style.background = state.triggerType === 'critical' ? 'var(--red-6)' : 'var(--amber-8)';
-  sendBtn.style.color      = state.triggerType === 'critical' ? '#fff' : '#241a04';
+  applyTypeStyle(sendBtn, state.triggerType);
 
   closeTrigger();
   const modal = q('#confirm-modal');
@@ -283,6 +323,17 @@ async function resolveAdmin(id) {
 }
 
 // ---------- refresh loop ----------
+async function loadAlertTypes() {
+  try {
+    const types = await api('/api/alert-types');
+    state.alertTypes = types || [];
+    state.alertTypeById = new Map(state.alertTypes.map(t => [t.id, t]));
+    renderTriggerTypeOptions();
+  } catch (e) {
+    console.error('alert-types load failed', e);
+  }
+}
+
 async function refresh() {
   try {
     const [stats, users, alerts] = await Promise.all([
@@ -355,6 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openId)    { openDetail(openId); return; }
   });
 
-  refresh();
+  loadAlertTypes().then(refresh);
   setInterval(refresh, 5000);
 });

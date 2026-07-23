@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../alerts/data/alert_dto.dart';
 import '../../alerts/data/alert_repository.dart';
 import 'org_alert_severity.dart';
 
@@ -19,16 +18,10 @@ class GetOrgAlertSeverityUseCase {
       serverUrl: serverUrl,
       status: 'active',
     );
-    var sawWarningForMe = false;
-    var sawCritical = false;
+    if (alerts.isEmpty) return OrgAlertSeverity.none;
     for (final a in alerts) {
-      if (a.type == AlertType.critical && a.isRecipient) {
-        return OrgAlertSeverity.critical;
-      }
-      if (a.type == AlertType.critical) sawCritical = true;
-      if (a.type == AlertType.warning && a.isRecipient) sawWarningForMe = true;
+      if (a.isRecipient) return OrgAlertSeverity.forMe;
     }
-    if (sawWarningForMe || sawCritical) return OrgAlertSeverity.warning;
-    return OrgAlertSeverity.none;
+    return OrgAlertSeverity.forOther;
   }
 }

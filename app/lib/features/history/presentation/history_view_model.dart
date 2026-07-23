@@ -30,11 +30,7 @@ class HistoryViewModel extends _$HistoryViewModel {
         ongoing.add(row);
       }
     }
-    ongoing.sort((a, b) {
-      final byType = _typeRank(a.type).compareTo(_typeRank(b.type));
-      if (byType != 0) return byType;
-      return b.triggeredAt.compareTo(a.triggeredAt);
-    });
+    ongoing.sort((a, b) => b.triggeredAt.compareTo(a.triggeredAt));
     history.sort((a, b) => b.triggeredAt.compareTo(a.triggeredAt));
     return HistoryViewState(
       orgName: _hostOf(serverUrl),
@@ -54,8 +50,6 @@ class HistoryViewModel extends _$HistoryViewModel {
     return u.host;
   }
 }
-
-int _typeRank(String type) => type == AlertType.critical ? 0 : 1;
 
 // The current user has already recorded their response on this alert.
 bool _hasMyResponse(AlertSummaryDto a) =>
