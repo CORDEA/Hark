@@ -100,6 +100,36 @@ type resolveAdminResponse struct {
 	ResolvedAt *time.Time `json:"resolved_at"`
 }
 
+type remindAlertResponse struct {
+	AlertID string `json:"alert_id"`
+	Status  string `json:"status"`
+	Sent    int    `json:"sent"`
+}
+
+// RemindAlertAdmin re-sends the active alert notification without changing
+// acknowledgement, recipient, or resolution state.
+func (h *API) RemindAlertAdmin(w http.ResponseWriter, r *http.Request) {
+	alertID := chi.URLParam(r, "id")
+	if alertID == "" {
+		fail(w, http.StatusBadRequest, "missing_id", "alert id required")
+		return
+	}
+	alert, sent, err := h.Alerts.Remind(r.Context(), alertID)
+	switch {
+	case err == nil:
+		ok(w, remindAlertResponse{AlertID: alert.ID, Status: alert.Status, Sent: sent})
+	case errors.Is(err, alerts.ErrAlertNotFound):
+		fail(w, http.StatusNotFound, "not_found", "alert not found")
+	case errors.Is(err, alerts.ErrAlertNotActive):
+		fail(w, http.StatusConflict, "not_active", "only active alerts can be reminded")
+	case errors.Is(err, alerts.ErrInvalidType):
+		fail(w, http.StatusInternalServerError, "invalid_type", "alert type is no longer configured")
+	default:
+		slog.Error("remind-alert", "err", err)
+		fail(w, http.StatusInternalServerError, "internal", err.Error())
+	}
+}
+
 func (h *API) ResolveAlertAdmin(w http.ResponseWriter, r *http.Request) {
 	alertID := chi.URLParam(r, "id")
 	if alertID == "" {

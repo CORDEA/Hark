@@ -86,6 +86,7 @@ func NewRouter(d Deps) http.Handler {
 		})
 		r.Post("/alerts/trigger", api.TriggerAlert)
 		r.Post("/alerts/{id}/resolve-admin", api.ResolveAlertAdmin)
+		r.Post("/alerts/{id}/remind-admin", api.RemindAlertAdmin)
 	})
 
 	// Well-known + universal-link landing page. Public, no auth.

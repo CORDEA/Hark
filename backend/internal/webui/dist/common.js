@@ -18,6 +18,7 @@ const catalogs = {
 
     'ongoing.section': 'Ongoing alerts',
     'ongoing.resolve': 'Resolve',
+    'ongoing.remind': 'Remind',
     'ongoing.progress': '{time} · {ack} acknowledged · {pending} pending',
 
     'history.section': 'Alert history',
@@ -58,6 +59,10 @@ const catalogs = {
     'detail.field.responder': 'Responder',
     'detail.nobodyYet': 'Nobody yet',
     'detail.resolve': 'Resolve alert',
+    'detail.remind': 'Send reminder',
+    'detail.remindConfirm': 'Send this alert notification again to all recipients?',
+    'detail.remindSent': 'Reminder sent to {n} device(s).',
+    'detail.remindFailed': 'Reminder failed: {error}',
     'detail.close': 'Close',
     'detail.resolveFailed': 'Resolve failed: {error}',
 

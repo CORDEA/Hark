@@ -23,6 +23,7 @@ var (
 	ErrAlertNotFound   = errors.New("alert not found")
 	ErrUserNotOnAlert  = errors.New("user not a recipient")
 	ErrAlreadyResolved = errors.New("alert already resolved")
+	ErrAlertNotActive  = errors.New("alert is not active")
 	ErrInvalidAction   = errors.New("invalid action")
 )
 
@@ -99,6 +100,34 @@ func (s *Service) Trigger(ctx context.Context, alertType string, targetUserIDs [
 
 	s.fanoutAlert(ctx, alert, typ, devices)
 	return alert, nil
+}
+
+// Remind re-sends the alert notification to every device that belongs to the
+// alert's recipients. It intentionally does not touch the alert or recipient
+// rows, so acknowledgement and resolution state remain unchanged.
+func (s *Service) Remind(ctx context.Context, alertID string) (models.Alert, int, error) {
+	var alert models.Alert
+	if err := s.DB.First(&alert, "id = ?", alertID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return alert, 0, ErrAlertNotFound
+		}
+		return alert, 0, err
+	}
+	if alert.Status != models.AlertStatusActive {
+		return alert, 0, ErrAlertNotActive
+	}
+	typ, ok := s.AlertTypes.Lookup(alert.Type)
+	if !ok {
+		return alert, 0, ErrInvalidType
+	}
+	var devices []models.Device
+	q := s.DB.Joins("JOIN alert_recipients ar ON ar.user_id = devices.user_id").
+		Where("ar.alert_id = ?", alert.ID)
+	if err := q.Find(&devices).Error; err != nil {
+		return alert, 0, err
+	}
+	s.fanoutAlert(ctx, alert, typ, devices)
+	return alert, len(devices), nil
 }
 
 // Respond records the caller's ack/decline on the alert. It does NOT resolve

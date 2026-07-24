@@ -80,6 +80,9 @@ function renderOngoing() {
       <button type="button" class="h-9 px-4 rounded-md font-bold text-sm flex-shrink-0"
               style="background:#fff;color:var(--red-6)"
               data-resolve-admin="${a.id}">${escapeHtml(t('ongoing.resolve'))}</button>
+      <button type="button" class="h-9 px-4 rounded-md font-bold text-sm flex-shrink-0"
+              style="background:transparent;border:1px solid var(--red-border-strong);color:var(--red-decline-text)"
+              data-remind-alert="${a.id}">${escapeHtml(t('ongoing.remind'))}</button>
     </div>
   `).join('');
 }
@@ -204,6 +207,7 @@ async function openDetail(id) {
   ).join('');
 
   q('#detail-resolve').classList.toggle('hidden', detail.status !== 'active');
+  q('#detail-remind').classList.toggle('hidden', detail.status !== 'active');
   q('#detail-modal').classList.remove('hidden');
   q('#detail-modal').classList.add('flex');
 }
@@ -322,6 +326,15 @@ async function resolveAdmin(id) {
   } catch (e) { alert(t('detail.resolveFailed', { error: e.message })); }
 }
 
+async function remindAlert(id) {
+  if (!confirm(t('detail.remindConfirm'))) return;
+  try {
+    const result = await api(`/api/alerts/${id}/remind-admin`, { method: 'POST' });
+    alert(t('detail.remindSent', { n: result.sent }));
+    await refresh();
+  } catch (e) { alert(t('detail.remindFailed', { error: e.message })); }
+}
+
 // ---------- refresh loop ----------
 async function loadAlertTypes() {
   try {
@@ -372,6 +385,9 @@ document.addEventListener('DOMContentLoaded', () => {
   q('#detail-resolve').addEventListener('click', () => {
     if (state.detailId) resolveAdmin(state.detailId);
   });
+  q('#detail-remind').addEventListener('click', () => {
+    if (state.detailId) remindAlert(state.detailId);
+  });
 
   q('#trigger-modal').addEventListener('click', (e) => {
     if (e.target === q('#trigger-modal')) cancelTrigger();
@@ -402,7 +418,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', (e) => {
     const openId = e.target.closest('[data-open-detail]')?.dataset.openDetail;
     const resolveId = e.target.closest('[data-resolve-admin]')?.dataset.resolveAdmin;
+    const remindId = e.target.closest('[data-remind-alert]')?.dataset.remindAlert;
     if (resolveId) { e.stopPropagation(); resolveAdmin(resolveId); return; }
+    if (remindId) { e.stopPropagation(); remindAlert(remindId); return; }
     if (openId)    { openDetail(openId); return; }
   });
 
