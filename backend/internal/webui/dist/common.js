@@ -96,6 +96,7 @@ const catalogs = {
     'invite.cardTitle': 'Temporary join details',
     'invite.serverUrlLabel': 'Server URL',
     'invite.invitationCodeLabel': 'Invitation code',
+    'invite.universalLinkLabel': 'Universal link',
     'invite.copy': 'Copy',
     'invite.copied': 'Copied',
     'invite.downloadQr': 'Download QR',
@@ -203,4 +204,3 @@ function initialsOf(name) {
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
-

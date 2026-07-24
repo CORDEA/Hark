@@ -131,6 +131,7 @@ function showInviteCard(data) {
   }
   q('#invite-server-url').textContent = data.server_url;
   q('#invite-code').textContent = data.code;
+  q('#invite-universal-link').textContent = data.universal_link;
   q('#invite-qr').src = data.qr_image;
 }
 
@@ -256,6 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   q('#btn-copy-code').addEventListener('click', (e) => {
     if (substate.invite) copyText(substate.invite.code, e.currentTarget);
+  });
+  q('#btn-copy-universal-link').addEventListener('click', (e) => {
+    if (substate.invite) copyText(substate.invite.universal_link, e.currentTarget);
   });
   q('#btn-download-qr').addEventListener('click', downloadQr);
   document.body.addEventListener('click', (e) => {
