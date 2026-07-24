@@ -364,12 +364,6 @@ abstract class AppLocalizations {
   /// **'No action needed'**
   String get activeAlertResolvedByOtherSubtitle;
 
-  /// No description provided for @activeAlertElapsed.
-  ///
-  /// In en, this message translates to:
-  /// **'{mm}:{ss} elapsed'**
-  String activeAlertElapsed(String mm, String ss);
-
   /// No description provided for @alertDetailBack.
   ///
   /// In en, this message translates to:

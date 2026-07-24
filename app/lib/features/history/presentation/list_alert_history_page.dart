@@ -147,13 +147,11 @@ class _RowSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.harkColors;
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       sliver: SliverList.separated(
         itemCount: rows.length,
-        separatorBuilder: (_, _) =>
-            Container(height: 1, color: colors.borderHairline),
+        separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
         itemBuilder: (context, i) => _Row(row: rows[i], serverUrl: serverUrl),
       ),
     );
@@ -173,49 +171,68 @@ class _Row extends ConsumerWidget {
     final dotColor = row.badge == HistoryRowBadge.resolved
         ? colors.borderSubtle
         : type?.color ?? kUnknownAlertTypeColor;
-    return InkWell(
-      onTap: () => _openAlert(context, row, serverUrl),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-        child: Row(
-          children: [
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: dotColor,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: row.badge == HistoryRowBadge.resolved
-                          ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
-                          : theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w600,
-                      decoration: row.badge == HistoryRowBadge.resolved
-                          ? TextDecoration.lineThrough
-                          : null,
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colors.borderSubtle),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onTap: () => _openAlert(context, row, serverUrl),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dotColor,
                   ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    _timeLabel(AppLocalizations.of(context), row.triggeredAt),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: row.badge == HistoryRowBadge.resolved
+                              ? theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.4,
+                                )
+                              : theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                          decoration: row.badge == HistoryRowBadge.resolved
+                              ? TextDecoration.lineThrough
+                              : null,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        _timeLabel(
+                          AppLocalizations.of(context),
+                          row.triggeredAt,
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                if (row.badge != HistoryRowBadge.ongoing) _BadgePill(row: row),
+              ],
             ),
-            if (row.badge != HistoryRowBadge.ongoing) _BadgePill(row: row),
-          ],
+          ),
         ),
       ),
     );

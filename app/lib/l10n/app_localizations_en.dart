@@ -172,11 +172,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeAlertResolvedByOtherSubtitle => 'No action needed';
 
   @override
-  String activeAlertElapsed(String mm, String ss) {
-    return '$mm:$ss elapsed';
-  }
-
-  @override
   String alertDetailBack(String org) {
     return '←  $org';
   }

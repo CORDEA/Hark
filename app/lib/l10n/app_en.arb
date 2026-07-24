@@ -109,13 +109,6 @@
   "@activeAlertResolvedByOtherHeadline": {},
   "activeAlertResolvedByOtherSubtitle": "No action needed",
   "@activeAlertResolvedByOtherSubtitle": {},
-  "activeAlertElapsed": "{mm}:{ss} elapsed",
-  "@activeAlertElapsed": {
-    "placeholders": {
-      "mm": { "type": "String" },
-      "ss": { "type": "String" }
-    }
-  },
 
   "alertDetailBack": "←  {org}",
   "@alertDetailBack": {

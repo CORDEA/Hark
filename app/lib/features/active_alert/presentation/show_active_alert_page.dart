@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -189,36 +187,9 @@ class _Content extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
-        _ElapsedText(triggeredAt: state.triggeredAt),
         const SizedBox(height: AppSpacing.lg),
         _RecipientSections(state: state),
       ],
-    );
-  }
-}
-
-class _ElapsedText extends HookWidget {
-  const _ElapsedText({required this.triggeredAt});
-  final DateTime triggeredAt;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = context.harkColors;
-    final l10n = AppLocalizations.of(context);
-    final tick = useState(0);
-    useEffect(() {
-      final timer = Timer.periodic(const Duration(seconds: 1), (_) {
-        tick.value = tick.value + 1;
-      });
-      return timer.cancel;
-    }, const []);
-    return Text(
-      _elapsed(l10n, triggeredAt),
-      style: AppTheme.monoStyle(
-        theme.textTheme.bodySmall?.copyWith(color: colors.criticalTextDim),
-      ),
     );
   }
 }
@@ -568,11 +539,3 @@ String _shortOrg(String serverUrl) {
 }
 
 String _fmtTime(DateTime t) => DateFormat('HH:mm:ss').format(t.toLocal());
-
-String _elapsed(AppLocalizations l10n, DateTime t) {
-  final d = DateTime.now().toUtc().difference(t.toUtc());
-  final m = d.inMinutes;
-  final s = (d.inSeconds - m * 60).clamp(0, 59);
-  final fmt = NumberFormat('00');
-  return l10n.activeAlertElapsed(fmt.format(m), fmt.format(s));
-}
