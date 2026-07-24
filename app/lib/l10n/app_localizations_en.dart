@@ -298,14 +298,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String settingsLeaveDialogBody(String org) {
-    return 'This device will stop receiving alerts from $org. You can rejoin with a new invitation code.';
+    return 'Leave $org and revoke its passkey on the server? This device will stop receiving alerts. You can rejoin with a new invitation code.';
   }
 
   @override
   String get settingsLeaveDialogCancel => 'Cancel';
 
   @override
-  String get settingsLeaveDialogConfirm => 'Leave';
+  String get settingsLeaveDialogConfirm => 'Revoke and leave';
 
   @override
   String get passkeyCleanupTitle => 'Passkey no longer usable';

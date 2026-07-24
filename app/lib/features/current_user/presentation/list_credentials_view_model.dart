@@ -9,10 +9,13 @@ part 'list_credentials_view_model.g.dart';
 @riverpod
 class ListCredentialsViewModel extends _$ListCredentialsViewModel {
   @override
-  Future<ListCredentialsViewState> build({required String serverUrl}) async {
+  Future<ListCredentialsViewState> build({
+    required String serverUrl,
+    required String userId,
+  }) async {
     final profile = await ref
         .read(orgRepositoryProvider)
-        .findByServerUrl(serverUrl);
+        .findByMembership(serverUrl, userId);
     if (profile == null) {
       throw StateError('No connected org for server $serverUrl');
     }

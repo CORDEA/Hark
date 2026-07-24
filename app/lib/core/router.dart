@@ -54,30 +54,39 @@ GoRouter router(Ref ref) {
             },
           ),
           GoRoute(
-            path: 'orgs/:serverUrl/history',
+            path: 'orgs/:serverUrl/:userId/history',
             builder: (context, state) {
               final url = Uri.decodeComponent(
                 state.pathParameters['serverUrl'] ?? '',
               );
-              return ListAlertHistoryPage(serverUrl: url);
+              final userId = Uri.decodeComponent(
+                state.pathParameters['userId'] ?? '',
+              );
+              return ListAlertHistoryPage(serverUrl: url, userId: userId);
             },
           ),
           GoRoute(
-            path: 'orgs/:serverUrl/credentials',
+            path: 'orgs/:serverUrl/:userId/credentials',
             builder: (context, state) {
               final url = Uri.decodeComponent(
                 state.pathParameters['serverUrl'] ?? '',
               );
-              return ListCredentialsPage(serverUrl: url);
+              final userId = Uri.decodeComponent(
+                state.pathParameters['userId'] ?? '',
+              );
+              return ListCredentialsPage(serverUrl: url, userId: userId);
             },
           ),
           GoRoute(
-            path: 'orgs/:serverUrl/settings',
+            path: 'orgs/:serverUrl/:userId/settings',
             builder: (context, state) {
               final url = Uri.decodeComponent(
                 state.pathParameters['serverUrl'] ?? '',
               );
-              return ShowSettingsPage(serverUrl: url);
+              final userId = Uri.decodeComponent(
+                state.pathParameters['userId'] ?? '',
+              );
+              return ShowSettingsPage(serverUrl: url, userId: userId);
             },
           ),
           GoRoute(

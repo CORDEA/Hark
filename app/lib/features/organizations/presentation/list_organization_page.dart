@@ -109,11 +109,11 @@ class _OrgList extends ConsumerWidget {
                       row: row,
                       onReconnect: () => ref
                           .read(listOrganizationViewModelProvider.notifier)
-                          .onReconnectTapped(row.serverUrl),
+                          .onReconnectTapped(row.serverUrl, row.userId),
                       onOpen: () => context.push(
                         Uri(
                           path:
-                              '/orgs/${Uri.encodeComponent(row.serverUrl)}/history',
+                              '/orgs/${Uri.encodeComponent(row.serverUrl)}/${Uri.encodeComponent(row.userId)}/history',
                         ).toString(),
                       ),
                     );

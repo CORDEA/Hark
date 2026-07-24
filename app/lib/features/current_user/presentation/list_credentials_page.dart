@@ -10,13 +10,21 @@ import 'list_credentials_view_model.dart';
 import 'list_credentials_view_state.dart';
 
 class ListCredentialsPage extends ConsumerWidget {
-  const ListCredentialsPage({super.key, required this.serverUrl});
+  const ListCredentialsPage({
+    super.key,
+    required this.serverUrl,
+    required this.userId,
+  });
 
   final String serverUrl;
+  final String userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = listCredentialsViewModelProvider(serverUrl: serverUrl);
+    final provider = listCredentialsViewModelProvider(
+      serverUrl: serverUrl,
+      userId: userId,
+    );
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.credentialsTitle)),

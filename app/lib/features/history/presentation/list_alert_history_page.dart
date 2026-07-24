@@ -12,13 +12,21 @@ import 'history_view_model.dart';
 import 'history_view_state.dart';
 
 class ListAlertHistoryPage extends ConsumerWidget {
-  const ListAlertHistoryPage({super.key, required this.serverUrl});
+  const ListAlertHistoryPage({
+    super.key,
+    required this.serverUrl,
+    required this.userId,
+  });
 
   final String serverUrl;
+  final String userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = historyViewModelProvider(serverUrl: serverUrl);
+    final provider = historyViewModelProvider(
+      serverUrl: serverUrl,
+      userId: userId,
+    );
     final async = ref.watch(provider);
     final l10n = AppLocalizations.of(context);
 
@@ -31,7 +39,8 @@ class ListAlertHistoryPage extends ConsumerWidget {
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => context.push(
               Uri(
-                path: '/orgs/${Uri.encodeComponent(serverUrl)}/settings',
+                path:
+                    '/orgs/${Uri.encodeComponent(serverUrl)}/${Uri.encodeComponent(userId)}/settings',
               ).toString(),
             ),
           ),

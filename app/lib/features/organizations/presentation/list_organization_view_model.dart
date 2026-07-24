@@ -38,9 +38,9 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
   /// Reuses the discoverable assertion ceremony to refresh a stale JWT. A
   /// 410/credential_revoked response is the authoritative kick signal: drop
   /// the local org and guide the member to remove its orphaned passkey.
-  Future<void> onReconnectTapped(String serverUrl) async {
+  Future<void> onReconnectTapped(String serverUrl, String userId) async {
     final row = state.asData?.value
-        .where((row) => row.serverUrl == serverUrl)
+        .where((row) => row.serverUrl == serverUrl && row.userId == userId)
         .firstOrNull;
     if (row == null) return;
     try {
@@ -50,7 +50,12 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
       ref.read(authReauthProvider.notifier).clear(serverUrl);
       await onRefresh();
     } on CredentialRevokedError {
-      await ref.read(orgRepositoryProvider).delete(serverUrl);
+      final profile = await ref
+          .read(orgRepositoryProvider)
+          .findByMembership(serverUrl, userId);
+      if (profile != null) {
+        await ref.read(orgRepositoryProvider).delete(profile);
+      }
       ref
           .read(passkeyCleanupNoticeControllerProvider.notifier)
           .show(
@@ -73,9 +78,7 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     await Future.wait([
       for (final p in profiles)
         if (stale.contains(p.serverUrl))
-          Future.sync(
-            () => _updateStatus(p.serverUrl, const OrgRowStatus.reconnect()),
-          )
+          Future.sync(() => _updateStatus(p, const OrgRowStatus.reconnect()))
         else
           _hydrateOne(p),
     ]);
@@ -91,7 +94,7 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
           .read(currentUserRepositoryProvider)
           .fetch(profile);
       _updateStatus(
-        profile.serverUrl,
+        profile,
         OrgRowStatus.ok(
           orgName: current.orgName,
           devicesCount: current.devices.length,
@@ -100,14 +103,14 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
       );
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        _updateStatus(profile.serverUrl, const OrgRowStatus.reconnect());
+        _updateStatus(profile, const OrgRowStatus.reconnect());
       } else {
-        _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
+        _updateStatus(profile, const OrgRowStatus.offline());
       }
     } on HarkApiException {
-      _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
+      _updateStatus(profile, const OrgRowStatus.offline());
     } catch (_) {
-      _updateStatus(profile.serverUrl, const OrgRowStatus.offline());
+      _updateStatus(profile, const OrgRowStatus.offline());
     }
   }
 
@@ -115,29 +118,31 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     try {
       final severity = await ref
           .read(getOrgAlertSeverityUseCaseProvider)
-          .execute(serverUrl: profile.serverUrl);
-      _updateSeverity(profile.serverUrl, severity);
+          .execute(serverUrl: profile.serverUrl, userId: profile.userId);
+      _updateSeverity(profile, severity);
     } catch (_) {
       // Leave the row at its default `none` severity — surfacing a stale or
       // misleading highlight is worse than showing no highlight.
     }
   }
 
-  void _updateStatus(String serverUrl, OrgRowStatus status) {
-    _updateRow(serverUrl, (row) => row.copyWith(status: status));
+  void _updateStatus(OrgProfile profile, OrgRowStatus status) {
+    _updateRow(profile, (row) => row.copyWith(status: status));
   }
 
-  void _updateSeverity(String serverUrl, OrgAlertSeverity severity) {
-    _updateRow(serverUrl, (row) => row.copyWith(severity: severity));
+  void _updateSeverity(OrgProfile profile, OrgAlertSeverity severity) {
+    _updateRow(profile, (row) => row.copyWith(severity: severity));
   }
 
   void _updateRow(
-    String serverUrl,
+    OrgProfile profile,
     OrganizationRowViewState Function(OrganizationRowViewState) update,
   ) {
     final list = state.value;
     if (list == null) return;
-    final idx = list.indexWhere((r) => r.serverUrl == serverUrl);
+    final idx = list.indexWhere(
+      (r) => r.serverUrl == profile.serverUrl && r.userId == profile.userId,
+    );
     if (idx < 0) return;
     final next = [...list];
     next[idx] = update(next[idx]);
@@ -148,6 +153,7 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
     final name = _hostOf(p.serverUrl);
     return OrganizationRowViewState(
       serverUrl: p.serverUrl,
+      userId: p.userId,
       fallbackName: name,
       initials: _initials(name),
       status: const OrgRowStatus.loading(),

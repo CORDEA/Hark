@@ -15,6 +15,7 @@ class GetHistoryUseCase {
 
   Future<List<AlertSummaryDto>> execute({
     required String serverUrl,
+    String? userId,
     int limit = 50,
-  }) => _repository.findAll(serverUrl: serverUrl, limit: limit);
+  }) => _repository.findAll(serverUrl: serverUrl, userId: userId, limit: limit);
 }

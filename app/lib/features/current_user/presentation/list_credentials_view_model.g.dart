@@ -20,7 +20,7 @@ final class ListCredentialsViewModelProvider
         > {
   ListCredentialsViewModelProvider._({
     required ListCredentialsViewModelFamily super.from,
-    required String super.argument,
+    required ({String serverUrl, String userId}) super.argument,
   }) : super(
          retry: null,
          name: r'listCredentialsViewModelProvider',
@@ -36,7 +36,7 @@ final class ListCredentialsViewModelProvider
   String toString() {
     return r'listCredentialsViewModelProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -56,7 +56,7 @@ final class ListCredentialsViewModelProvider
 }
 
 String _$listCredentialsViewModelHash() =>
-    r'4935986728c282ce18976fee1cc6e6760c14c2a0';
+    r'02da1668831ccb3e0966677000fa467e07608546';
 
 final class ListCredentialsViewModelFamily extends $Family
     with
@@ -65,7 +65,7 @@ final class ListCredentialsViewModelFamily extends $Family
           AsyncValue<ListCredentialsViewState>,
           ListCredentialsViewState,
           FutureOr<ListCredentialsViewState>,
-          String
+          ({String serverUrl, String userId})
         > {
   ListCredentialsViewModelFamily._()
     : super(
@@ -76,8 +76,13 @@ final class ListCredentialsViewModelFamily extends $Family
         isAutoDispose: true,
       );
 
-  ListCredentialsViewModelProvider call({required String serverUrl}) =>
-      ListCredentialsViewModelProvider._(argument: serverUrl, from: this);
+  ListCredentialsViewModelProvider call({
+    required String serverUrl,
+    required String userId,
+  }) => ListCredentialsViewModelProvider._(
+    argument: (serverUrl: serverUrl, userId: userId),
+    from: this,
+  );
 
   @override
   String toString() => r'listCredentialsViewModelProvider';
@@ -85,10 +90,14 @@ final class ListCredentialsViewModelFamily extends $Family
 
 abstract class _$ListCredentialsViewModel
     extends $AsyncNotifier<ListCredentialsViewState> {
-  late final _$args = ref.$arg as String;
-  String get serverUrl => _$args;
+  late final _$args = ref.$arg as ({String serverUrl, String userId});
+  String get serverUrl => _$args.serverUrl;
+  String get userId => _$args.userId;
 
-  FutureOr<ListCredentialsViewState> build({required String serverUrl});
+  FutureOr<ListCredentialsViewState> build({
+    required String serverUrl,
+    required String userId,
+  });
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
@@ -109,6 +118,9 @@ abstract class _$ListCredentialsViewModel
               Object?,
               Object?
             >;
-    return element.handleCreate(ref, () => build(serverUrl: _$args));
+    return element.handleCreate(
+      ref,
+      () => build(serverUrl: _$args.serverUrl, userId: _$args.userId),
+    );
   }
 }

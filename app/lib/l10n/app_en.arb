@@ -207,13 +207,13 @@
   },
   "settingsLeaveDialogTitle": "Leave organization",
   "@settingsLeaveDialogTitle": {},
-  "settingsLeaveDialogBody": "This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.",
+  "settingsLeaveDialogBody": "Leave {org} and revoke its passkey on the server? This device will stop receiving alerts. You can rejoin with a new invitation code.",
   "@settingsLeaveDialogBody": {
     "placeholders": { "org": { "type": "String" } }
   },
   "settingsLeaveDialogCancel": "Cancel",
   "@settingsLeaveDialogCancel": {},
-  "settingsLeaveDialogConfirm": "Leave",
+  "settingsLeaveDialogConfirm": "Revoke and leave",
   "@settingsLeaveDialogConfirm": {},
 
   "passkeyCleanupTitle": "Passkey no longer usable",

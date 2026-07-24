@@ -34,10 +34,11 @@ class AlertRepository {
 
   Future<List<AlertSummaryDto>> findAll({
     required String serverUrl,
+    String? userId,
     int limit = 50,
     String? status,
   }) async {
-    final ds = await _dsFor(serverUrl);
+    final ds = await _dsFor(serverUrl, userId: userId);
     return ds.list(limit: limit, status: status);
   }
 
@@ -65,8 +66,16 @@ class AlertRepository {
     return profile;
   }
 
-  Future<AlertRemoteDataSource> _dsFor(String serverUrl) async {
-    final profile = await _profile(serverUrl);
+  Future<AlertRemoteDataSource> _dsFor(
+    String serverUrl, {
+    String? userId,
+  }) async {
+    final profile = userId == null
+        ? await _profile(serverUrl)
+        : await _orgs.findByMembership(serverUrl, userId);
+    if (profile == null) {
+      throw StateError('No connected org for server $serverUrl');
+    }
     return AlertRemoteDataSource(
       _apiClientFactory.create(profile.serverUrl, authToken: profile.authToken),
     );

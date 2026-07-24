@@ -27,6 +27,7 @@ sealed class OrgRowStatus with _$OrgRowStatus {
 abstract class OrganizationRowViewState with _$OrganizationRowViewState {
   const factory OrganizationRowViewState({
     required String serverUrl,
+    required String userId,
     required String fallbackName,
     required String initials,
     required OrgRowStatus status,

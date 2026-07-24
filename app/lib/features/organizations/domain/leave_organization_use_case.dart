@@ -13,6 +13,5 @@ class LeaveOrganizationUseCase {
   const LeaveOrganizationUseCase(this._repository);
   final OrgRepository _repository;
 
-  Future<LeaveOutcome> execute(OrgProfile profile) =>
-      _repository.leave(profile);
+  Future<void> execute(OrgProfile profile) => _repository.leave(profile);
 }

@@ -577,7 +577,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLeaveDialogBody.
   ///
   /// In en, this message translates to:
-  /// **'This device will stop receiving alerts from {org}. You can rejoin with a new invitation code.'**
+  /// **'Leave {org} and revoke its passkey on the server? This device will stop receiving alerts. You can rejoin with a new invitation code.'**
   String settingsLeaveDialogBody(String org);
 
   /// No description provided for @settingsLeaveDialogCancel.
@@ -589,7 +589,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLeaveDialogConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Leave'**
+  /// **'Revoke and leave'**
   String get settingsLeaveDialogConfirm;
 
   /// No description provided for @passkeyCleanupTitle.

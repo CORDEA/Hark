@@ -16,7 +16,7 @@ final class ShowSettingsViewModelProvider
     extends $NotifierProvider<ShowSettingsViewModel, ShowSettingsViewState> {
   ShowSettingsViewModelProvider._({
     required ShowSettingsViewModelFamily super.from,
-    required String super.argument,
+    required ({String serverUrl, String userId}) super.argument,
   }) : super(
          retry: null,
          name: r'showSettingsViewModelProvider',
@@ -32,7 +32,7 @@ final class ShowSettingsViewModelProvider
   String toString() {
     return r'showSettingsViewModelProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -59,7 +59,7 @@ final class ShowSettingsViewModelProvider
 }
 
 String _$showSettingsViewModelHash() =>
-    r'5639d88bd58c2bb17d9c28687e9cbf81d11c7e1f';
+    r'd4253f5118f7999ec66db0089d6a5da4f2bd2469';
 
 final class ShowSettingsViewModelFamily extends $Family
     with
@@ -68,7 +68,7 @@ final class ShowSettingsViewModelFamily extends $Family
           ShowSettingsViewState,
           ShowSettingsViewState,
           ShowSettingsViewState,
-          String
+          ({String serverUrl, String userId})
         > {
   ShowSettingsViewModelFamily._()
     : super(
@@ -79,8 +79,13 @@ final class ShowSettingsViewModelFamily extends $Family
         isAutoDispose: true,
       );
 
-  ShowSettingsViewModelProvider call({required String serverUrl}) =>
-      ShowSettingsViewModelProvider._(argument: serverUrl, from: this);
+  ShowSettingsViewModelProvider call({
+    required String serverUrl,
+    required String userId,
+  }) => ShowSettingsViewModelProvider._(
+    argument: (serverUrl: serverUrl, userId: userId),
+    from: this,
+  );
 
   @override
   String toString() => r'showSettingsViewModelProvider';
@@ -88,10 +93,14 @@ final class ShowSettingsViewModelFamily extends $Family
 
 abstract class _$ShowSettingsViewModel
     extends $Notifier<ShowSettingsViewState> {
-  late final _$args = ref.$arg as String;
-  String get serverUrl => _$args;
+  late final _$args = ref.$arg as ({String serverUrl, String userId});
+  String get serverUrl => _$args.serverUrl;
+  String get userId => _$args.userId;
 
-  ShowSettingsViewState build({required String serverUrl});
+  ShowSettingsViewState build({
+    required String serverUrl,
+    required String userId,
+  });
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
@@ -104,6 +113,9 @@ abstract class _$ShowSettingsViewModel
               Object?,
               Object?
             >;
-    return element.handleCreate(ref, () => build(serverUrl: _$args));
+    return element.handleCreate(
+      ref,
+      () => build(serverUrl: _$args.serverUrl, userId: _$args.userId),
+    );
   }
 }

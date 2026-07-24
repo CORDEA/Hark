@@ -210,8 +210,8 @@ return $default(_that.serverUrl,_that.userId,_that.authToken);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _OrgProfile implements OrgProfile {
-  const _OrgProfile({@JsonKey(name: 'server_url') required this.serverUrl, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'auth_token') required this.authToken});
+class _OrgProfile extends OrgProfile {
+  const _OrgProfile({@JsonKey(name: 'server_url') required this.serverUrl, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'auth_token') required this.authToken}): super._();
   factory _OrgProfile.fromJson(Map<String, dynamic> json) => _$OrgProfileFromJson(json);
 
 @override@JsonKey(name: 'server_url') final  String serverUrl;

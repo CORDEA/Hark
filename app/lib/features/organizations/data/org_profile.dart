@@ -6,9 +6,12 @@ part 'org_profile.g.dart';
 /// One row in the local list of connected organizations. Persisted as JSON in
 /// secure storage under `hark.orgs` — see [SecureOrgStore]. Shape is verbatim
 /// per PASSKEY_v2 §2: only login credentials live here. Org name, devices,
-/// and everything else are fetched from `/api/me` on demand.
+/// and everything else are fetched from `/api/me` on demand. A membership is
+/// identified by both the server URL and its server-local user ID.
 @freezed
 abstract class OrgProfile with _$OrgProfile {
+  const OrgProfile._();
+
   const factory OrgProfile({
     @JsonKey(name: 'server_url') required String serverUrl,
     @JsonKey(name: 'user_id') required String userId,
@@ -17,4 +20,6 @@ abstract class OrgProfile with _$OrgProfile {
 
   factory OrgProfile.fromJson(Map<String, dynamic> json) =>
       _$OrgProfileFromJson(json);
+
+  String get membershipId => '$serverUrl\u001f$userId';
 }

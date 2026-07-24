@@ -10,16 +10,19 @@ part 'history_view_model.g.dart';
 @riverpod
 class HistoryViewModel extends _$HistoryViewModel {
   @override
-  Future<HistoryViewState> build({required String serverUrl}) async {
+  Future<HistoryViewState> build({
+    required String serverUrl,
+    required String userId,
+  }) async {
     final profile = await ref
         .read(orgRepositoryProvider)
-        .findByServerUrl(serverUrl);
+        .findByMembership(serverUrl, userId);
     if (profile == null) {
       throw StateError('No connected org for server $serverUrl');
     }
     final alerts = await ref
         .watch(getHistoryUseCaseProvider)
-        .execute(serverUrl: serverUrl);
+        .execute(serverUrl: serverUrl, userId: userId);
     final ongoing = <HistoryRowViewState>[];
     final history = <HistoryRowViewState>[];
     for (final a in alerts) {

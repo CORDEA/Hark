@@ -13,9 +13,13 @@ class GetOrgAlertSeverityUseCase {
   const GetOrgAlertSeverityUseCase(this._repository);
   final AlertRepository _repository;
 
-  Future<OrgAlertSeverity> execute({required String serverUrl}) async {
+  Future<OrgAlertSeverity> execute({
+    required String serverUrl,
+    String? userId,
+  }) async {
     final alerts = await _repository.findAll(
       serverUrl: serverUrl,
+      userId: userId,
       status: 'active',
     );
     if (alerts.isEmpty) return OrgAlertSeverity.none;
