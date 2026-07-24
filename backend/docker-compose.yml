@@ -18,6 +18,11 @@ services:
       APPLE_APP_IDS: "${APPLE_APP_IDS:-}"
       ANDROID_APP_LINKS: "${ANDROID_APP_LINKS:-}"
       RP_ID_OVERRIDE: "${RP_ID_OVERRIDE:-false}"
+      # Path inside the container to the alert-type catalog. The compose
+      # file mounts ./data into /data, so seed it with:
+      #   cp alert_types.example.json data/alert_types.json
+      # The process refuses to boot if the file is missing or invalid.
+      ALERT_TYPES: "/data/alert_types.json"
     volumes:
       # Persistent SQLite database. If not using Application Default
       # Credentials, drop a Firebase service-account JSON key (with the

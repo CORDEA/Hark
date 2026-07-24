@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/fs"
 	"os"
 	"regexp"
 	"strings"
@@ -35,34 +34,27 @@ func (a AlertTypes) Lookup(id string) (AlertType, bool) {
 	return t, ok
 }
 
-// defaultAlertTypes is served when no configuration file is present. It keeps
-// `docker compose up` working out of the box without an operator seeding a
-// catalog first.
-var defaultAlertTypes = []AlertType{
-	{ID: "p0", Name: "P0", Description: "Critical", Color: "#E84A5F"},
-	{ID: "p1", Name: "P1", Description: "Warning", Color: "#E0B950"},
-}
-
 type alertTypesFile struct {
 	Types []AlertType `json:"types"`
 }
 
 var hexColorRE = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
 
-// LoadAlertTypes reads and validates the catalog at path. An empty path or a
-// missing file yields the built-in defaults; a present-but-broken file is a
-// hard error because a silent fallback would let a misconfigured deploy accept
-// alert ids that never round-trip to the mobile client.
+// ErrAlertTypesPathRequired is returned by LoadAlertTypes when no path is
+// configured. The catalog has no safe default: every id the backend accepts
+// must be one the mobile client can render, so a silent fallback would let a
+// misconfigured deploy trigger alerts that show up unlabeled on devices.
+var ErrAlertTypesPathRequired = errors.New("ALERT_TYPES is required")
+
+// LoadAlertTypes reads and validates the catalog at path. Empty path, missing
+// file, or an invalid file are all hard errors — see ErrAlertTypesPathRequired.
 func LoadAlertTypes(path string) (AlertTypes, error) {
 	path = strings.TrimSpace(path)
 	if path == "" {
-		return buildAlertTypes(defaultAlertTypes)
+		return AlertTypes{}, ErrAlertTypesPathRequired
 	}
 	raw, err := os.ReadFile(path)
 	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return buildAlertTypes(defaultAlertTypes)
-		}
 		return AlertTypes{}, fmt.Errorf("read alert types %q: %w", path, err)
 	}
 	var file alertTypesFile

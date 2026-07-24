@@ -1,0 +1,16 @@
+{
+  "types": [
+    {
+      "id": "p0",
+      "name": "P0",
+      "description": "Critical",
+      "color": "#E84A5F"
+    },
+    {
+      "id": "p1",
+      "name": "P1",
+      "description": "Warning",
+      "color": "#E0B950"
+    }
+  ]
+}
