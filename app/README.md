@@ -1,17 +1,57 @@
-# hark
+# Hark mobile app
 
-Hark on-call notification client
+The Hark client is a Flutter app for iOS and Android. It receives on-call notifications and uses passkeys to authenticate with the backend.
 
-## Getting Started
+## Run locally
 
-This project is a starting point for a Flutter application.
+Install the repository toolchains first; see the [root README](../README.md).
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+# Debug run against a connected device or simulator
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Release builds:
+
+```sh
+flutter build apk --release
+flutter build ipa --release # requires Xcode signing
+```
+
+During onboarding, scan the invite QR code served by the backend. The app will use the backend's `PUBLIC_URL`.
+
+## Passkeys and app links
+
+The app's link host must exactly match the hostname in the backend's `PUBLIC_URL`. The backend publishes the required Apple and Android well-known files; see [backend configuration](../backend/README.md#passkeys-and-app-link-binding).
+
+### iOS
+
+`Runner.entitlements` reads the host from `HARK_LINK_HOST`. It defaults to `hark.example.com` in `ios/Flutter/Debug.xcconfig` and `Release.xcconfig`.
+
+Override it locally without changing tracked files by creating `app/ios/Flutter/Local.xcconfig`:
+
+```
+HARK_LINK_HOST = your-hark-host.example.com
+```
+
+The `applinks:` and `webcredentials:` entries in `Runner.entitlements` are substituted at build time. Enable the entitlements file in Xcode: `Runner` target → **Signing & Capabilities** → **Associated Domains**.
+
+### Android
+
+The app-link intent-filter host is the Gradle `harkLinkHost` placeholder. It defaults to `hark.example.com`; override it at build time:
+
+```sh
+flutter build apk --release -PharkLinkHost=your-hark-host.example.com
+```
+
+`android:autoVerify="true"` asks the device to verify the host against `/.well-known/assetlinks.json` when the app is installed.
+
+## Verify mobile-link configuration
+
+- **iOS:** Install a signed TestFlight build and tap an invite QR. The app should open directly rather than in Safari.
+- **Android:** After installing, run `adb shell pm get-app-links <package>`. Each domain should report `verified`; otherwise, check `assetlinks.json` and the signing fingerprint.
+
+If you change the domain or re-sign with a new key, passkey assertions can fail because the platform authenticator no longer trusts the credential's RP ID.
