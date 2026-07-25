@@ -194,6 +194,10 @@
   "@settingsTitle": {},
   "settingsCredentials": "Devices & passkeys",
   "@settingsCredentials": {},
+  "settingsSectionLegal": "Legal",
+  "@settingsSectionLegal": {},
+  "settingsOpenSourceLicenses": "Open source licenses",
+  "@settingsOpenSourceLicenses": {},
   "settingsLeave": "Leave {org}",
   "@settingsLeave": {
     "placeholders": { "org": { "type": "String" } }

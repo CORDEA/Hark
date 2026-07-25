@@ -284,6 +284,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCredentials => 'Devices & passkeys';
 
   @override
+  String get settingsSectionLegal => 'Legal';
+
+  @override
+  String get settingsOpenSourceLicenses => 'Open source licenses';
+
+  @override
   String settingsLeave(String org) {
     return 'Leave $org';
   }

@@ -65,9 +65,39 @@ class ShowSettingsPage extends ConsumerWidget {
                 ),
               ),
               _LeaveCard(provider: provider, orgName: orgName),
+              const SizedBox(height: AppSpacing.lg),
+              _SectionHeader(title: l10n.settingsSectionLegal),
+              const SizedBox(height: AppSpacing.sm),
+              _SettingsCard(
+                icon: Icons.description_outlined,
+                title: l10n.settingsOpenSourceLicenses,
+                onTap: () => showLicensePage(
+                  context: context,
+                  applicationName: l10n.appTitle,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xl),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Text(
+      title.toUpperCase(),
+      style: theme.textTheme.labelSmall?.copyWith(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        letterSpacing: 1.2,
       ),
     );
   }

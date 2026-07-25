@@ -556,6 +556,18 @@ abstract class AppLocalizations {
   /// **'Devices & passkeys'**
   String get settingsCredentials;
 
+  /// No description provided for @settingsSectionLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get settingsSectionLegal;
+
+  /// No description provided for @settingsOpenSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source licenses'**
+  String get settingsOpenSourceLicenses;
+
   /// No description provided for @settingsLeave.
   ///
   /// In en, this message translates to:
