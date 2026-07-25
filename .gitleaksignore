@@ -1,0 +1,6 @@
+# Known Firebase client configuration keys and Android passkey test origins.
+# These entries are intentionally pinned to the exact historical findings.
+19bc0b76810da283111b1b992331bc017fede07d:backend/internal/webauthn/config_test.go:generic-api-key:11
+9e2ef5c567435130cb55541564659933f131230a:app/android/app/google-services.json:gcp-api-key:18
+9e2ef5c567435130cb55541564659933f131230a:app/lib/firebase_options.dart:gcp-api-key:53
+9e2ef5c567435130cb55541564659933f131230a:app/lib/firebase_options.dart:gcp-api-key:61

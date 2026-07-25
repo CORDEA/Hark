@@ -1,3 +1,4 @@
 [tools]
 go = "1.23"
 flutter = "3.44.6"
+gitleaks = "8.30.1"
