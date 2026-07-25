@@ -38,7 +38,9 @@ mise.toml  Pinned toolchain (Go 1.23, Flutter 3.44.6)
 - [mise](https://mise.jdx.dev/) to install the pinned toolchain versions:
   ```sh
   mise install
+  mise run hooks-install
   ```
+  This enables the repository's pre-push Gitleaks scan.
 - A Firebase project with Cloud Messaging enabled. The backend accepts two credential sources, tried in this order:
   1. **Application Default Credentials** — preferred. Works with Workload Identity Federation, the GCE/GKE metadata server, `gcloud auth application-default login`, or `GOOGLE_APPLICATION_CREDENTIALS`. Avoids shipping a long-lived key.
   2. **Service-account JSON file** — fallback. Download a key with the Firebase Cloud Messaging API Admin role and save it as `backend/data/firebase.json` (or set `FCM_CREDENTIALS` to another path).
