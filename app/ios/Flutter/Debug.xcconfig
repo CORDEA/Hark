@@ -1,7 +1,8 @@
 #include "Generated.xcconfig"
-#include? "Local.xcconfig"
 
 // Host that satisfies applinks: and webcredentials: in Runner.entitlements.
-// Must match the backend's PUBLIC_URL hostname. Override per-machine by
-// creating ios/Flutter/Local.xcconfig with `HARK_LINK_HOST = <your-host>`.
-HARK_LINK_HOST = hark.example.com
+// Must match the backend's PUBLIC_URL hostname. Set it per-machine in
+// ios/Flutter/Local.xcconfig with `HARK_LINK_HOST = <your-host>`.
+
+// Keep this include last so it supplies the build setting used by the entitlement.
+#include? "Local.xcconfig"

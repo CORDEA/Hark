@@ -1,4 +1,4 @@
 #include "Generated.xcconfig"
-#include? "Local.xcconfig"
 
-HARK_LINK_HOST = hark.example.com
+// Supply HARK_LINK_HOST in Local.xcconfig. It must match PUBLIC_URL's hostname.
+#include? "Local.xcconfig"

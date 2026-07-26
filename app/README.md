@@ -29,13 +29,13 @@ The app's link host must exactly match the hostname in the backend's `PUBLIC_URL
 
 ### iOS
 
-`Runner.entitlements` reads the host from `HARK_LINK_HOST`. It defaults to `hark.example.com` in `ios/Flutter/Debug.xcconfig` and `Release.xcconfig`.
-
-Override it locally without changing tracked files by creating `app/ios/Flutter/Local.xcconfig`:
+`Runner.entitlements` reads the host from `HARK_LINK_HOST`. Set it without changing tracked files by creating `app/ios/Flutter/Local.xcconfig`:
 
 ```
 HARK_LINK_HOST = your-hark-host.example.com
 ```
+
+This value is required for both Debug and Release builds and must match the hostname in the backend's `PUBLIC_URL`.
 
 The `applinks:` and `webcredentials:` entries in `Runner.entitlements` are substituted at build time. Enable the entitlements file in Xcode: `Runner` target → **Signing & Capabilities** → **Associated Domains**.
 
