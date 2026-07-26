@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hark/core/logger/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/api/auth_reauth_notifier.dart';
@@ -101,15 +102,24 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
           credentialsCount: current.credentials.length,
         ),
       );
-    } on DioException catch (e) {
+    } on DioException catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .w('Failed to hydrate organization profile', error: e, stackTrace: s);
       if (e.response?.statusCode == 401) {
         _updateStatus(profile, const OrgRowStatus.reconnect());
       } else {
         _updateStatus(profile, const OrgRowStatus.offline());
       }
-    } on HarkApiException {
+    } on HarkApiException catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .w('Failed to hydrate organization profile', error: e, stackTrace: s);
       _updateStatus(profile, const OrgRowStatus.offline());
-    } catch (_) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .w('Failed to hydrate organization profile', error: e, stackTrace: s);
       _updateStatus(profile, const OrgRowStatus.offline());
     }
   }
@@ -120,7 +130,14 @@ class ListOrganizationViewModel extends _$ListOrganizationViewModel {
           .read(getOrgAlertSeverityUseCaseProvider)
           .execute(serverUrl: profile.serverUrl, userId: profile.userId);
       _updateSeverity(profile, severity);
-    } catch (_) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .w(
+            'Failed to hydrate organization alert severity',
+            error: e,
+            stackTrace: s,
+          );
       // Leave the row at its default `none` severity — surfacing a stale or
       // misleading highlight is worse than showing no highlight.
     }

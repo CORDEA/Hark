@@ -1,3 +1,4 @@
+import 'package:hark/core/logger/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../organizations/data/org_repository.dart';
@@ -37,7 +38,10 @@ class ShowSettingsViewModel extends _$ShowSettingsViewModel {
         isLeaving: false,
         event: const ShowSettingsViewEvent.navigateToOrgs(),
       );
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to leave organization', error: e, stackTrace: s);
       state = state.copyWith(
         isLeaving: false,
         event: ShowSettingsViewEvent.leaveFailed(e),

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:hark/core/logger/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/fcm_token_provider.dart';
@@ -64,7 +65,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
         invitationCode: code,
         invitation: invitation,
       );
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to resolve invitation', error: e, stackTrace: s);
       state = state.copyWith(
         isBusy: false,
         event: ConnectOrgViewEvent.lookupFailed(e),
@@ -99,7 +103,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
       // already saved locally so we still navigate; the user can re-enable
       // notifications from the org row.
       await _registerDevice(profile);
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to register passkey', error: e, stackTrace: s);
       state = state.copyWith(
         isBusy: false,
         step: ConnectOrgStep.confirm,
@@ -131,7 +138,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
           .read(addDeviceViaSyncedPasskeyUseCaseProvider)
           .execute(serverUrl: serverUrl);
       await _registerDevice(profile);
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to add device with passkey', error: e, stackTrace: s);
       state = state.copyWith(
         isBusy: false,
         step: ConnectOrgStep.input,
@@ -159,7 +169,10 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
         isBusy: false,
         event: const ConnectOrgViewEvent.navigateToOrgs(),
       );
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to register device', error: e, stackTrace: s);
       // Profile is already persisted; the list page still needs to reflect it
       // even though the FCM step failed.
       ref.invalidate(getOrganizationsUseCaseProvider);

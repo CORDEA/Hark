@@ -1,3 +1,4 @@
+import 'package:hark/core/logger/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/domain/observe_fcm_event_use_case.dart';
@@ -67,7 +68,10 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
             : ActiveAlertOutcome.declinedByMe,
       );
       await _loadRecipients();
-    } catch (e) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .e('Failed to respond to alert', error: e, stackTrace: s);
       state = state.copyWith(
         isSending: false,
         event: ActiveAlertViewEvent.respondFailed(e),
@@ -96,7 +100,10 @@ class ActiveAlertViewModel extends _$ActiveAlertViewModel {
         declined: filter(RecipientResponse.declined),
         pending: filter(RecipientResponse.pending),
       );
-    } catch (_) {
+    } catch (e, s) {
+      ref
+          .read(appLoggerProvider)
+          .w('Failed to load alert recipients', error: e, stackTrace: s);
       // Recipient list is supplemental — swallow load errors rather than
       // masking the primary ack/decline UX.
     }
