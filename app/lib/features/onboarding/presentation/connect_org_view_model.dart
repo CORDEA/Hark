@@ -4,7 +4,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/fcm/fcm_token_provider.dart';
 import '../../organizations/data/org_profile.dart';
-import '../../organizations/domain/get_organizations_use_case.dart';
 import '../domain/add_device_via_synced_passkey_use_case.dart';
 import '../domain/register_device_use_case.dart';
 import '../domain/register_with_passkey_use_case.dart';
@@ -162,9 +161,6 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
             deviceName: _deviceName(),
             locale: _currentLocaleTag(),
           );
-      // Refetch the org list before we hand control back so the destination
-      // page renders the newly-saved profile instead of a stale snapshot.
-      ref.invalidate(getOrganizationsUseCaseProvider);
       state = state.copyWith(
         isBusy: false,
         event: const ConnectOrgViewEvent.navigateToOrgs(),
@@ -173,9 +169,6 @@ class ConnectOrgViewModel extends _$ConnectOrgViewModel {
       ref
           .read(appLoggerProvider)
           .e('Failed to register device', error: e, stackTrace: s);
-      // Profile is already persisted; the list page still needs to reflect it
-      // even though the FCM step failed.
-      ref.invalidate(getOrganizationsUseCaseProvider);
       state = state.copyWith(
         isBusy: false,
         event: ConnectOrgViewEvent.deviceRegisterFailed(e),

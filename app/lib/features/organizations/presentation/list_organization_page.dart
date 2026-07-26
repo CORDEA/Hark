@@ -56,7 +56,16 @@ class ListOrganizationPage extends ConsumerWidget {
               Expanded(child: _OrgList(colors: colors)),
               const SizedBox(height: AppSpacing.md),
               OutlinedButton(
-                onPressed: () => context.go('/connect'),
+                onPressed: () async {
+                  final organizationAdded = await context.push<bool>(
+                    '/connect',
+                  );
+                  if (organizationAdded == true && context.mounted) {
+                    await ref
+                        .read(listOrganizationViewModelProvider.notifier)
+                        .onRefresh();
+                  }
+                },
                 child: Text(l10n.orgListAdd),
               ),
               const SizedBox(height: AppSpacing.xl),

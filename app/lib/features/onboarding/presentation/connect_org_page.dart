@@ -52,10 +52,10 @@ class ConnectOrgPage extends HookConsumerWidget {
             context,
           ).showSnackBar(SnackBar(content: Text(l10n.connectOrgDeviceFailed)));
           ref.read(observeDeepLinkUseCaseProvider.notifier).consume();
-          context.go('/');
+          context.pop(true);
         case ConnectOrgViewEventNavigateToOrgs():
           ref.read(observeDeepLinkUseCaseProvider.notifier).consume();
-          context.go('/');
+          context.pop(true);
         case ConnectOrgViewEventNone():
           break;
       }
