@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Hark is open-source, zero-context paging for teams that need to wake the right person with certainty."
+    />
+    <meta name="theme-color" content="#0b1320" />
+    <meta property="og:title" content="Hark — paging without the noise" />
+    <meta
+      property="og:description"
+      content="Open-source, zero-context paging for on-call teams."
+    />
+    <meta property="og:type" content="website" />
+    <title>Hark — paging without the noise</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/" aria-label="Hark home"><img src="assets/hark-icon.png" alt="Hark" /></a>
+        <div class="nav-links">
+          <a href="#how-it-works">How it works</a>
+          <a href="#open-source">Open source</a>
+          <a
+            class="github-link"
+            href="https://github.com/CORDEA/Hark"
+            target="_blank"
+            rel="noreferrer"
+          >GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <div class="eyebrow"><i></i> Built for the moment it matters</div>
+        <h1>Wake the right person.<br /><em>Nothing else.</em></h1>
+        <p class="hero-copy">
+          Hark is open-source, zero-context paging for teams that cannot afford
+          to miss a critical alert.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/CORDEA/Hark" target="_blank" rel="noreferrer">Deploy Hark <span aria-hidden="true">→</span></a>
+          <a class="button secondary" href="#how-it-works">See how it works</a>
+        </div>
+        <figure class="hero-screen">
+          <img src="assets/screenshots/app-active-alerts.png" alt="Hark mobile app showing a critical alert awaiting acknowledgement" />
+        </figure>
+      </section>
+
+      <section class="principles" aria-label="Hark principles">
+        <article><span>01</span><h2>Zero context</h2><p>No logs, incident details, or sensitive infrastructure data live on a personal device.</p></article>
+        <article><span>02</span><h2>High certainty</h2><p>Native notifications built to break through the noise when an incident is real.</p></article>
+        <article><span>03</span><h2>Open by design</h2><p>Inspect it, self-host it, and keep ownership of your alerting path.</p></article>
+      </section>
+
+      <section class="app-gallery" aria-labelledby="app-gallery-title">
+        <div class="gallery-copy">
+          <p class="kicker">A calm, dedicated receiver</p>
+          <h2 id="app-gallery-title">The alert is clear.<br />The response is immediate.</h2>
+          <p>Hark gives on-call engineers only what they need to take ownership—without exposing the rest of your incident context.</p>
+        </div>
+        <div class="phones">
+          <figure class="phone phone-one"><img src="assets/screenshots/app-alerts.png" alt="Hark mobile app alert history" loading="lazy" /></figure>
+          <figure class="phone phone-two"><img src="assets/screenshots/app-active-alerts.png" alt="Hark mobile app alert acknowledgement screen" loading="lazy" /></figure>
+          <figure class="phone phone-three"><img src="assets/screenshots/app-organizations.png" alt="Hark mobile app organization settings" loading="lazy" /></figure>
+        </div>
+      </section>
+
+      <section class="split-section" id="how-it-works">
+        <div>
+          <p class="kicker">A deliberately narrow system</p>
+          <h2>Paging is not<br />a chat app.</h2>
+        </div>
+        <div class="steps">
+          <article><span>01</span><div><h3>Trigger</h3><p>Your monitoring system calls Hark when an incident needs attention.</p></div></article>
+          <article><span>02</span><div><h3>Route</h3><p>Hark reaches the relevant on-call engineer through a dedicated mobile app.</p></div></article>
+          <article><span>03</span><div><h3>Respond</h3><p>The engineer acknowledges the page, then investigates in the tools that already hold the context.</p></div></article>
+        </div>
+      </section>
+
+      <section class="console-section" aria-labelledby="console-title">
+        <div class="console-copy">
+          <p class="kicker">A focused control plane</p>
+          <h2 id="console-title">Route pages.<br />Know who responded.</h2>
+          <p>The lightweight admin console gives incident commanders a direct view of subscribers, ongoing alerts, and acknowledgements.</p>
+        </div>
+        <figure class="console-shot">
+          <img src="assets/screenshots/admin-alerts.png" alt="Hark Admin dashboard with broadcast controls and alert history" loading="lazy" />
+        </figure>
+        <figure class="console-shot subscribers-shot">
+          <img src="assets/screenshots/admin-subscribers.png" alt="Hark Admin subscriber management screen" loading="lazy" />
+        </figure>
+      </section>
+
+      <section class="open-source" id="open-source">
+        <p class="kicker">Self-hosted and transparent</p>
+        <h2>Own the path<br />between alert and action.</h2>
+        <p>Hark includes a Go backend, a Flutter app for iOS and Android, passkey authentication, and Firebase Cloud Messaging delivery.</p>
+        <a class="text-link" href="https://github.com/CORDEA/Hark" target="_blank" rel="noreferrer">Read the source on GitHub <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand" href="/" aria-label="Hark home"><img src="assets/hark-icon.png" alt="Hark" /></a>
+      <p>Zero-context, high-certainty on-call paging.</p>
+      <a href="https://github.com/CORDEA/Hark" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </footer>
+  </body>
+</html>

@@ -27,7 +27,7 @@ Hark is built for teams who value absolute security, high-fidelity alerting, and
 ```
 app/       Flutter client (iOS + Android)
 backend/   Go server, SQLite storage, FCM dispatcher, subscriber web UI
-web/       Static assets served by the backend
+site/      Static public website for gethark.app
 mise.toml  Pinned toolchain (Go 1.23, Flutter 3.44.6)
 ```
 
@@ -45,3 +45,4 @@ mise run hooks-install
 - [Flutter app setup and mobile-link configuration](app/README.md)
 - [Backend setup, deployment, and configuration](backend/README.md)
 - [Cloudflare Tunnel for local mobile testing](backend/cloudflared/README.md)
+- [Public website](site/README.md)
