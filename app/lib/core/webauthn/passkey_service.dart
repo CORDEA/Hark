@@ -20,7 +20,13 @@ class PasskeyService {
   Future<Map<String, dynamic>> createCredential(
     Map<String, dynamic> creationOptions,
   ) async {
-    final request = RegisterRequestType.fromJson(creationOptions);
+    // WebAuthn makes `transports` optional on PublicKeyCredentialDescriptor.
+    // go-webauthn therefore omits it in `excludeCredentials`, but passkeys
+    // 2.22 deserializes it as a required List. Supply the equivalent empty
+    // list before handing the options to the platform package.
+    final request = RegisterRequestType.fromJson(
+      _normalizeRegistrationOptions(creationOptions),
+    );
     final response = await _authenticator.register(request);
     return response.toJson();
   }
@@ -32,4 +38,24 @@ class PasskeyService {
     final response = await _authenticator.authenticate(request);
     return response.toJson();
   }
+}
+
+Map<String, dynamic> _normalizeRegistrationOptions(
+  Map<String, dynamic> options,
+) {
+  final excludeCredentials = options['excludeCredentials'];
+  if (excludeCredentials is! List) return options;
+
+  return {
+    ...options,
+    'excludeCredentials': excludeCredentials.map((credential) {
+      if (credential is! Map) return credential;
+
+      final descriptor = Map<String, dynamic>.from(credential);
+      if (descriptor['transports'] == null) {
+        descriptor['transports'] = const <String>[];
+      }
+      return descriptor;
+    }).toList(),
+  };
 }
