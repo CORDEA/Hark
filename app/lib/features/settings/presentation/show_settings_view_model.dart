@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../organizations/data/org_repository.dart';
+import '../../organizations/domain/get_organizations_use_case.dart';
 import '../../organizations/domain/leave_organization_use_case.dart';
 import 'show_settings_view_state.dart';
 
@@ -23,6 +24,9 @@ class ShowSettingsViewModel extends _$ShowSettingsViewModel {
           .findByMembership(serverUrl, userId);
       if (profile != null) {
         await ref.read(leaveOrganizationUseCaseProvider).execute(profile);
+        // The org list may still be cached while this settings page is open.
+        // Refresh it before navigating back so the departed org is not shown.
+        ref.invalidate(getOrganizationsUseCaseProvider);
         state = state.copyWith(
           isLeaving: false,
           event: const ShowSettingsViewEvent.navigateToOrgs(),
