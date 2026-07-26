@@ -195,11 +195,14 @@ function fmtTime(iso) {
   const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
   const dayStart = new Date(d); dayStart.setHours(0, 0, 0, 0);
   const time = d.toLocaleTimeString('en-GB', {
-    hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC',
-  }) + ' UTC';
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
   if (dayStart.getTime() === today.getTime())     return t('time.today', { time });
   if (dayStart.getTime() === yesterday.getTime()) return t('time.yesterday', { time });
-  return t('time.absolute', { date: d.toISOString().slice(0, 10), time });
+  return t('time.absolute', {
+    date: d.toLocaleDateString('en-CA'),
+    time,
+  });
 }
 
 /// Turn "Jordan Marsh" → "JM"; "Acme" → "AC"; empty → "·".
