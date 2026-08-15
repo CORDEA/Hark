@@ -21,3 +21,5 @@
 # Cloudflare tunnel
 /backend/cloudflared/config.yml
 /backend/cloudflared/*.json
+
+.wrangler/
